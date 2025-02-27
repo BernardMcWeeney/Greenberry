@@ -34,7 +34,7 @@ const stats = [
 ];
 ---
 
-<section class="section-padding bg-white dark:bg-gray-900">
+<section class="section-padding bg-white dark:bg-gray-900 overflow-x-hidden">
   <Container>
     <div class="max-w-3xl mx-auto text-center mb-12">
       <div class="badge-wrapper">
@@ -45,16 +45,16 @@ const stats = [
       </h2>
     </div>
     
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
       {stats.map((stat) => (
-        <div class="card-hover relative bg-gradient-to-br from-greenberry-500/5 to-greenberry-600/10 p-8 rounded-2xl border border-greenberry-100 dark:border-greenberry-900/20 flex flex-col items-center text-center">
-          <div class={`w-16 h-16 rounded-full ${stat.color.replace('bg-', 'bg-')}/10 flex items-center justify-center ${stat.textColor} dark:${stat.textColor} text-2xl mb-4`}>
+        <div class="card-hover relative bg-gradient-to-br from-greenberry-500/5 to-greenberry-600/10 p-4 sm:p-6 md:p-8 rounded-2xl border border-greenberry-100 dark:border-greenberry-900/20 flex flex-col items-center text-center">
+          <div class={`w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full ${stat.color.replace('bg-', 'bg-')}/10 flex items-center justify-center ${stat.textColor} dark:${stat.textColor} text-lg sm:text-xl md:text-2xl mb-3 md:mb-4`}>
             <i class={stat.icon}></i>
           </div>
-          <p class={`text-4xl font-bold ${stat.textColor} dark:${stat.textColor} mb-2`}>
+          <p class={`text-2xl sm:text-3xl md:text-4xl font-bold ${stat.textColor} dark:${stat.textColor} mb-1 md:mb-2`}>
             {stat.value}
           </p>
-          <p class="text-gray-600 dark:text-gray-300">
+          <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
             {stat.label}
           </p>
         </div>

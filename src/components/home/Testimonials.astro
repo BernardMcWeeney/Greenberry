@@ -50,6 +50,9 @@ const testimonials = [
 // Calculate average Google review rating
 const googleRating = 4.9;
 const totalReviews = 87;
+
+// Adjust card width based on screen size
+const cardWidth = "min-w-[85vw] sm:min-w-[380px] md:min-w-[400px]";
 ---
 
 <section class="section-padding bg-white dark:bg-gray-900 relative overflow-hidden">
@@ -88,10 +91,10 @@ const totalReviews = 87;
     
     <!-- Full-width Testimonial Tapefeed -->
     <div class="testimonial-tapefeed-container relative w-full overflow-hidden mt-8 mb-6">
-      <div id="testimonial-tapefeed" class="flex space-x-6 animate-scroll">
+      <div id="testimonial-tapefeed" class="flex gap-4 md:gap-6 animate-scroll">
         {testimonials.map((testimonial) => (
-          <div class="testimonial-card flex-shrink-0" style="width: 400px;">
-            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border border-white/20 dark:border-gray-700/20 rounded-xl p-6 shadow-lg h-full flex flex-col">
+          <div class={`testimonial-card flex-shrink-0 ${cardWidth}`}>
+            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border border-white/20 dark:border-gray-700/20 rounded-xl p-5 md:p-6 shadow-lg h-full flex flex-col">
               <div class="flex text-yellow-400 mb-3">
                 {[...Array(5)].map((_, i) => (
                   <span>
@@ -102,11 +105,11 @@ const totalReviews = 87;
               <div class="mb-4 text-greenberry-600/20 dark:text-greenberry-500/20 text-3xl">
                 <i class="fa-solid fa-quote-left"></i>
               </div>
-              <p class="text-gray-600 dark:text-gray-300 mb-6 flex-grow">
+              <p class="text-gray-600 dark:text-gray-300 mb-6 flex-grow text-sm md:text-base">
                 "{testimonial.content}"
               </p>
               <div class="flex items-center mt-auto">
-                <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-greenberry-200/50 dark:border-greenberry-800/30 mr-4">
+                <div class="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-greenberry-200/50 dark:border-greenberry-800/30 mr-3 md:mr-4">
                   <img 
                     src={testimonial.image} 
                     alt={testimonial.author} 
@@ -114,10 +117,10 @@ const totalReviews = 87;
                   />
                 </div>
                 <div>
-                  <h4 class="font-semibold text-gray-900 dark:text-white">
+                  <h4 class="font-semibold text-gray-900 dark:text-white text-sm md:text-base">
                     {testimonial.author}
                   </h4>
-                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                  <p class="text-xs md:text-sm text-gray-500 dark:text-gray-400">
                     {testimonial.position}
                   </p>
                 </div>
@@ -127,8 +130,8 @@ const totalReviews = 87;
         ))}
         <!-- Duplicate the first few testimonials to create a seamless loop -->
         {testimonials.slice(0, 3).map((testimonial) => (
-          <div class="testimonial-card flex-shrink-0" style="width: 400px;">
-            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border border-white/20 dark:border-gray-700/20 rounded-xl p-6 shadow-lg h-full flex flex-col">
+          <div class={`testimonial-card flex-shrink-0 ${cardWidth}`}>
+            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border border-white/20 dark:border-gray-700/20 rounded-xl p-5 md:p-6 shadow-lg h-full flex flex-col">
               <div class="flex text-yellow-400 mb-3">
                 {[...Array(5)].map((_, i) => (
                   <span>
@@ -139,11 +142,11 @@ const totalReviews = 87;
               <div class="mb-4 text-greenberry-600/20 dark:text-greenberry-500/20 text-3xl">
                 <i class="fa-solid fa-quote-left"></i>
               </div>
-              <p class="text-gray-600 dark:text-gray-300 mb-6 flex-grow">
+              <p class="text-gray-600 dark:text-gray-300 mb-6 flex-grow text-sm md:text-base">
                 "{testimonial.content}"
               </p>
               <div class="flex items-center mt-auto">
-                <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-greenberry-200/50 dark:border-greenberry-800/30 mr-4">
+                <div class="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-greenberry-200/50 dark:border-greenberry-800/30 mr-3 md:mr-4">
                   <img 
                     src={testimonial.image} 
                     alt={testimonial.author} 
@@ -151,10 +154,10 @@ const totalReviews = 87;
                   />
                 </div>
                 <div>
-                  <h4 class="font-semibold text-gray-900 dark:text-white">
+                  <h4 class="font-semibold text-gray-900 dark:text-white text-sm md:text-base">
                     {testimonial.author}
                   </h4>
-                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                  <p class="text-xs md:text-sm text-gray-500 dark:text-gray-400">
                     {testimonial.position}
                   </p>
                 </div>
@@ -188,7 +191,7 @@ const totalReviews = 87;
 </script>
 
 <style>
-  /* Tapefeed animation */
+  /* Tapefeed animation - increased speed */
   @keyframes scroll {
     0% {
       transform: translateX(0);
@@ -199,7 +202,14 @@ const totalReviews = 87;
   }
   
   .animate-scroll {
-    animation: scroll 60s linear infinite;
+    animation: scroll 35s linear infinite; /* Reduced from 60s to 35s for faster movement */
+  }
+  
+  /* Increase animation speed on smaller screens */
+  @media (max-width: 768px) {
+    .animate-scroll {
+      animation: scroll 25s linear infinite; /* Even faster on mobile */
+    }
   }
   
   .testimonial-tapefeed-container {
@@ -213,10 +223,17 @@ const totalReviews = 87;
     content: '';
     position: absolute;
     top: 0;
-    width: 100px;
+    width: 60px;
     height: 100%;
     z-index: 2;
     pointer-events: none;
+  }
+  
+  @media (min-width: 768px) {
+    .testimonial-tapefeed-container::before,
+    .testimonial-tapefeed-container::after {
+      width: 100px;
+    }
   }
   
   .testimonial-tapefeed-container::before {

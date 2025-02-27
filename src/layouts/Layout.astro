@@ -41,10 +41,10 @@ const {
       image={image}
     />
   </head>
-  <body class={`bg-white dark:bg-gray-900 min-h-screen flex flex-col ${bodyClass}`}>
+  <body class={`bg-white dark:bg-gray-900 min-h-screen flex flex-col ${bodyClass} overflow-x-hidden`}>
     <Header />
     
-    <main class="flex-grow">
+    <main class="flex-grow overflow-x-hidden">
       <slot />
     </main>
     
@@ -110,6 +110,13 @@ const {
       .section-revealed {
         opacity: 1;
         transform: translateY(0);
+      }
+      
+      /* Prevent horizontal overflow */
+      html, body {
+        overflow-x: hidden;
+        width: 100%;
+        position: relative;
       }
     </style>
   </body>

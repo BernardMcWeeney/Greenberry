@@ -37,7 +37,7 @@ const navItems = NAVIGATION.main;
           <!-- Dark Mode Toggle -->
           <button 
             id="theme-toggle" 
-            class="p-2 text-gray-600 hover:text-greenberry-600 dark:text-gray-300 dark:hover:text-greenberry-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none"
+            class="p-2 text-gray-600 hover:text-greenberry-600 dark:text-gray-300 dark:hover:text-greenberry-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none relative"
             aria-label="Toggle dark mode"
           >
             <i class="fa-solid fa-sun hidden dark:block text-xl"></i>
@@ -57,40 +57,45 @@ const navItems = NAVIGATION.main;
         </div>
       </nav>
 
-      <!-- Mobile header controls -->
-      <div class="flex items-center gap-4 md:hidden">
+      <!-- Mobile header controls with fixed width to prevent shifting -->
+      <div class="flex items-center gap-2 md:hidden">
         <!-- Dark Mode Toggle (Mobile) -->
         <button 
           id="theme-toggle-mobile" 
-          class="p-2 text-gray-600 hover:text-greenberry-600 dark:text-gray-300 dark:hover:text-greenberry-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none"
+          class="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-greenberry-600 dark:text-gray-300 dark:hover:text-greenberry-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none relative"
           aria-label="Toggle dark mode"
         >
-          <i class="fa-solid fa-sun hidden dark:block text-xl"></i>
-          <i class="fa-solid fa-moon block dark:hidden text-xl"></i>
+          <i class="fa-solid fa-sun hidden dark:block text-xl absolute inset-0 flex items-center justify-center transition-opacity duration-150"></i>
+          <i class="fa-solid fa-moon block dark:hidden text-xl absolute inset-0 flex items-center justify-center transition-opacity duration-150"></i>
         </button>
         
-        <!-- Mobile menu toggle with improved animation -->
+        <!-- Mobile menu toggle with fixed width and smoother transitions -->
         <button 
           id="menu-toggle"
-          class="p-2 text-gray-600 hover:text-greenberry-600 rounded-lg hover:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800 transition-colors relative overflow-hidden"
+          class="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-greenberry-600 rounded-lg hover:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800 transition-colors relative overflow-hidden"
           aria-label="Toggle mobile menu"
         >
           <span class="absolute inset-0 bg-greenberry-100 dark:bg-greenberry-900/30 transform scale-0 rounded-lg transition-transform duration-300 ease-in-out origin-center" id="menu-toggle-bg"></span>
-          <i id="menu-icon" class="fa-solid fa-bars text-xl relative z-10"></i>
+          <div class="w-6 h-6 relative">
+            <!-- Using separate spans for the menu icon bars for smoother transitions -->
+            <span id="bar-top" class="absolute h-0.5 w-6 bg-current rounded-full transform transition-transform duration-200 ease-out" style="top: 30%;"></span>
+            <span id="bar-middle" class="absolute h-0.5 w-6 bg-current rounded-full transform transition-opacity duration-200 ease-out" style="top: 50%; transform: translateY(-50%);"></span>
+            <span id="bar-bottom" class="absolute h-0.5 w-6 bg-current rounded-full transform transition-transform duration-200 ease-out" style="bottom: 30%;"></span>
+          </div>
         </button>
       </div>
     </div>
   </Container>
 
   <!-- Mobile Navigation with improved animation -->
-  <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 transform transition-transform duration-300 origin-top" style="transform-origin: top center;">
+  <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 transition-all duration-200 ease-in-out">
     <Container>
       <div class="py-6 space-y-6">
         <nav class="flex flex-col space-y-5">
           {navItems.map((item, index) => (
             <a 
               href={item.href} 
-              class="font-medium text-gray-800 hover:text-greenberry-600 dark:text-gray-200 dark:hover:text-greenberry-400 transition-colors text-lg px-1 flex items-center transform hover:translate-x-2 transition-transform duration-300 hover:scale-[1.01]"
+              class="mobile-nav-item font-medium text-gray-800 hover:text-greenberry-600 dark:text-gray-200 dark:hover:text-greenberry-400 transition-colors text-lg px-1 flex items-center transform hover:translate-x-2 transition-transform duration-300 hover:scale-[1.01] opacity-0 translate-y-2"
               style={`transition-delay: ${index * 50}ms;`}
             >
               {item.name}
@@ -103,11 +108,11 @@ const navItems = NAVIGATION.main;
         <div class="flex flex-col gap-3 pt-5 border-t border-gray-100 dark:border-gray-800">
           <a 
             href="/customer-portal" 
-            class="px-4 py-3 rounded-md border-2 border-greenberry-600 text-greenberry-600 hover:bg-greenberry-50 dark:border-greenberry-500 dark:text-greenberry-400 dark:hover:bg-gray-800 font-medium transition-colors text-center transform hover:scale-[1.02]"
+            class="mobile-nav-item px-4 py-3 rounded-md border-2 border-greenberry-600 text-greenberry-600 hover:bg-greenberry-50 dark:border-greenberry-500 dark:text-greenberry-400 dark:hover:bg-gray-800 font-medium transition-colors text-center transform hover:scale-[1.02] opacity-0 translate-y-2"
           >
             Customer Portal
           </a>
-          <Button href="/contact" variant="primary" size="md" block={true} class="transform hover:scale-[1.02] shadow-md hover:shadow-lg hover:shadow-greenberry-500/20">
+          <Button href="/contact" variant="primary" size="md" block={true} class="mobile-nav-item transform hover:scale-[1.02] shadow-md hover:shadow-lg hover:shadow-greenberry-500/20 opacity-0 translate-y-2">
             Get Started
             <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>
           </Button>
@@ -118,13 +123,16 @@ const navItems = NAVIGATION.main;
 </header>
 
 <script>
-  // Enhanced mobile menu toggle with animations
+  // Enhanced mobile menu toggle with improved animations
   const menuToggle = document.getElementById('menu-toggle');
   const mobileMenu = document.getElementById('mobile-menu');
-  const menuIcon = document.getElementById('menu-icon');
   const menuToggleBg = document.getElementById('menu-toggle-bg');
+  const barTop = document.getElementById('bar-top');
+  const barMiddle = document.getElementById('bar-middle');
+  const barBottom = document.getElementById('bar-bottom');
+  const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
 
-  if (menuToggle && mobileMenu && menuIcon && menuToggleBg) {
+  if (menuToggle && mobileMenu && menuToggleBg && barTop && barMiddle && barBottom) {
     menuToggle.addEventListener('click', () => {
       // Toggle background effect
       if (menuToggleBg.classList.contains('scale-0')) {
@@ -135,52 +143,68 @@ const navItems = NAVIGATION.main;
         menuToggleBg.classList.add('scale-0');
       }
       
-      // Toggle menu visibility with slide animation
+      // Animate the menu icon immediately (no delay)
       if (mobileMenu.classList.contains('hidden')) {
+        // Transform bars to X shape
+        barTop.style.transform = 'translateY(250%) rotate(45deg)';
+        barMiddle.style.opacity = '0';
+        barBottom.style.transform = 'translateY(-250%) rotate(-45deg)';
+        
+        // Show mobile menu
         mobileMenu.classList.remove('hidden');
+        mobileMenu.style.maxHeight = '0';
         mobileMenu.style.opacity = '0';
-        mobileMenu.style.transform = 'scaleY(0.95)';
         
         // Force reflow to enable animation
         mobileMenu.offsetHeight;
         
+        // Animate the menu
+        mobileMenu.style.maxHeight = '500px';
         mobileMenu.style.opacity = '1';
-        mobileMenu.style.transform = 'scaleY(1)';
-      } else {
-        mobileMenu.style.opacity = '0';
-        mobileMenu.style.transform = 'scaleY(0.95)';
         
+        // Animate each nav item with staggered delay
+        mobileNavItems.forEach((item, index) => {
+          setTimeout(() => {
+            item.style.opacity = '1';
+            item.style.transform = 'translateY(0)';
+          }, 100 + (index * 50));
+        });
+      } else {
+        // Transform X shape back to bars
+        barTop.style.transform = 'translateY(0) rotate(0)';
+        barMiddle.style.opacity = '1';
+        barBottom.style.transform = 'translateY(0) rotate(0)';
+        
+        // Hide the mobile nav items first
+        mobileNavItems.forEach(item => {
+          item.style.opacity = '0';
+          item.style.transform = 'translateY(1rem)';
+        });
+        
+        // Animate out the menu
+        mobileMenu.style.maxHeight = '0';
+        mobileMenu.style.opacity = '0';
+        
+        // Hide after animation completes
         setTimeout(() => {
           mobileMenu.classList.add('hidden');
-        }, 300);
-      }
-      
-      // Toggle icon between bars and x with rotation
-      if (menuIcon.classList.contains('fa-bars')) {
-        menuIcon.style.transform = 'rotate(90deg)';
-        setTimeout(() => {
-          menuIcon.classList.remove('fa-bars');
-          menuIcon.classList.add('fa-xmark');
-          menuIcon.style.transform = 'rotate(0)';
-        }, 150);
-      } else {
-        menuIcon.style.transform = 'rotate(90deg)';
-        setTimeout(() => {
-          menuIcon.classList.remove('fa-xmark');
-          menuIcon.classList.add('fa-bars');
-          menuIcon.style.transform = 'rotate(0)';
-        }, 150);
+          
+          // Reset styles for next opening
+          mobileNavItems.forEach(item => {
+            item.style.transitionDelay = '0ms';
+          });
+        }, 200);
       }
     });
   }
 
-  // Dark mode toggle functionality
+  // Dark mode toggle functionality with no delay
   function setupThemeToggle(buttonId) {
     const themeToggle = document.getElementById(buttonId);
     
     if (themeToggle) {
       themeToggle.addEventListener('click', () => {
-        // Toggle dark mode
+        // Toggle dark mode immediately
         if (document.documentElement.classList.contains('dark')) {
           document.documentElement.classList.remove('dark');
           localStorage.theme = 'light';
@@ -248,5 +272,17 @@ const navItems = NAVIGATION.main;
       transform: scale(2.5);
       opacity: 0;
     }
+  }
+  
+  /* Smooth transitions for mobile menu */
+  #mobile-menu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out, opacity 0.2s ease-in-out;
+  }
+  
+  /* Nav items transition */
+  .mobile-nav-item {
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
   }
 </style>
