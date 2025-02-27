@@ -44,7 +44,7 @@ const {
   <body class={`bg-white dark:bg-gray-900 min-h-screen flex flex-col ${bodyClass}`}>
     <Header />
     
-    <main class="flex-grow">
+    <main class="flex-grow pt-[73px]">
       <slot />
     </main>
     
@@ -110,6 +110,24 @@ const {
       .section-revealed {
         opacity: 1;
         transform: translateY(0);
+      }
+      
+      /* Fix horizontal and vertical scrolling issues */
+      html {
+        overflow-x: hidden;
+        width: 100%;
+      }
+      
+      body {
+        overflow-x: hidden;
+        width: 100%;
+        position: relative;
+        overflow-y: auto;
+      }
+      
+      /* Ensure all elements respect their parent width */
+      * {
+        max-width: 100%;
       }
     </style>
   </body>

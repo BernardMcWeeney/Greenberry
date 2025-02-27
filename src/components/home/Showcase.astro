@@ -38,14 +38,15 @@ const wordpressWebsites = [
   }
 ];
 
-// Get badges for features based on website color
-const getFeatureBadges = (features, color) => {
-  return features.map(feature => {
-    return {
-      text: feature,
-      color: color
-    };
-  });
+// Feature badge colors
+const getFeatureBadgeColor = (color) => {
+  switch(color) {
+    case "blue": return "bg-blue-100 text-blue-800";
+    case "green": return "bg-green-100 text-green-800";
+    case "yellow": return "bg-yellow-100 text-yellow-800";
+    case "red": return "bg-red-100 text-red-800";
+    default: return "bg-gray-100 text-gray-800";
+  }
 };
 ---
 
@@ -71,31 +72,37 @@ const getFeatureBadges = (features, color) => {
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
       {wordpressWebsites.map((website) => (
-        <div class="card card-hover overflow-hidden">
-          <div class="relative">
+        <div class="group relative rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="w-full aspect-video relative">
             <img 
               src={website.image} 
               alt={website.title}
-              class="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-700"
+              class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-700"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-85"></div>
             
-            <div class="absolute top-4 left-4">
-              <span class={`px-3 py-1 text-sm font-medium ${website.badgeColor} text-white rounded-full`}>
+            {/* Dark gradient overlay */}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-80 rounded-lg"></div>
+            
+            {/* Title badge at top - Improved spacing for mobile */}
+            <div class="absolute top-3 left-3 sm:top-4 sm:left-4 z-10">
+              <span class={`px-2.5 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm font-medium ${website.badgeColor} text-white rounded-full`}>
                 {website.title}
               </span>
             </div>
             
-            <div class="absolute inset-0 flex flex-col justify-end p-8">
-              <h3 class="text-2xl font-bold text-white mb-3">
+            {/* Content overlay at bottom - Improved for mobile */}
+            <div class="absolute inset-0 flex flex-col justify-end p-4 sm:p-6">
+              <h3 class="text-xl sm:text-2xl font-bold text-white mb-1 sm:mb-2 mt-6 sm:mt-0">
                 {website.title}
               </h3>
-              <p class="text-white/90 text-base mb-4 line-clamp-2">
+              <p class="text-white/90 text-sm sm:text-base mb-2 sm:mb-4 line-clamp-2">
                 {website.description}
               </p>
-              <div class="flex flex-wrap gap-2">
+              <div class="flex flex-wrap gap-1.5 sm:gap-2">
                 {website.features.map(feature => (
-                  <Badge text={feature} variant={website.color} size="sm" />
+                  <span class={`px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium inline-block whitespace-nowrap ${getFeatureBadgeColor(website.color)}`}>
+                    {feature}
+                  </span>
                 ))}
               </div>
             </div>

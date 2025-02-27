@@ -10,12 +10,22 @@ export default {
           200: '#bbf7d0',
           300: '#86efac',
           400: '#4ade80',
-          500: '#22c55e',
-          600: '#16a34a',
+          500: '#22c55e',  // Primary brand color
+          600: '#16a34a',  // Darker primary for hover states
           700: '#15803d',
           800: '#166534',
           900: '#14532d',
+        },
+        'cool-gray': {
+          50: '#f8fafc',   // Background for sections (off-white)
+          100: '#f1f5f9',  // Secondary background
+          200: '#e2e8f0',  // Borders
+          800: '#1e293b',  // Dark text
         }
+      },
+      backgroundColor: {
+        'cool-white': '#f8fafc', // Very light blue-gray instead of yellow-white
+        'cool-gray': '#f1f5f9', // Light blue-gray for subtle sections
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -31,8 +41,8 @@ export default {
           '50%': { transform: 'translateY(-10px)' },
         },
         'float-slow': {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-6px)' },
+          '0%, 100%': { transform: 'translateY(0) rotate(6deg)' },
+          '50%': { transform: 'translateY(-6px) rotate(8deg)' },
         },
         'ping-slow': {
           '0%': { transform: 'scale(1)', opacity: '0.2' },
@@ -43,12 +53,20 @@ export default {
       boxShadow: {
         'inner-sm': 'inset 0 1px 2px 0 rgba(0, 0, 0, 0.05)',
         'brand': '0 4px 10px -2px rgba(22, 163, 74, 0.2)',
+        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+        'green-glow': '0 0 15px 2px rgba(34, 197, 94, 0.3)',
       },
       borderRadius: {
         'xl': '0.75rem',
         '2xl': '1rem',
         '3xl': '1.5rem',
       },
+      gradientColorStops: theme => ({
+        ...theme('colors'),
+        'green-glow-start': 'rgba(34, 197, 94, 0.2)',
+        'green-glow-end': 'rgba(34, 197, 94, 0.05)',
+      }),
       typography: {
         DEFAULT: {
           css: {

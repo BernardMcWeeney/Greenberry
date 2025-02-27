@@ -4,10 +4,10 @@
 @tailwind utilities;
 
 :root {
-  /* Custom color palette */
-  --color-primary: 34, 197, 94; /* greenberry color */
-  --color-secondary: 96, 165, 250;
-  --color-accent: 253, 224, 71;
+  /* Custom colour palette – keeping greenberry as primary */
+  --color-primary: 34, 197, 94; /* greenberry colour */
+  --color-secondary: 59, 130, 246; /* blue */
+  --color-accent: 99, 102, 241; /* indigo instead of yellow */
   --color-danger: 239, 68, 68;
   
   /* Spacing system */
@@ -21,11 +21,11 @@
 @layer base {
   html {
     font-family: 'Inter', sans-serif;
-    scroll-behavior: smooth;
+    scroll-behaviour: smooth;
   }
   
   body {
-    @apply text-gray-700 dark:text-gray-300;
+    @apply text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900;
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -34,7 +34,7 @@
 }
 
 @layer components {
-  /* Consistent section styling */
+  /* Updated section styling with refined padding */
   .section-padding {
     @apply py-16 md:py-24;
   }
@@ -49,7 +49,7 @@
   }
   
   .section-description {
-    @apply text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto;
+    @apply text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8;
   }
   
   /* Badge styling wrapper */
@@ -57,18 +57,19 @@
     @apply inline-block mb-6;
   }
   
-  /* Card styling */
+  /* Card styling with refined shadow */
   .card {
-    @apply bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden;
+    @apply bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden;
   }
   
+  /* Card hover effect with removed vertical translation */
   .card-hover {
-    @apply hover:shadow-lg hover:translate-y-[-4px] transition-all duration-300;
+    @apply hover:shadow-lg hover:shadow-greenberry-500/10 transition-all duration-300;
   }
   
-  /* Section decorative background */
+  /* Section decorative background with updated ::after colour */
   .section-bg-decoration {
-    @apply relative;
+    @apply relative overflow-hidden;
   }
   
   .section-bg-decoration::before {
@@ -79,6 +80,48 @@
   .section-bg-decoration::after {
     content: '';
     @apply absolute bottom-0 left-0 w-1/3 h-1/3 bg-greenberry-500/10 rounded-full filter blur-3xl opacity-60 translate-y-1/2 -translate-x-1/3;
+  }
+  
+  /* Hero section with cool background */
+  .hero-section {
+    @apply bg-gradient-to-br from-gray-50 via-gray-50 to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-800 relative overflow-hidden;
+  }
+  
+  /* Feature highlight box */
+  .feature-highlight {
+    @apply bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 border border-gray-100 dark:border-gray-700;
+  }
+  
+  /* Stats card */
+  .stats-card {
+    @apply bg-white shadow-md border border-gray-100 dark:bg-gray-800 dark:border-gray-700 rounded-xl;
+  }
+  
+  /* Testimonial card */
+  .testimonial-card-bg {
+    @apply bg-white dark:bg-gray-800 shadow-md backdrop-blur-md border border-gray-100 dark:border-gray-700;
+  }
+  
+  /* Green accent features */
+  .green-accent-feature {
+    @apply bg-gradient-to-br from-greenberry-50 to-greenberry-100 dark:from-gray-800 dark:to-gray-700 border border-greenberry-100 dark:border-greenberry-900/30;
+  }
+  
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition-all duration-300;
+  }
+  
+  .btn-primary {
+    @apply bg-greenberry-600 hover:bg-greenberry-700 text-white shadow-md hover:shadow-lg hover:shadow-greenberry-500/20;
+  }
+  
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 shadow-sm hover:shadow-md;
+  }
+  
+  .btn-outline {
+    @apply bg-transparent border-2 border-greenberry-500 text-greenberry-600 hover:bg-greenberry-50;
   }
   
   /* Animations */
@@ -101,5 +144,13 @@
   
   .animation-delay-600 {
     animation-delay: 600ms;
+  }
+  
+  /* Background grid pattern */
+  .bg-grid-pattern {
+    background-image: 
+      linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
   }
 }

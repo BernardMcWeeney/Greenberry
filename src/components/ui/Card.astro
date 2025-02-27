@@ -5,8 +5,7 @@ export interface Props {
   class?: string;
   iconClass?: string;
   href?: string;
-  variant?: 'default' | 'feature' | 'service' | 'glass';
-  color?: 'blue' | 'green' | 'yellow' | 'red' | 'purple' | 'primary';
+  variant?: 'default' | 'feature' | 'service';
 }
 
 const { 
@@ -14,60 +13,32 @@ const {
   icon,
   href,
   variant = 'default',
-  color = 'primary',
   class: className = "",
-  iconClass = "",
+  iconClass = "text-greenberry-600 dark:text-greenberry-400",
 } = Astro.props;
 
 // Card variant classes
 const variants = {
-  default: 'bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300',
-  feature: 'p-6 border-t-4 border-t-greenberry-500 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-all duration-300',
-  service: 'relative overflow-hidden bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300',
-  glass: 'bg-white/50 dark:bg-gray-800/50 backdrop-blur-md p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-white/20 dark:border-gray-700/20',
-};
-
-// Color classes for borders and accents
-const colors = {
-  blue: 'border-blue-500',
-  green: 'border-green-500',
-  yellow: 'border-yellow-500',
-  red: 'border-red-500',
-  purple: 'border-purple-500',
-  primary: 'border-greenberry-500',
-};
-
-// Icon color classes
-const getIconColor = (color) => {
-  const iconColors = {
-    blue: 'text-blue-500',
-    green: 'text-green-500',
-    yellow: 'text-yellow-500',
-    red: 'text-red-500',
-    purple: 'text-purple-500',
-    primary: 'text-greenberry-600 dark:text-greenberry-400',
-  };
-  return iconColors[color] || 'text-greenberry-600 dark:text-greenberry-400';
+  default: 'p-6',
+  feature: 'p-6 border-t-4 border-t-greenberry-500',
+  service: 'relative overflow-hidden',
 };
 
 // Generate class list
 const classes = [
-  'card card-hover', 
+  'card', 
   variants[variant],
-  variant === 'feature' ? colors[color] : '',
   className
 ];
-
-const finalIconClass = `${getIconColor(color)} ${iconClass}`;
 ---
 
 <div class:list={classes}>
   {variant === 'service' && (
-    <div class={`absolute top-0 left-0 w-full h-1 ${color === 'primary' ? 'bg-greenberry-500' : `bg-${color}-500`}`}></div>
+    <div class="absolute top-0 left-0 w-full h-1 bg-greenberry-500"></div>
   )}
   
   {icon && (
-    <div class={`text-2xl mb-4 ${finalIconClass} ${variant === 'feature' ? 'feature-icon' : ''}`}>
+    <div class={`text-2xl mb-4 ${iconClass} ${variant === 'feature' ? 'feature-icon' : ''}`}>
       <i class={icon}></i>
     </div>
   )}
@@ -102,28 +73,3 @@ const finalIconClass = `${getIconColor(color)} ${iconClass}`;
     </div>
   )}
 </div>
-
-<style>
-  .feature-icon {
-    position: relative;
-  }
-  
-  .feature-icon::after {
-    content: '';
-    position: absolute;
-    left: -8px;
-    top: -8px;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: currentColor;
-    opacity: 0.1;
-    z-index: -1;
-    transform: scale(0);
-    transition: transform 0.3s ease;
-  }
-  
-  .card:hover .feature-icon::after {
-    transform: scale(1);
-  }
-</style>

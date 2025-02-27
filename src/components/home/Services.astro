@@ -9,7 +9,8 @@ const services = [
     description: "Modern and cutting-edge websites featuring responsive and lightweight designs.",
     icon: "fa-solid fa-globe",
     color: "blue",
-    bgColor: "bg-blue-500",
+    borderColor: "border-t-blue-500",
+    textColor: "text-blue-500",
     link: "/services#websites"
   },
   {
@@ -17,15 +18,17 @@ const services = [
     description: "Regular updates and maintenance to ensure your website has the latest software and security.",
     icon: "fa-solid fa-arrows-rotate",
     color: "green",
-    bgColor: "bg-green-500",
+    borderColor: "border-t-green-500",
+    textColor: "text-green-500",
     link: "/services#maintenance"
   },
   {
     title: "SEO Packages",
     description: "Improve your online visibility and help meet your goals with our comprehensive SEO services.",
     icon: "fa-solid fa-magnifying-glass-chart",
-    color: "yellow",
-    bgColor: "bg-yellow-500",
+    color: "orange",
+    borderColor: "border-t-orange-500",
+    textColor: "text-orange-500",
     link: "/services#seo"
   },
   {
@@ -33,13 +36,14 @@ const services = [
     description: "Streamlined and reliable email solutions that prioritize simplicity & security for your business.",
     icon: "fa-solid fa-envelope",
     color: "red",
-    bgColor: "bg-red-500",
+    borderColor: "border-t-red-500",
+    textColor: "text-red-500",
     link: "/services#email"
   }
 ];
 ---
 
-<section class="section-padding bg-gray-50 dark:bg-gray-800/50 section-bg-decoration">
+<section class="section-padding bg-cool-gray-50 dark:bg-gray-800/50 section-bg-decoration">
   <Container>
     <div class="max-w-3xl mx-auto text-center mb-16 relative z-10">
       <div class="badge-wrapper">
@@ -53,20 +57,17 @@ const services = [
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
       {services.map((service) => (
-        <div class="card card-hover group overflow-hidden border border-gray-100 dark:border-gray-700">
-          <div class="relative h-2">
-            <div class={`absolute inset-0 ${service.bgColor} group-hover:w-full transition-all duration-300`}></div>
-          </div>
-          <div class="p-8">
-            <div class="w-14 h-14 rounded-full bg-gray-50 dark:bg-gray-700 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
-              <i class={`${service.icon} text-${service.color}-500`}></i>
+        <div class={`group bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border-t-4 ${service.borderColor}`}>
+          <div class="p-6">
+            <div class={`${service.textColor} text-4xl mb-4`}>
+              <i class={service.icon}></i>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-greenberry-600 dark:group-hover:text-greenberry-400 transition-colors">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">
               {service.title}
             </h3>
-            <p class="text-gray-600 dark:text-gray-300 mb-6">
+            <p class="text-gray-600 dark:text-gray-300 mb-4">
               {service.description}
             </p>
             <a 
@@ -84,7 +85,7 @@ const services = [
     </div>
     
     <div class="text-center mt-16 relative z-10">
-      <Button href="/services" variant="primary" size="lg" class="font-medium">
+      <Button href="/services" variant="primary" size="lg" class="font-medium shadow-md hover:shadow-lg hover:shadow-greenberry-500/20">
         Explore All Services
         <span class="ml-2"><i class="fa-solid fa-arrow-right"></i></span>
       </Button>
