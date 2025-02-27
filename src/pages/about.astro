@@ -2,6 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import Container from '../components/common/Container.astro';
 import Button from '../components/common/Button.astro';
+import Badge from '../components/ui/Badge.astro';
+import { COMPANY } from '../config';
 
 const teamMembers = [
   {
@@ -50,13 +52,13 @@ const values = [
 
 <Layout title="About Us | Greenberry">
   <!-- Hero Section -->
-  <section class="pt-20 pb-16 bg-green-50 dark:bg-gray-800">
+  <section class="pt-20 pb-16 bg-green-50 dark:bg-gray-800 section-bg-decoration">
     <Container>
       <div class="max-w-3xl mx-auto text-center">
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+        <h1 class="heading-primary">
           About Greenberry
         </h1>
-        <p class="text-xl text-gray-600 dark:text-gray-300">
+        <p class="section-description">
           We're an Irish web development agency specializing in creating beautiful, functional websites that help businesses grow.
         </p>
       </div>
@@ -64,19 +66,19 @@ const values = [
   </section>
   
   <!-- Our Story -->
-  <section class="py-16">
+  <section class="py-16 bg-white dark:bg-gray-900">
     <Container>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div>
-          <span class="inline-block py-1 px-3 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 rounded-full text-sm font-medium mb-4">
-            Our Story
-          </span>
-          <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+          <div class="badge-wrapper">
+            <Badge text="OUR STORY" variant="primary" size="md" />
+          </div>
+          <h2 class="heading-secondary">
             From a small idea to helping businesses across Ireland
           </h2>
           <div class="space-y-4 text-gray-600 dark:text-gray-300">
             <p>
-              Founded in 2018, Greenberry began with a simple mission: to make high-quality web development accessible to Irish businesses of all sizes.
+              Founded in {COMPANY.foundedYear}, Greenberry began with a simple mission: to make high-quality web development accessible to Irish businesses of all sizes.
             </p>
             <p>
               We noticed that many small businesses were struggling with outdated websites or overpaying for basic services. We set out to change that by offering affordable, fully-managed website solutions that prioritize performance, design, and results.
@@ -102,21 +104,21 @@ const values = [
   <section class="py-16 bg-gray-50 dark:bg-gray-800/50">
     <Container>
       <div class="max-w-3xl mx-auto text-center mb-16">
-        <span class="inline-block py-1 px-3 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 rounded-full text-sm font-medium mb-4">
-          Our Values
-        </span>
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+        <div class="badge-wrapper">
+          <Badge text="OUR VALUES" variant="primary" size="md" />
+        </div>
+        <h2 class="heading-primary">
           What drives us every day
         </h2>
-        <p class="text-xl text-gray-600 dark:text-gray-300">
+        <p class="section-description">
           These core principles guide everything we do at Greenberry.
         </p>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {values.map((value) => (
-          <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
-            <div class="text-green-600 dark:text-green-400 text-2xl mb-4">
+          <div class="card p-6">
+            <div class="feature-icon mb-4">
               <i class={value.icon}></i>
             </div>
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
@@ -132,33 +134,36 @@ const values = [
   </section>
   
   <!-- Team Section -->
-  <section class="py-16">
+  <section class="py-16 bg-white dark:bg-gray-900">
     <Container>
       <div class="max-w-3xl mx-auto text-center mb-16">
-        <span class="inline-block py-1 px-3 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 rounded-full text-sm font-medium mb-4">
-          Our Team
-        </span>
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+        <div class="badge-wrapper">
+          <Badge text="OUR TEAM" variant="primary" size="md" />
+        </div>
+        <h2 class="heading-primary">
           Meet the people behind Greenberry
         </h2>
-        <p class="text-xl text-gray-600 dark:text-gray-300">
+        <p class="section-description">
           A small but dedicated team of web experts passionate about helping Irish businesses succeed online.
         </p>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         {teamMembers.map((member) => (
-          <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm border border-gray-200 dark:border-gray-700">
-            <img 
-              src={member.image} 
-              alt={member.name} 
-              class="w-full h-64 object-cover object-center"
-            />
+          <div class="card overflow-hidden group">
+            <div class="relative">
+              <img 
+                src={member.image} 
+                alt={member.name} 
+                class="w-full h-64 object-cover object-center group-hover:scale-105 transition-transform duration-500"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </div>
             <div class="p-6">
               <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-1">
                 {member.name}
               </h3>
-              <p class="text-green-600 dark:text-green-400 font-medium mb-4">
+              <p class="text-greenberry-600 dark:text-greenberry-400 font-medium mb-4">
                 {member.position}
               </p>
               <p class="text-gray-600 dark:text-gray-400">
@@ -172,13 +177,13 @@ const values = [
   </section>
   
   <!-- CTA Section -->
-  <section class="py-16 bg-green-50 dark:bg-gray-800/50">
+  <section class="py-16 bg-green-50 dark:bg-gray-800/50 section-bg-decoration">
     <Container>
       <div class="max-w-3xl mx-auto text-center">
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+        <h2 class="heading-primary">
           Ready to work with us?
         </h2>
-        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
+        <p class="section-description mb-8">
           Let's discuss how Greenberry can help your business thrive online.
         </p>
         <Button href="/contact" size="lg">

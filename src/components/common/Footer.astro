@@ -1,60 +1,81 @@
 ---
 import Container from './Container.astro';
+import Button from './Button.astro';
+import { COMPANY, SOCIAL_LINKS, NAVIGATION } from '../../config';
 
 const currentYear = new Date().getFullYear();
 
-const companyItems = [
-  { title: "About", path: "/about" },
-  { title: "Services", path: "/services" },
-  { title: "Blog", path: "/blog" },
-  { title: "Contact", path: "/contact" },
-];
-
-const serviceItems = [
-  { title: "Website Solutions", path: "/services#websites" },
-  { title: "Upgrades & Maintenance", path: "/services#maintenance" },
-  { title: "SEO Packages", path: "/services#seo" },
-  { title: "Email Solutions", path: "/services#email" },
-];
-
-const resourceItems = [
-  { title: "Help Center", path: "/help" },
-  { title: "Terms of Service", path: "/terms" },
-  { title: "Privacy Policy", path: "/privacy" },
-];
+const companyItems = NAVIGATION.footer.company;
+const serviceItems = NAVIGATION.footer.services;
+const resourceItems = NAVIGATION.footer.resources;
 
 const socialLinks = [
-  { icon: "fa-brands fa-facebook", path: "https://facebook.com/" },
-  { icon: "fa-brands fa-twitter", path: "https://twitter.com/" },
-  { icon: "fa-brands fa-linkedin", path: "https://linkedin.com/" },
-  { icon: "fa-brands fa-instagram", path: "https://instagram.com/" },
+  { icon: "fa-brands fa-facebook", path: SOCIAL_LINKS.facebook },
+  { icon: "fa-brands fa-twitter", path: SOCIAL_LINKS.twitter },
+  { icon: "fa-brands fa-linkedin", path: SOCIAL_LINKS.linkedin },
+  { icon: "fa-brands fa-instagram", path: SOCIAL_LINKS.instagram },
 ];
 ---
 
-<footer class="bg-gray-50 dark:bg-gray-800 mt-20">
-  <Container>
-    <div class="py-16">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<footer class="bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 relative overflow-hidden">
+  <!-- Newsletter Section -->
+  <div class="bg-gray-50 dark:bg-gray-800/50 py-16 relative section-bg-decoration">
+    <Container>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        <div>
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+            Stay updated with Greenberry
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300 mb-0">
+            Get the latest web development insights and special offers delivered to your inbox.
+          </p>
+        </div>
+        <div>
+          <form class="flex flex-col sm:flex-row gap-3">
+            <input 
+              type="email" 
+              placeholder="Enter your email" 
+              class="flex-1 px-4 py-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-greenberry-500 focus:border-greenberry-500"
+              required
+            />
+            <Button type="submit" size="md">
+              Subscribe
+              <i class="fa-solid fa-paper-plane ml-2 text-sm"></i>
+            </Button>
+          </form>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+            We respect your privacy. Unsubscribe at any time.
+          </p>
+        </div>
+      </div>
+    </Container>
+  </div>
+
+  <!-- Main Footer Content -->
+  <div class="py-16">
+    <Container>
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
         <!-- Branding & Social -->
-        <div class="col-span-1 md:col-span-1">
-          <a href="/" class="flex items-center gap-2 mb-4">
-            <span class="text-green-600 text-xl">
+        <div class="col-span-1 md:col-span-4">
+          <a href="/" class="flex items-center gap-2 mb-4 group">
+            <div class="w-9 h-9 bg-greenberry-50 dark:bg-greenberry-900/30 rounded-lg flex items-center justify-center text-greenberry-600 dark:text-greenberry-400 group-hover:scale-110 transition-transform duration-300">
               <i class="fa-solid fa-leaf"></i>
-            </span>
-            <span class="font-bold text-gray-900 dark:text-white">
-              <span class="text-green-600">Green</span>berry
+            </div>
+            <span class="font-bold text-xl text-gray-900 dark:text-white">
+              <span class="text-greenberry-600 dark:text-greenberry-400">Green</span>berry
             </span>
           </a>
-          <p class="text-gray-600 dark:text-gray-400 mb-4">
+          <p class="text-gray-600 dark:text-gray-400 mb-6">
             Hassle-free website solutions and fully managed IT services for businesses across Ireland.
           </p>
-          <div class="flex gap-4 mt-4">
+          <div class="flex gap-4">
             {socialLinks.map(social => (
               <a 
                 href={social.path} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                class="text-gray-500 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-500 transition-colors"
+                class="w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 hover:bg-greenberry-500 hover:text-white dark:text-gray-400 dark:hover:bg-greenberry-600 dark:hover:text-white transition-colors"
+                aria-label={`Follow us on ${social.icon.split('-').pop()}`}
               >
                 <i class={social.icon}></i>
               </a>
@@ -63,16 +84,19 @@ const socialLinks = [
         </div>
 
         <!-- Company -->
-        <div>
-          <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Company</h3>
-          <ul class="space-y-2">
+        <div class="col-span-1 md:col-span-2">
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-5">Company</h3>
+          <ul class="space-y-3">
             {companyItems.map(item => (
               <li>
                 <a 
-                  href={item.path} 
-                  class="text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-500 transition-colors"
+                  href={item.href} 
+                  class="text-gray-600 hover:text-greenberry-600 dark:text-gray-400 dark:hover:text-greenberry-400 transition-colors inline-flex items-center group"
                 >
-                  {item.title}
+                  <span class="text-xs mr-2 text-greenberry-500 dark:text-greenberry-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <i class="fa-solid fa-chevron-right"></i>
+                  </span>
+                  {item.name}
                 </a>
               </li>
             ))}
@@ -80,62 +104,96 @@ const socialLinks = [
         </div>
 
         <!-- Services -->
-        <div>
-          <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Services</h3>
-          <ul class="space-y-2">
+        <div class="col-span-1 md:col-span-2">
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-5">Services</h3>
+          <ul class="space-y-3">
             {serviceItems.map(item => (
               <li>
                 <a 
-                  href={item.path} 
-                  class="text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-500 transition-colors"
+                  href={item.href} 
+                  class="text-gray-600 hover:text-greenberry-600 dark:text-gray-400 dark:hover:text-greenberry-400 transition-colors inline-flex items-center group"
                 >
-                  {item.title}
+                  <span class="text-xs mr-2 text-greenberry-500 dark:text-greenberry-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <i class="fa-solid fa-chevron-right"></i>
+                  </span>
+                  {item.name}
                 </a>
               </li>
             ))}
           </ul>
         </div>
 
-        <!-- Resources -->
-        <div>
-          <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Resources</h3>
-          <ul class="space-y-2">
-            {resourceItems.map(item => (
-              <li>
-                <a 
-                  href={item.path} 
-                  class="text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-500 transition-colors"
-                >
-                  {item.title}
+        <!-- Contact -->
+        <div class="col-span-1 md:col-span-4">
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-5">Contact Us</h3>
+          <ul class="space-y-4">
+            <li class="flex">
+              <div class="w-10 h-10 rounded-full bg-greenberry-50 dark:bg-greenberry-900/30 flex items-center justify-center text-greenberry-600 dark:text-greenberry-400 mr-3">
+                <i class="fa-solid fa-envelope"></i>
+              </div>
+              <div>
+                <p class="text-gray-900 dark:text-white font-medium">Email</p>
+                <a href={`mailto:${COMPANY.email}`} class="text-gray-600 dark:text-gray-400 hover:text-greenberry-600 dark:hover:text-greenberry-400">
+                  {COMPANY.email}
                 </a>
-              </li>
-            ))}
+              </div>
+            </li>
+            <li class="flex">
+              <div class="w-10 h-10 rounded-full bg-greenberry-50 dark:bg-greenberry-900/30 flex items-center justify-center text-greenberry-600 dark:text-greenberry-400 mr-3">
+                <i class="fa-solid fa-phone"></i>
+              </div>
+              <div>
+                <p class="text-gray-900 dark:text-white font-medium">Phone</p>
+                <a href={`tel:${COMPANY.phone}`} class="text-gray-600 dark:text-gray-400 hover:text-greenberry-600 dark:hover:text-greenberry-400">
+                  {COMPANY.phone}
+                </a>
+              </div>
+            </li>
+            <li class="flex">
+              <div class="w-10 h-10 rounded-full bg-greenberry-50 dark:bg-greenberry-900/30 flex items-center justify-center text-greenberry-600 dark:text-greenberry-400 mr-3">
+                <i class="fa-solid fa-location-dot"></i>
+              </div>
+              <div>
+                <p class="text-gray-900 dark:text-white font-medium">Location</p>
+                <p class="text-gray-600 dark:text-gray-400">
+                  {COMPANY.address}
+                </p>
+              </div>
+            </li>
           </ul>
         </div>
       </div>
-    </div>
+    </Container>
+  </div>
 
-    <!-- Bottom bar -->
-    <div class="py-6 border-t border-gray-200 dark:border-gray-700">
+  <!-- Bottom bar -->
+  <div class="py-6 border-t border-gray-200 dark:border-gray-700">
+    <Container>
       <div class="flex flex-col sm:flex-row justify-between items-center">
         <p class="text-sm text-gray-600 dark:text-gray-400">
-          &copy; {currentYear} Greenberry. All rights reserved.
+          &copy; {currentYear} {COMPANY.name}. All rights reserved.
         </p>
-        <div class="flex gap-4 mt-4 sm:mt-0">
+        <div class="flex gap-6 mt-4 sm:mt-0">
           <a 
             href="/terms" 
-            class="text-sm text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-500 transition-colors"
+            class="text-sm text-gray-600 hover:text-greenberry-600 dark:text-gray-400 dark:hover:text-greenberry-400 transition-colors"
           >
             Terms
           </a>
           <a 
             href="/privacy" 
-            class="text-sm text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-500 transition-colors"
+            class="text-sm text-gray-600 hover:text-greenberry-600 dark:text-gray-400 dark:hover:text-greenberry-400 transition-colors"
           >
             Privacy
           </a>
+          <a 
+            href="/sitemap" 
+            class="text-sm text-gray-600 hover:text-greenberry-600 dark:text-gray-400 dark:hover:text-greenberry-400 transition-colors"
+          >
+            Sitemap
+          </a>
         </div>
       </div>
-    </div>
-  </Container>
+    </Container>
+  </div>
 </footer>

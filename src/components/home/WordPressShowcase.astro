@@ -1,0 +1,116 @@
+---
+import Container from '../common/Container.astro';
+import Badge from '../ui/Badge.astro';
+import Button from '../common/Button.astro';
+
+const wordpressWebsites = [
+  {
+    title: "Business Website",
+    description: "Professional business website with service pages, about section, and contact form.",
+    image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
+    features: ["Responsive", "SEO Optimized", "Fast Loading"]
+  },
+  {
+    title: "E-Commerce Store",
+    description: "Complete online store with product catalog, shopping cart, and secure checkout.",
+    image: "https://images.unsplash.com/photo-1593642532400-2682810df593?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
+    features: ["WooCommerce", "Payment Gateway", "Inventory Management"]
+  },
+  {
+    title: "Blog & Magazine",
+    description: "Content-focused website with categories, tags, and subscription options.",
+    image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
+    features: ["Content Management", "Newsletter", "Social Sharing"]
+  },
+  {
+    title: "Portfolio Site",
+    description: "Showcase your work with this elegant and minimalist portfolio design.",
+    image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
+    features: ["Gallery", "Project Categories", "Case Studies"]
+  }
+];
+
+// Feature badge colors map
+const badgeColors = {
+  "Responsive": { bg: "bg-green-100", text: "text-green-800" },
+  "SEO Optimized": { bg: "bg-blue-100", text: "text-blue-800" },
+  "Fast Loading": { bg: "bg-red-100", text: "text-red-800" },
+  "WooCommerce": { bg: "bg-purple-100", text: "text-purple-800" },
+  "Payment Gateway": { bg: "bg-yellow-100", text: "text-yellow-800" },
+  "Inventory Management": { bg: "bg-blue-100", text: "text-blue-800" },
+  "Content Management": { bg: "bg-green-100", text: "text-green-800" },
+  "Newsletter": { bg: "bg-teal-100", text: "text-teal-800" },
+  "Social Sharing": { bg: "bg-indigo-100", text: "text-indigo-800" },
+  "Gallery": { bg: "bg-purple-100", text: "text-purple-800" },
+  "Project Categories": { bg: "bg-blue-100", text: "text-blue-800" },
+  "Case Studies": { bg: "bg-green-100", text: "text-green-800" }
+};
+---
+
+<section class="py-24 bg-gray-50 dark:bg-gray-800/50 relative overflow-hidden">
+  <!-- Background elements -->
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="absolute top-0 right-0 w-96 h-96 bg-greenberry-500/10 rounded-full filter blur-3xl opacity-70 translate-x-1/3 -translate-y-1/3"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-greenberry-500/10 rounded-full filter blur-3xl opacity-60 -translate-x-1/3 translate-y-1/3"></div>
+  </div>
+
+  <Container>
+    <div class="max-w-3xl mx-auto text-center mb-16 relative z-10">
+      <div class="inline-block bg-greenberry-100 dark:bg-greenberry-900/50 rounded-full px-4 py-1.5 mb-6">
+        <span class="text-sm font-medium tracking-wide uppercase text-greenberry-800 dark:text-greenberry-300">
+          WordPress Expertise
+        </span>
+      </div>
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+        Beautiful WordPress Websites<br class="hidden md:block"> for Every Need
+      </h2>
+      <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+        We specialize in creating custom WordPress websites that are fast, secure, and easy to manage.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+      {wordpressWebsites.map((website) => (
+        <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group">
+          <div class="relative">
+            <img 
+              src={website.image} 
+              alt={website.title}
+              class="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-700"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-85"></div>
+            
+            <div class="absolute top-4 left-4">
+              <span class="px-3 py-1 text-sm font-medium bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-greenberry-700 dark:text-greenberry-400 rounded-full">
+                {website.title}
+              </span>
+            </div>
+            
+            <div class="absolute inset-0 flex flex-col justify-end p-8">
+              <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-greenberry-300 transition-colors">
+                {website.title}
+              </h3>
+              <p class="text-white/90 text-base mb-4 line-clamp-2">
+                {website.description}
+              </p>
+              <div class="flex flex-wrap gap-2">
+                {website.features.map(feature => (
+                  <span class={`inline-block px-2.5 py-1 text-xs font-medium rounded-full ${badgeColors[feature].bg} ${badgeColors[feature].text} dark:bg-opacity-20 dark:text-white/90`}>
+                    {feature}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+    
+    <div class="text-center mt-12">
+      <Button href="/services#wordpress" variant="outline" size="md" class="gap-2 group">
+        Explore WordPress solutions
+        <i class="fa-brands fa-wordpress group-hover:rotate-12 transition-transform duration-300"></i>
+      </Button>
+    </div>
+  </Container>
+</section>

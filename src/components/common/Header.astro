@@ -1,93 +1,89 @@
 ---
 import Container from './Container.astro';
+import Button from './Button.astro';
+import { NAVIGATION } from '../../config';
 
-const navItems = [
-  {
-    title: "Home",
-    path: "/",
-  },
-  {
-    title: "About",
-    path: "/about",
-  },
-  {
-    title: "Services",
-    path: "/services",
-  },
-  {
-    title: "Blog",
-    path: "/blog",
-  },
-  {
-    title: "Contact",
-    path: "/contact",
-  },
-];
+const navItems = NAVIGATION.main;
 ---
 
-<header class="sticky top-0 z-40 flex-none w-full bg-white/90 backdrop-blur dark:bg-gray-900/90 shadow-sm">
+<header class="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 border-b border-gray-200 dark:border-gray-800 backdrop-blur-md shadow-sm">
   <Container>
-    <div class="py-3 flex justify-between items-center">
+    <div class="py-4 flex justify-between items-center">
       <!-- Logo -->
-      <a href="/" class="flex items-center gap-2">
-        <span class="text-green-600 text-2xl">
-          <i class="fa-solid fa-leaf"></i>
-        </span>
+      <a href="/" class="flex items-center gap-2 group">
+        <div class="w-10 h-10 bg-gradient-to-br from-greenberry-50 to-greenberry-100 dark:from-greenberry-900/30 dark:to-greenberry-800/30 rounded-lg flex items-center justify-center text-greenberry-600 dark:text-greenberry-400 group-hover:scale-110 transition-transform duration-300 shadow-sm">
+          <i class="fa-solid fa-leaf text-xl"></i>
+        </div>
         <span class="font-bold text-xl text-gray-900 dark:text-white">
-          <span class="text-green-600">Green</span>berry
+          <span class="text-greenberry-600 dark:text-greenberry-400">Green</span>berry
         </span>
       </a>
 
-      <!-- Mobile menu toggle -->
-      <div class="block lg:hidden">
-        <button 
-          id="menu-toggle"
-          class="p-2 text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none dark:text-gray-400 dark:hover:bg-gray-700"
-        >
-          <i id="menu-icon" class="fa-solid fa-bars"></i>
-        </button>
-      </div>
-
       <!-- Desktop Navigation -->
-      <nav class="hidden lg:flex items-center gap-6">
+      <nav class="hidden md:flex items-center gap-8">
         {navItems.map(item => (
           <a 
-            href={item.path} 
-            class="font-medium text-gray-600 hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500 transition-colors"
+            href={item.href} 
+            class="font-medium text-gray-700 hover:text-greenberry-600 dark:text-gray-200 dark:hover:text-greenberry-400 transition-colors relative group py-1"
           >
-            {item.title}
+            {item.name}
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-greenberry-500 group-hover:w-full transition-all duration-300"></span>
           </a>
         ))}
-        <a 
-          href="/contact" 
-          class="px-5 py-2.5 rounded-md bg-green-600 hover:bg-green-700 text-white font-medium transition-colors"
-        >
-          Get Started
-        </a>
+        <div class="flex items-center gap-4 ml-4">
+          <a 
+            href="/customer-portal" 
+            class="px-4 py-2 text-sm rounded-md border-2 border-greenberry-600 text-greenberry-600 hover:bg-greenberry-50 dark:border-greenberry-500 dark:text-greenberry-400 dark:hover:bg-gray-800 font-medium transition-colors"
+          >
+            Customer Portal
+          </a>
+          <Button href="/contact" variant="primary" size="sm">
+            Get Started
+            <span class="ml-1 opacity-80">→</span>
+          </Button>
+        </div>
       </nav>
+
+      <!-- Mobile menu toggle -->
+      <button 
+        id="menu-toggle"
+        class="md:hidden p-2 text-gray-600 hover:text-greenberry-600 rounded-lg hover:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+        aria-label="Toggle mobile menu"
+      >
+        <i id="menu-icon" class="fa-solid fa-bars text-xl"></i>
+      </button>
     </div>
   </Container>
 
   <!-- Mobile Navigation (Hidden by default) -->
-  <div id="mobile-menu" class="hidden lg:hidden w-full">
+  <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
     <Container>
-      <div class="py-4 border-t border-gray-200 dark:border-gray-700">
-        <nav class="flex flex-col space-y-4">
+      <div class="py-6 space-y-6">
+        <nav class="flex flex-col space-y-5">
           {navItems.map(item => (
             <a 
-              href={item.path} 
-              class="font-medium text-gray-600 hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500 transition-colors"
+              href={item.href} 
+              class="font-medium text-gray-800 hover:text-greenberry-600 dark:text-gray-200 dark:hover:text-greenberry-400 transition-colors text-lg px-1 flex items-center"
             >
-              {item.title}
+              {item.name}
+              <span class="ml-auto text-gray-400 text-sm">
+                <i class="fa-solid fa-chevron-right"></i>
+              </span>
             </a>
           ))}
-          <a 
-            href="/contact" 
-            class="px-5 py-2.5 rounded-md bg-green-600 hover:bg-green-700 text-white font-medium transition-colors text-center"
-          >
-            Get Started
-          </a>
         </nav>
+        <div class="flex flex-col gap-3 pt-5 border-t border-gray-100 dark:border-gray-800">
+          <a 
+            href="/customer-portal" 
+            class="px-4 py-3 rounded-md border-2 border-greenberry-600 text-greenberry-600 hover:bg-greenberry-50 dark:border-greenberry-500 dark:text-greenberry-400 dark:hover:bg-gray-800 font-medium transition-colors text-center"
+          >
+            Customer Portal
+          </a>
+          <Button href="/contact" variant="primary" size="md" block={true}>
+            Get Started
+            <i class="fa-solid fa-arrow-right ml-2"></i>
+          </Button>
+        </div>
       </div>
     </Container>
   </div>

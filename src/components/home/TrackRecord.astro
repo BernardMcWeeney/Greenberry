@@ -1,0 +1,56 @@
+---
+import Container from '../common/Container.astro';
+import Badge from '../ui/Badge.astro';
+
+const stats = [
+  {
+    value: "5+",
+    label: "Years Experience",
+    icon: "fa-solid fa-calendar-check"
+  },
+  {
+    value: "100+",
+    label: "Happy Clients",
+    icon: "fa-solid fa-users"
+  },
+  {
+    value: "150+",
+    label: "Projects Completed",
+    icon: "fa-solid fa-check-circle"
+  },
+  {
+    value: "99%",
+    label: "Client Satisfaction",
+    icon: "fa-solid fa-heart"
+  }
+];
+---
+
+<section class="py-20 bg-white dark:bg-gray-900">
+  <Container>
+    <div class="max-w-3xl mx-auto text-center mb-12">
+      <div class="badge-wrapper">
+        <Badge text="OUR TRACK RECORD" variant="primary" size="md" />
+      </div>
+      <h2 class="heading-primary">
+        Numbers That Speak for Themselves
+      </h2>
+    </div>
+    
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+      {stats.map((stat) => (
+        <div class="card-hover relative bg-gradient-to-br from-greenberry-500/5 to-greenberry-600/10 p-8 rounded-2xl border border-greenberry-100 dark:border-greenberry-900/20 flex flex-col items-center text-center">
+          <div class="w-16 h-16 rounded-full bg-greenberry-50 dark:bg-greenberry-900/30 flex items-center justify-center text-greenberry-500 dark:text-greenberry-400 text-2xl mb-4">
+            <i class={stat.icon}></i>
+          </div>
+          <p class="text-4xl font-bold text-greenberry-600 dark:text-greenberry-400 mb-2">
+            {stat.value}
+          </p>
+          <p class="text-gray-600 dark:text-gray-300">
+            {stat.label}
+          </p>
+        </div>
+      ))}
+    </div>
+  </Container>
+</section>

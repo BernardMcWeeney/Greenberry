@@ -1,59 +1,88 @@
 ---
 import Container from '../common/Container.astro';
+import Badge from '../ui/Badge.astro';
 
 const testimonials = [
   {
-    content: "Greenberry transformed our online presence. Their team was professional, responsive, and delivered a stunning website that has significantly increased our customer inquiries.",
+    content: "Greenberry transformed our online presence. Their professional team delivered a stunning website that significantly increased our customer inquiries.",
     author: "Sarah O'Brien",
-    position: "Owner, Dublin Café",
-    image: "https://randomuser.me/api/portraits/women/48.jpg"
+    position: "Dublin Café",
+    image: "https://randomuser.me/api/portraits/women/48.jpg",
+    rating: 5
   },
   {
-    content: "Working with Greenberry was hassle-free from start to finish. They managed everything from design to hosting, and even helped improve our search rankings. Highly recommended!",
+    content: "Working with Greenberry was hassle-free. They managed everything from design to hosting, and even improved our search rankings.",
     author: "Michael Collins",
-    position: "Director, Cork Retail Group",
-    image: "https://randomuser.me/api/portraits/men/32.jpg"
+    position: "Cork Retail Group",
+    image: "https://randomuser.me/api/portraits/men/32.jpg",
+    rating: 5
   },
   {
-    content: "As a small business owner, I needed a website that would stand out without breaking the bank. Greenberry delivered exactly that, plus their ongoing support has been invaluable.",
+    content: "As a small business owner, I needed a website that would stand out without breaking the bank. Greenberry delivered exactly that.",
     author: "Emma Fitzgerald",
-    position: "Founder, Galway Artisans",
-    image: "https://randomuser.me/api/portraits/women/65.jpg"
+    position: "Galway Artisans",
+    image: "https://randomuser.me/api/portraits/women/65.jpg",
+    rating: 5
   }
 ];
+
+// Calculate average Google review rating
+const googleRating = 4.9;
+const totalReviews = 87;
 ---
 
-<section class="py-20">
+<section class="py-20 bg-white dark:bg-gray-900 relative section-bg-decoration">
   <Container>
-    <div class="max-w-3xl mx-auto text-center mb-16">
-      <span class="inline-block py-1 px-3 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 rounded-full text-sm font-medium mb-4">
-        Client Testimonials
-      </span>
-      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
+    <div class="max-w-3xl mx-auto text-center mb-12 relative z-10">
+      <div class="badge-wrapper">
+        <Badge text="CLIENT TESTIMONIALS" variant="primary" size="md" />
+      </div>
+      <h2 class="heading-primary">
         What Our Clients Say
       </h2>
-      <p class="text-xl text-gray-600 dark:text-gray-300">
-        Don't just take our word for it. Here's what businesses across Ireland have to say about working with Greenberry.
-      </p>
+      
+      <!-- Google Rating -->
+      <div class="bg-white dark:bg-gray-800 rounded-full shadow-md border border-gray-100 dark:border-gray-700 inline-flex items-center px-5 py-2 mb-6">
+        <div class="flex text-yellow-400 text-sm mr-2">
+          {[...Array(5)].map((_, i) => (
+            <span>
+              <i class={`fa-${i < Math.round(googleRating) ? 'solid' : 'regular'} fa-star`}></i>
+            </span>
+          ))}
+        </div>
+        <div class="flex items-center">
+          <span class="text-gray-900 dark:text-white font-medium mr-1">{googleRating}</span>
+          <span class="text-gray-500 dark:text-gray-400 text-sm">|</span>
+          <span class="text-blue-600 ml-1"><i class="fa-brands fa-google text-lg"></i></span>
+          <span class="text-gray-500 dark:text-gray-400 text-sm ml-2">({totalReviews} reviews)</span>
+        </div>
+      </div>
     </div>
-
+    
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       {testimonials.map((testimonial) => (
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col">
-          <div class="mb-4 text-green-600">
-            <i class="fa-solid fa-quote-left text-3xl opacity-20"></i>
+        <div class="card p-8 flex flex-col h-full group">
+          <div class="flex text-yellow-400 mb-4">
+            {[...Array(5)].map((_, i) => (
+              <span>
+                <i class={`fa-${i < testimonial.rating ? 'solid' : 'regular'} fa-star`}></i>
+              </span>
+            ))}
           </div>
-          <p class="text-gray-600 dark:text-gray-300 italic mb-6 flex-grow">
+          <div class="mb-6 text-greenberry-600/20 dark:text-greenberry-500/20 text-4xl">
+            <i class="fa-solid fa-quote-left"></i>
+          </div>
+          <p class="text-gray-600 dark:text-gray-300 mb-6 flex-grow">
             "{testimonial.content}"
           </p>
           <div class="flex items-center mt-auto">
             <img 
               src={testimonial.image} 
               alt={testimonial.author} 
-              class="w-12 h-12 rounded-full mr-4"
+              class="w-12 h-12 rounded-full mr-4 border-2 border-greenberry-100 group-hover:border-greenberry-300 transition-colors"
             />
             <div>
-              <h4 class="font-medium text-gray-900 dark:text-white">
+              <h4 class="font-semibold text-gray-900 dark:text-white">
                 {testimonial.author}
               </h4>
               <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -63,6 +92,15 @@ const testimonials = [
           </div>
         </div>
       ))}
+    </div>
+    
+    <div class="text-center mt-12">
+      <a href="/testimonials" class="text-greenberry-600 hover:text-greenberry-700 dark:text-greenberry-400 dark:hover:text-greenberry-300 inline-flex items-center font-medium group">
+        View all testimonials 
+        <span class="ml-2 text-sm group-hover:translate-x-1 transition-transform duration-300">
+          <i class="fa-solid fa-arrow-right"></i>
+        </span>
+      </a>
     </div>
   </Container>
 </section>

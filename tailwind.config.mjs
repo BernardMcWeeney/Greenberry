@@ -16,7 +16,55 @@ export default {
           800: '#166534',
           900: '#14532d',
         }
-      }
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      animation: {
+        'float': 'float 5s ease-in-out infinite',
+        'float-slow': 'float-slow 7s ease-in-out infinite',
+        'ping-slow': 'ping-slow 5s infinite',
+      },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        'float-slow': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-6px)' },
+        },
+        'ping-slow': {
+          '0%': { transform: 'scale(1)', opacity: '0.2' },
+          '50%': { transform: 'scale(1.5)', opacity: '0.1' },
+          '100%': { transform: 'scale(1)', opacity: '0.2' },
+        },
+      },
+      boxShadow: {
+        'inner-sm': 'inset 0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        'brand': '0 4px 10px -2px rgba(22, 163, 74, 0.2)',
+      },
+      borderRadius: {
+        'xl': '0.75rem',
+        '2xl': '1rem',
+        '3xl': '1.5rem',
+      },
+      typography: {
+        DEFAULT: {
+          css: {
+            maxWidth: '65ch',
+            color: 'var(--tw-prose-body)',
+            a: {
+              color: 'var(--tw-prose-links)',
+              textDecoration: 'none',
+              fontWeight: '500',
+              '&:hover': {
+                textDecoration: 'underline',
+              },
+            },
+          },
+        },
+      },
     },
   },
   plugins: [],

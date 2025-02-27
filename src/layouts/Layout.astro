@@ -2,6 +2,7 @@
 import Header from '../components/common/Header.astro';
 import Footer from '../components/common/Footer.astro';
 import Seo from '../components/common/Seo.astro';
+import '../styles/global.css';
 
 export interface Props {
   title?: string;
@@ -24,6 +25,11 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     
@@ -32,8 +38,6 @@ const {
       description={description}
       image={image}
     />
-    
-    <title>{title}</title>
   </head>
   <body class="bg-white dark:bg-gray-900 min-h-screen flex flex-col">
     <Header />
@@ -45,31 +49,3 @@ const {
     <Footer />
   </body>
 </html>
-
-<style is:global>
-  :root {
-    --primary: #38a169; /* Green color */
-    --primary-dark: #2f855a;
-    --primary-light: #68d391;
-    --accent: #4299e1; /* Blue accent */
-    --text-primary: #1a202c;
-    --text-secondary: #4a5568;
-    --background: #ffffff;
-    --background-offset: #f7fafc;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --text-primary: #f7fafc;
-      --text-secondary: #e2e8f0;
-      --background: #1a202c;
-      --background-offset: #2d3748;
-    }
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-  /* Add more global styles as needed */
-</style>
