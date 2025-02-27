@@ -1,12 +1,13 @@
 ---
 import Container from '../common/Container.astro';
 import Button from '../common/Button.astro';
+import Badge from '../ui/Badge.astro';
 ---
 
-<section class="relative py-24 lg:py-32 bg-gradient-to-br from-greenberry-50/50 to-green-50/80 dark:from-gray-900 dark:to-gray-800 overflow-hidden">
+<section class="relative py-24 lg:py-32 bg-gradient-to-br from-greenberry-50/50 via-green-50/50 to-green-50/80 dark:from-gray-900 dark:via-gray-800/50 dark:to-gray-800 overflow-hidden">
   <!-- Background decorative elements -->
   <div class="absolute inset-0 overflow-hidden">
-    <!-- Gradient blobs -->
+    <!-- Subtle gradient blobs -->
     <div class="absolute -top-40 -right-40 w-96 h-96 bg-greenberry-500/20 rounded-full filter blur-3xl opacity-70"></div>
     <div class="absolute -bottom-60 -left-40 w-96 h-96 bg-greenberry-400/20 rounded-full filter blur-3xl opacity-60"></div>
     
@@ -25,44 +26,50 @@ import Button from '../common/Button.astro';
   <Container>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center relative z-10">
       <div>
-        <div class="inline-flex items-center gap-2 bg-white/80 dark:bg-gray-800/80 rounded-full px-4 py-1.5 shadow-sm mb-6 backdrop-blur-sm">
-          <span class="text-greenberry-600 text-xs"><i class="fa-solid fa-check-circle"></i></span>
-          <span class="text-sm text-gray-700 dark:text-gray-300 font-medium">
-            Trusted by Irish businesses
-          </span>
+        <!-- Trusted badge with glassmorphism -->
+        <div class="badge-wrapper">
+          <Badge text="Trusted by Irish businesses" variant="primary" size="md" class="bg-white/40 dark:bg-gray-800/40 backdrop-blur-md shadow-sm" />
         </div>
         
         <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight mb-6">
           Hassle-Free<br class="hidden md:block"> Websites with 
           <span class="relative inline-block text-greenberry-600">
             Greenberry
-            <span class="absolute -bottom-1 left-0 w-full h-1 bg-greenberry-500/30 rounded-full"></span>
+            <span class="absolute -bottom-1 left-0 w-full h-1.5 bg-greenberry-500/30 rounded-full"></span>
           </span>
         </h1>
         
         <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-          Fully managed IT solutions designed for Irish businesses. Modern websites that convert and scale with your business needs.
+          Fully managed IT solutions designed for Irish businesses. Modern websites that <span class="text-greenberry-600 font-medium">convert</span> and <span class="text-greenberry-600 font-medium">scale</span> with your business needs.
         </p>
         
+        <!-- CTA buttons with glassmorphism effects -->
         <div class="flex flex-col sm:flex-row gap-4 mb-12">
-          <Button href="/contact" size="lg" class="font-semibold">
-            Start Your Project
-            <span class="ml-2 group-hover:translate-x-1 transition-transform duration-300">→</span>
+          <!-- Primary CTA with enhanced effect -->
+          <Button href="/contact" size="lg" class="font-semibold shadow-lg shadow-greenberry-500/20 relative overflow-hidden group">
+            <span class="relative z-10">Start Your Project</span>
+            <span class="ml-2 group-hover:translate-x-1 transition-transform duration-300 relative z-10">→</span>
+            <span class="absolute inset-0 bg-white/10 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-500"></span>
           </Button>
-          <Button href="/portfolio" variant="outline" size="lg" class="font-semibold">
+          
+          <!-- Secondary CTA with glassmorphism -->
+          <a 
+            href="/portfolio" 
+            class="px-6 py-3 rounded-md font-medium border-2 border-greenberry-500/40 bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm text-greenberry-700 dark:text-greenberry-300 hover:bg-white/50 dark:hover:bg-gray-800/50 transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center"
+          >
             <span class="mr-2"><i class="fa-regular fa-eye"></i></span>
             View Our Work
-          </Button>
+          </a>
         </div>
         
-        <!-- Google Rating -->
-        <div class="flex items-center gap-6">
+        <!-- Google Rating with glassmorphism -->
+        <div class="flex items-center gap-6 group">
           <div class="flex -space-x-3">
             <img src="https://randomuser.me/api/portraits/women/21.jpg" alt="Customer" class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800 object-cover shadow-sm" />
             <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Customer" class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800 object-cover shadow-sm" />
             <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Customer" class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800 object-cover shadow-sm" />
           </div>
-          <div class="flex items-center">
+          <div class="flex items-center bg-white/40 dark:bg-gray-800/40 backdrop-blur-md rounded-full py-1.5 px-3 shadow-sm border border-white/20 dark:border-gray-700/20">
             <div class="flex text-yellow-400 text-sm mr-2">
               <i class="fa-solid fa-star"></i>
               <i class="fa-solid fa-star"></i>
@@ -80,17 +87,17 @@ import Button from '../common/Button.astro';
       </div>
       
       <div class="relative">
-        <!-- Browser mockup -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden relative z-10 transform hover:-translate-y-2 hover:shadow-greenberry-500/20 transition-all duration-500">
+        <!-- Browser mockup with glassmorphism -->
+        <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-xl shadow-xl overflow-hidden relative z-10 transform hover:-translate-y-2 hover:shadow-lg hover:shadow-greenberry-500/20 transition-all duration-500 border border-white/20 dark:border-gray-700/20">
           <!-- Browser toolbar -->
-          <div class="flex items-center gap-1.5 px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800">
+          <div class="flex items-center gap-1.5 px-4 py-3 border-b border-gray-200/70 dark:border-gray-700/70 bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-md">
             <div class="flex gap-1.5">
               <div class="w-3 h-3 rounded-full bg-red-500"></div>
               <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
               <div class="w-3 h-3 rounded-full bg-green-500"></div>
             </div>
             <div class="flex-1 ml-4">
-              <div class="bg-white dark:bg-gray-700 rounded-md text-xs px-3 py-1.5 text-center text-gray-600 dark:text-gray-300 flex items-center justify-center">
+              <div class="bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm rounded-md text-xs px-3 py-1.5 text-center text-gray-600 dark:text-gray-300 flex items-center justify-center">
                 <span class="mr-2 text-xs text-gray-400"><i class="fa-solid fa-lock"></i></span>
                 greenberry.ie
               </div>
@@ -107,20 +114,20 @@ import Button from '../common/Button.astro';
           </div>
         </div>
         
-        <!-- Floating elements -->
-        <div class="absolute -bottom-8 -left-10 lg:-left-16 w-20 h-20 bg-white dark:bg-gray-800 rounded-lg shadow-xl flex items-center justify-center transform rotate-6 z-20 animate-float-slow border border-gray-100 dark:border-gray-700">
+        <!-- Floating elements with glassmorphism -->
+        <div class="absolute -bottom-8 -left-10 lg:-left-16 w-20 h-20 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-lg shadow-lg flex items-center justify-center transform rotate-6 z-20 animate-float-slow border border-white/20 dark:border-gray-700/20">
           <div class="text-greenberry-600 dark:text-greenberry-400 text-3xl">
             <i class="fa-solid fa-leaf"></i>
           </div>
         </div>
         
-        <div class="absolute -top-8 right-8 w-16 h-16 bg-white dark:bg-gray-800 rounded-lg shadow-xl flex items-center justify-center transform -rotate-12 z-20 animate-float border border-gray-100 dark:border-gray-700">
-          <div class="text-greenberry-600 dark:text-greenberry-400 text-2xl">
+        <div class="absolute -top-8 right-8 w-16 h-16 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-lg shadow-lg flex items-center justify-center transform -rotate-12 z-20 animate-float border border-white/20 dark:border-gray-700/20">
+          <div class="text-blue-500 dark:text-blue-400 text-2xl">
             <i class="fa-solid fa-rocket"></i>
           </div>
         </div>
         
-        <div class="absolute bottom-16 -right-8 w-14 h-14 bg-white dark:bg-gray-800 rounded-full shadow-lg flex items-center justify-center z-20 animate-float animation-delay-300 border border-gray-100 dark:border-gray-700">
+        <div class="absolute bottom-16 -right-8 w-14 h-14 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-full shadow-lg flex items-center justify-center z-20 animate-float animation-delay-300 border border-white/20 dark:border-gray-700/20">
           <div class="text-green-500 dark:text-green-400 text-xl">
             <i class="fa-solid fa-check"></i>
           </div>

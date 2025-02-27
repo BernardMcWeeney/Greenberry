@@ -6,27 +6,35 @@ const stats = [
   {
     value: "5+",
     label: "Years Experience",
-    icon: "fa-solid fa-calendar-check"
+    icon: "fa-solid fa-calendar-check",
+    color: "bg-green-500",
+    textColor: "text-green-500"
   },
   {
     value: "100+",
     label: "Happy Clients",
-    icon: "fa-solid fa-users"
+    icon: "fa-solid fa-users",
+    color: "bg-blue-500",
+    textColor: "text-blue-500"
   },
   {
     value: "150+",
     label: "Projects Completed",
-    icon: "fa-solid fa-check-circle"
+    icon: "fa-solid fa-check-circle",
+    color: "bg-yellow-500",
+    textColor: "text-yellow-500"
   },
   {
     value: "99%",
     label: "Client Satisfaction",
-    icon: "fa-solid fa-heart"
+    icon: "fa-solid fa-heart",
+    color: "bg-red-500",
+    textColor: "text-red-500"
   }
 ];
 ---
 
-<section class="py-20 bg-white dark:bg-gray-900">
+<section class="section-padding bg-white dark:bg-gray-900">
   <Container>
     <div class="max-w-3xl mx-auto text-center mb-12">
       <div class="badge-wrapper">
@@ -40,10 +48,10 @@ const stats = [
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
       {stats.map((stat) => (
         <div class="card-hover relative bg-gradient-to-br from-greenberry-500/5 to-greenberry-600/10 p-8 rounded-2xl border border-greenberry-100 dark:border-greenberry-900/20 flex flex-col items-center text-center">
-          <div class="w-16 h-16 rounded-full bg-greenberry-50 dark:bg-greenberry-900/30 flex items-center justify-center text-greenberry-500 dark:text-greenberry-400 text-2xl mb-4">
+          <div class={`w-16 h-16 rounded-full ${stat.color.replace('bg-', 'bg-')}/10 flex items-center justify-center ${stat.textColor} dark:${stat.textColor} text-2xl mb-4`}>
             <i class={stat.icon}></i>
           </div>
-          <p class="text-4xl font-bold text-greenberry-600 dark:text-greenberry-400 mb-2">
+          <p class={`text-4xl font-bold ${stat.textColor} dark:${stat.textColor} mb-2`}>
             {stat.value}
           </p>
           <p class="text-gray-600 dark:text-gray-300">

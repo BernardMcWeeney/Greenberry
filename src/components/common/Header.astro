@@ -9,17 +9,20 @@ const navItems = NAVIGATION.main;
 <header class="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 border-b border-gray-200 dark:border-gray-800 backdrop-blur-md shadow-sm">
   <Container>
     <div class="py-4 flex justify-between items-center">
-      <!-- Logo -->
+      <!-- Logo with improved animation -->
       <a href="/" class="flex items-center gap-2 group">
-        <div class="w-10 h-10 bg-gradient-to-br from-greenberry-50 to-greenberry-100 dark:from-greenberry-900/30 dark:to-greenberry-800/30 rounded-lg flex items-center justify-center text-greenberry-600 dark:text-greenberry-400 group-hover:scale-110 transition-transform duration-300 shadow-sm">
-          <i class="fa-solid fa-leaf text-xl"></i>
+        <div class="w-10 h-10 bg-gradient-to-br from-greenberry-50 to-greenberry-200 dark:from-greenberry-900/30 dark:to-greenberry-800/30 rounded-lg flex items-center justify-center text-greenberry-600 dark:text-greenberry-400 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-sm">
+          <i class="fa-solid fa-leaf text-xl group-hover:animate-pulse"></i>
         </div>
         <span class="font-bold text-xl text-gray-900 dark:text-white">
-          <span class="text-greenberry-600 dark:text-greenberry-400">Green</span>berry
+          <span class="text-greenberry-600 dark:text-greenberry-400 relative inline-block">
+            Greenberry
+            <span class="absolute -bottom-1 left-0 w-full h-0.5 bg-greenberry-500/40 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+          </span>
         </span>
       </a>
 
-      <!-- Desktop Navigation -->
+      <!-- Desktop Navigation with hover effects -->
       <nav class="hidden md:flex items-center gap-8">
         {navItems.map(item => (
           <a 
@@ -31,39 +34,64 @@ const navItems = NAVIGATION.main;
           </a>
         ))}
         <div class="flex items-center gap-4 ml-4">
+          <!-- Dark Mode Toggle -->
+          <button 
+            id="theme-toggle" 
+            class="p-2 text-gray-600 hover:text-greenberry-600 dark:text-gray-300 dark:hover:text-greenberry-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none"
+            aria-label="Toggle dark mode"
+          >
+            <i class="fa-solid fa-sun hidden dark:block text-xl"></i>
+            <i class="fa-solid fa-moon block dark:hidden text-xl"></i>
+          </button>
+          
           <a 
             href="/customer-portal" 
             class="px-4 py-2 text-sm rounded-md border-2 border-greenberry-600 text-greenberry-600 hover:bg-greenberry-50 dark:border-greenberry-500 dark:text-greenberry-400 dark:hover:bg-gray-800 font-medium transition-colors"
           >
             Customer Portal
           </a>
-          <Button href="/contact" variant="primary" size="sm">
+          <Button href="/contact" variant="primary" size="sm" class="transform hover:scale-105 shadow-md hover:shadow-lg hover:shadow-greenberry-500/20">
             Get Started
-            <span class="ml-1 opacity-80">→</span>
+            <span class="ml-1 opacity-80 group-hover:translate-x-1 transition-transform duration-300">→</span>
           </Button>
         </div>
       </nav>
 
-      <!-- Mobile menu toggle -->
-      <button 
-        id="menu-toggle"
-        class="md:hidden p-2 text-gray-600 hover:text-greenberry-600 rounded-lg hover:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-        aria-label="Toggle mobile menu"
-      >
-        <i id="menu-icon" class="fa-solid fa-bars text-xl"></i>
-      </button>
+      <!-- Mobile header controls -->
+      <div class="flex items-center gap-4 md:hidden">
+        <!-- Dark Mode Toggle (Mobile) -->
+        <button 
+          id="theme-toggle-mobile" 
+          class="p-2 text-gray-600 hover:text-greenberry-600 dark:text-gray-300 dark:hover:text-greenberry-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none"
+          aria-label="Toggle dark mode"
+        >
+          <i class="fa-solid fa-sun hidden dark:block text-xl"></i>
+          <i class="fa-solid fa-moon block dark:hidden text-xl"></i>
+        </button>
+        
+        <!-- Mobile menu toggle with improved animation -->
+        <button 
+          id="menu-toggle"
+          class="p-2 text-gray-600 hover:text-greenberry-600 rounded-lg hover:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800 transition-colors relative overflow-hidden"
+          aria-label="Toggle mobile menu"
+        >
+          <span class="absolute inset-0 bg-greenberry-100 dark:bg-greenberry-900/30 transform scale-0 rounded-lg transition-transform duration-300 ease-in-out origin-center" id="menu-toggle-bg"></span>
+          <i id="menu-icon" class="fa-solid fa-bars text-xl relative z-10"></i>
+        </button>
+      </div>
     </div>
   </Container>
 
-  <!-- Mobile Navigation (Hidden by default) -->
-  <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+  <!-- Mobile Navigation with improved animation -->
+  <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 transform transition-transform duration-300 origin-top" style="transform-origin: top center;">
     <Container>
       <div class="py-6 space-y-6">
         <nav class="flex flex-col space-y-5">
-          {navItems.map(item => (
+          {navItems.map((item, index) => (
             <a 
               href={item.href} 
-              class="font-medium text-gray-800 hover:text-greenberry-600 dark:text-gray-200 dark:hover:text-greenberry-400 transition-colors text-lg px-1 flex items-center"
+              class="font-medium text-gray-800 hover:text-greenberry-600 dark:text-gray-200 dark:hover:text-greenberry-400 transition-colors text-lg px-1 flex items-center transform hover:translate-x-2 transition-transform duration-300 hover:scale-[1.01]"
+              style={`transition-delay: ${index * 50}ms;`}
             >
               {item.name}
               <span class="ml-auto text-gray-400 text-sm">
@@ -75,13 +103,13 @@ const navItems = NAVIGATION.main;
         <div class="flex flex-col gap-3 pt-5 border-t border-gray-100 dark:border-gray-800">
           <a 
             href="/customer-portal" 
-            class="px-4 py-3 rounded-md border-2 border-greenberry-600 text-greenberry-600 hover:bg-greenberry-50 dark:border-greenberry-500 dark:text-greenberry-400 dark:hover:bg-gray-800 font-medium transition-colors text-center"
+            class="px-4 py-3 rounded-md border-2 border-greenberry-600 text-greenberry-600 hover:bg-greenberry-50 dark:border-greenberry-500 dark:text-greenberry-400 dark:hover:bg-gray-800 font-medium transition-colors text-center transform hover:scale-[1.02]"
           >
             Customer Portal
           </a>
-          <Button href="/contact" variant="primary" size="md" block={true}>
+          <Button href="/contact" variant="primary" size="md" block={true} class="transform hover:scale-[1.02] shadow-md hover:shadow-lg hover:shadow-greenberry-500/20">
             Get Started
-            <i class="fa-solid fa-arrow-right ml-2"></i>
+            <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>
           </Button>
         </div>
       </div>
@@ -90,23 +118,135 @@ const navItems = NAVIGATION.main;
 </header>
 
 <script>
-  // Mobile menu toggle
+  // Enhanced mobile menu toggle with animations
   const menuToggle = document.getElementById('menu-toggle');
   const mobileMenu = document.getElementById('mobile-menu');
   const menuIcon = document.getElementById('menu-icon');
+  const menuToggleBg = document.getElementById('menu-toggle-bg');
 
-  if (menuToggle && mobileMenu && menuIcon) {
+  if (menuToggle && mobileMenu && menuIcon && menuToggleBg) {
     menuToggle.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-      
-      // Toggle icon between bars and x
-      if (menuIcon.classList.contains('fa-bars')) {
-        menuIcon.classList.remove('fa-bars');
-        menuIcon.classList.add('fa-xmark');
+      // Toggle background effect
+      if (menuToggleBg.classList.contains('scale-0')) {
+        menuToggleBg.classList.remove('scale-0');
+        menuToggleBg.classList.add('scale-100');
       } else {
-        menuIcon.classList.remove('fa-xmark');
-        menuIcon.classList.add('fa-bars');
+        menuToggleBg.classList.remove('scale-100');
+        menuToggleBg.classList.add('scale-0');
+      }
+      
+      // Toggle menu visibility with slide animation
+      if (mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.remove('hidden');
+        mobileMenu.style.opacity = '0';
+        mobileMenu.style.transform = 'scaleY(0.95)';
+        
+        // Force reflow to enable animation
+        mobileMenu.offsetHeight;
+        
+        mobileMenu.style.opacity = '1';
+        mobileMenu.style.transform = 'scaleY(1)';
+      } else {
+        mobileMenu.style.opacity = '0';
+        mobileMenu.style.transform = 'scaleY(0.95)';
+        
+        setTimeout(() => {
+          mobileMenu.classList.add('hidden');
+        }, 300);
+      }
+      
+      // Toggle icon between bars and x with rotation
+      if (menuIcon.classList.contains('fa-bars')) {
+        menuIcon.style.transform = 'rotate(90deg)';
+        setTimeout(() => {
+          menuIcon.classList.remove('fa-bars');
+          menuIcon.classList.add('fa-xmark');
+          menuIcon.style.transform = 'rotate(0)';
+        }, 150);
+      } else {
+        menuIcon.style.transform = 'rotate(90deg)';
+        setTimeout(() => {
+          menuIcon.classList.remove('fa-xmark');
+          menuIcon.classList.add('fa-bars');
+          menuIcon.style.transform = 'rotate(0)';
+        }, 150);
       }
     });
   }
+
+  // Dark mode toggle functionality
+  function setupThemeToggle(buttonId) {
+    const themeToggle = document.getElementById(buttonId);
+    
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        // Toggle dark mode
+        if (document.documentElement.classList.contains('dark')) {
+          document.documentElement.classList.remove('dark');
+          localStorage.theme = 'light';
+        } else {
+          document.documentElement.classList.add('dark');
+          localStorage.theme = 'dark';
+        }
+        
+        // Add ripple effect
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple-effect');
+        themeToggle.appendChild(ripple);
+        
+        // Remove ripple after animation
+        setTimeout(() => {
+          ripple.remove();
+        }, 1000);
+      });
+    }
+  }
+  
+  // Setup both desktop and mobile dark mode toggles
+  setupThemeToggle('theme-toggle');
+  setupThemeToggle('theme-toggle-mobile');
+  
+  // Initialize dark mode based on system preference or saved setting
+  const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  
+  // Set dark mode based on local storage or system preference
+  if (localStorage.theme === 'dark' || (!('theme' in localStorage) && darkModeMediaQuery.matches)) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+  
+  // Listen for system dark mode preference changes
+  darkModeMediaQuery.addEventListener('change', (e) => {
+    if (!('theme' in localStorage)) {
+      if (e.matches) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  });
 </script>
+
+<style>
+  /* Ripple effect for theme toggle */
+  .ripple-effect {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(34, 197, 94, 0.2);
+    width: 100%;
+    height: 100%;
+    transform: scale(0);
+    animation: ripple 1s linear;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
+  
+  @keyframes ripple {
+    to {
+      transform: scale(2.5);
+      opacity: 0;
+    }
+  }
+</style>

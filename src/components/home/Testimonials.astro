@@ -4,24 +4,45 @@ import Badge from '../ui/Badge.astro';
 
 const testimonials = [
   {
-    content: "Greenberry transformed our online presence. Their professional team delivered a stunning website that significantly increased our customer inquiries.",
+    content: "Greenberry transformed our online presence. Their professional team delivered a stunning website that significantly increased our customer inquiries by 35% in the first month.",
     author: "Sarah O'Brien",
     position: "Dublin Café",
     image: "https://randomuser.me/api/portraits/women/48.jpg",
     rating: 5
   },
   {
-    content: "Working with Greenberry was hassle-free. They managed everything from design to hosting, and even improved our search rankings.",
+    content: "Working with Greenberry was hassle-free. They managed everything from design to hosting, and even improved our search rankings. Our site now loads 3x faster!",
     author: "Michael Collins",
     position: "Cork Retail Group",
     image: "https://randomuser.me/api/portraits/men/32.jpg",
     rating: 5
   },
   {
-    content: "As a small business owner, I needed a website that would stand out without breaking the bank. Greenberry delivered exactly that.",
+    content: "As a small business owner, I needed a website that would stand out without breaking the bank. Greenberry delivered exactly that, and sales are up 20% year-over-year.",
     author: "Emma Fitzgerald",
     position: "Galway Artisans",
     image: "https://randomuser.me/api/portraits/women/65.jpg",
+    rating: 5
+  },
+  {
+    content: "The team at Greenberry understood our vision perfectly. Our new website has received amazing feedback from clients, and our conversion rate has doubled.",
+    author: "James O'Connor",
+    position: "Limerick Legal Services",
+    image: "https://randomuser.me/api/portraits/men/45.jpg",
+    rating: 5
+  },
+  {
+    content: "The SEO services provided by Greenberry have put us on the map. We're now ranking on the first page for our key search terms.",
+    author: "Laura Murphy",
+    position: "Waterford Home Décor",
+    image: "https://randomuser.me/api/portraits/women/23.jpg",
+    rating: 5
+  },
+  {
+    content: "Our e-commerce site built by Greenberry has been a game-changer. The user experience is excellent and our mobile sales have tripled.",
+    author: "Sean Kennedy",
+    position: "Kilkenny Craft Shop",
+    image: "https://randomuser.me/api/portraits/men/67.jpg",
     rating: 5
   }
 ];
@@ -31,7 +52,13 @@ const googleRating = 4.9;
 const totalReviews = 87;
 ---
 
-<section class="py-20 bg-white dark:bg-gray-900 relative section-bg-decoration">
+<section class="section-padding bg-white dark:bg-gray-900 relative overflow-hidden">
+  <!-- Background elements for depth -->
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-greenberry-500/10 rounded-full filter blur-3xl opacity-50"></div>
+    <div class="absolute bottom-0 left-0 w-1/3 h-1/3 bg-greenberry-400/10 rounded-full filter blur-3xl opacity-40"></div>
+  </div>
+  
   <Container>
     <div class="max-w-3xl mx-auto text-center mb-12 relative z-10">
       <div class="badge-wrapper">
@@ -41,8 +68,8 @@ const totalReviews = 87;
         What Our Clients Say
       </h2>
       
-      <!-- Google Rating -->
-      <div class="bg-white dark:bg-gray-800 rounded-full shadow-md border border-gray-100 dark:border-gray-700 inline-flex items-center px-5 py-2 mb-6">
+      <!-- Google Rating with glassmorphism -->
+      <div class="bg-white/60 dark:bg-gray-800/60 backdrop-blur-md rounded-full shadow-md border border-white/20 dark:border-gray-700/20 inline-flex items-center px-5 py-2 mb-6">
         <div class="flex text-yellow-400 text-sm mr-2">
           {[...Array(5)].map((_, i) => (
             <span>
@@ -59,43 +86,87 @@ const totalReviews = 87;
       </div>
     </div>
     
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {testimonials.map((testimonial) => (
-        <div class="card p-8 flex flex-col h-full group">
-          <div class="flex text-yellow-400 mb-4">
-            {[...Array(5)].map((_, i) => (
-              <span>
-                <i class={`fa-${i < testimonial.rating ? 'solid' : 'regular'} fa-star`}></i>
-              </span>
-            ))}
-          </div>
-          <div class="mb-6 text-greenberry-600/20 dark:text-greenberry-500/20 text-4xl">
-            <i class="fa-solid fa-quote-left"></i>
-          </div>
-          <p class="text-gray-600 dark:text-gray-300 mb-6 flex-grow">
-            "{testimonial.content}"
-          </p>
-          <div class="flex items-center mt-auto">
-            <img 
-              src={testimonial.image} 
-              alt={testimonial.author} 
-              class="w-12 h-12 rounded-full mr-4 border-2 border-greenberry-100 group-hover:border-greenberry-300 transition-colors"
-            />
-            <div>
-              <h4 class="font-semibold text-gray-900 dark:text-white">
-                {testimonial.author}
-              </h4>
-              <p class="text-sm text-gray-500 dark:text-gray-400">
-                {testimonial.position}
+    <!-- Full-width Testimonial Tapefeed -->
+    <div class="testimonial-tapefeed-container relative w-full overflow-hidden mt-8 mb-6">
+      <div id="testimonial-tapefeed" class="flex space-x-6 animate-scroll">
+        {testimonials.map((testimonial) => (
+          <div class="testimonial-card flex-shrink-0" style="width: 400px;">
+            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border border-white/20 dark:border-gray-700/20 rounded-xl p-6 shadow-lg h-full flex flex-col">
+              <div class="flex text-yellow-400 mb-3">
+                {[...Array(5)].map((_, i) => (
+                  <span>
+                    <i class={`fa-${i < testimonial.rating ? 'solid' : 'regular'} fa-star`}></i>
+                  </span>
+                ))}
+              </div>
+              <div class="mb-4 text-greenberry-600/20 dark:text-greenberry-500/20 text-3xl">
+                <i class="fa-solid fa-quote-left"></i>
+              </div>
+              <p class="text-gray-600 dark:text-gray-300 mb-6 flex-grow">
+                "{testimonial.content}"
               </p>
+              <div class="flex items-center mt-auto">
+                <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-greenberry-200/50 dark:border-greenberry-800/30 mr-4">
+                  <img 
+                    src={testimonial.image} 
+                    alt={testimonial.author} 
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-900 dark:text-white">
+                    {testimonial.author}
+                  </h4>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                    {testimonial.position}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+        <!-- Duplicate the first few testimonials to create a seamless loop -->
+        {testimonials.slice(0, 3).map((testimonial) => (
+          <div class="testimonial-card flex-shrink-0" style="width: 400px;">
+            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border border-white/20 dark:border-gray-700/20 rounded-xl p-6 shadow-lg h-full flex flex-col">
+              <div class="flex text-yellow-400 mb-3">
+                {[...Array(5)].map((_, i) => (
+                  <span>
+                    <i class={`fa-${i < testimonial.rating ? 'solid' : 'regular'} fa-star`}></i>
+                  </span>
+                ))}
+              </div>
+              <div class="mb-4 text-greenberry-600/20 dark:text-greenberry-500/20 text-3xl">
+                <i class="fa-solid fa-quote-left"></i>
+              </div>
+              <p class="text-gray-600 dark:text-gray-300 mb-6 flex-grow">
+                "{testimonial.content}"
+              </p>
+              <div class="flex items-center mt-auto">
+                <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-greenberry-200/50 dark:border-greenberry-800/30 mr-4">
+                  <img 
+                    src={testimonial.image} 
+                    alt={testimonial.author} 
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-900 dark:text-white">
+                    {testimonial.author}
+                  </h4>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                    {testimonial.position}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
     
     <div class="text-center mt-12">
-      <a href="/testimonials" class="text-greenberry-600 hover:text-greenberry-700 dark:text-greenberry-400 dark:hover:text-greenberry-300 inline-flex items-center font-medium group">
+      <a href="/testimonials" class="text-greenberry-600 hover:text-greenberry-700 dark:text-greenberry-400 dark:hover:text-greenberry-300 inline-flex items-center font-medium group bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm hover:shadow border border-white/10 dark:border-gray-700/10">
         View all testimonials 
         <span class="ml-2 text-sm group-hover:translate-x-1 transition-transform duration-300">
           <i class="fa-solid fa-arrow-right"></i>
@@ -104,3 +175,83 @@ const totalReviews = 87;
     </div>
   </Container>
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Simple initialization - no controls or hover effects
+    const tapefeed = document.getElementById('testimonial-tapefeed');
+    if (!tapefeed) return;
+    
+    // Ensure the animation is always running
+    tapefeed.style.animationPlayState = 'running';
+  });
+</script>
+
+<style>
+  /* Tapefeed animation */
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-180%); /* Adjust based on the number of testimonials */
+    }
+  }
+  
+  .animate-scroll {
+    animation: scroll 60s linear infinite;
+  }
+  
+  .testimonial-tapefeed-container {
+    position: relative;
+    width: 100%;
+    overflow-x: hidden;
+  }
+  
+  .testimonial-tapefeed-container::before,
+  .testimonial-tapefeed-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 100px;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+  }
+  
+  .testimonial-tapefeed-container::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+  }
+  
+  .testimonial-tapefeed-container::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+  }
+  
+  :global(.dark) .testimonial-tapefeed-container::before {
+    background: linear-gradient(to right, rgba(17, 24, 39, 0.9), rgba(17, 24, 39, 0));
+  }
+  
+  :global(.dark) .testimonial-tapefeed-container::after {
+    background: linear-gradient(to left, rgba(17, 24, 39, 0.9), rgba(17, 24, 39, 0));
+  }
+  
+  /* Tape feed effect for cards */
+  .testimonial-card {
+    position: relative;
+  }
+  
+  .testimonial-card::before {
+    content: '';
+    position: absolute;
+    top: -0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3rem;
+    height: 0.25rem;
+    background-color: rgba(34, 197, 94, 0.1);
+    border-radius: 0.25rem;
+    z-index: 1;
+  }
+</style>

@@ -2,41 +2,44 @@
 import Container from '../common/Container.astro';
 import Badge from '../ui/Badge.astro';
 import Button from '../common/Button.astro';
-import Card from '../ui/Card.astro';
 
 const services = [
   {
     title: "Website Solutions",
     description: "Modern and cutting-edge websites featuring responsive and lightweight designs.",
     icon: "fa-solid fa-globe",
-    color: "bg-blue-500",
+    color: "blue",
+    bgColor: "bg-blue-500",
     link: "/services#websites"
   },
   {
     title: "Upgrades & Maintenance",
     description: "Regular updates and maintenance to ensure your website has the latest software and security.",
     icon: "fa-solid fa-arrows-rotate",
-    color: "bg-green-500",
+    color: "green",
+    bgColor: "bg-green-500",
     link: "/services#maintenance"
   },
   {
     title: "SEO Packages",
     description: "Improve your online visibility and help meet your goals with our comprehensive SEO services.",
     icon: "fa-solid fa-magnifying-glass-chart",
-    color: "bg-yellow-500",
+    color: "yellow",
+    bgColor: "bg-yellow-500",
     link: "/services#seo"
   },
   {
     title: "Email Solutions",
     description: "Streamlined and reliable email solutions that prioritize simplicity & security for your business.",
     icon: "fa-solid fa-envelope",
-    color: "bg-red-500",
+    color: "red",
+    bgColor: "bg-red-500",
     link: "/services#email"
   }
 ];
 ---
 
-<section class="py-24 bg-gray-50 dark:bg-gray-800/50 section-bg-decoration">
+<section class="section-padding bg-gray-50 dark:bg-gray-800/50 section-bg-decoration">
   <Container>
     <div class="max-w-3xl mx-auto text-center mb-16 relative z-10">
       <div class="badge-wrapper">
@@ -52,13 +55,13 @@ const services = [
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
       {services.map((service) => (
-        <div class="card group overflow-hidden">
+        <div class="card card-hover group overflow-hidden border border-gray-100 dark:border-gray-700">
           <div class="relative h-2">
-            <div class={`absolute inset-0 ${service.color} group-hover:w-full transition-all duration-300`}></div>
+            <div class={`absolute inset-0 ${service.bgColor} group-hover:w-full transition-all duration-300`}></div>
           </div>
           <div class="p-8">
             <div class="w-14 h-14 rounded-full bg-gray-50 dark:bg-gray-700 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
-              <i class={`${service.icon} text-${service.color.split('-')[1]}-500`}></i>
+              <i class={`${service.icon} text-${service.color}-500`}></i>
             </div>
             <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-greenberry-600 dark:group-hover:text-greenberry-400 transition-colors">
               {service.title}

@@ -1,37 +1,40 @@
 ---
 import Container from '../common/Container.astro';
 import Badge from '../ui/Badge.astro';
-import Card from '../ui/Card.astro';
 
 const featureCards = [
   {
     title: "Lightning Fast Websites",
     description: "We build websites that load in milliseconds, not seconds. Speed is critical for user experience and search engine rankings.",
     icon: "fa-solid fa-bolt",
-    color: "text-yellow-500"
+    color: "yellow",
+    textColor: "text-yellow-500"
   },
   {
     title: "Mobile-First Design",
     description: "Every website we build is fully responsive and optimized for all devices, from smartphones to desktop computers.",
     icon: "fa-solid fa-mobile-screen",
-    color: "text-blue-500"
+    color: "blue",
+    textColor: "text-blue-500"
   },
   {
     title: "SEO Optimization",
     description: "We implement the latest SEO best practices to ensure your website ranks well and attracts more organic traffic.",
     icon: "fa-solid fa-magnifying-glass-chart",
-    color: "text-green-500"
+    color: "green",
+    textColor: "text-green-500"
   },
   {
     title: "Secure & Reliable",
     description: "We implement robust security measures to protect your website and your customers' data from threats.",
     icon: "fa-solid fa-shield-halved",
-    color: "text-red-500"
+    color: "red",
+    textColor: "text-red-500"
   }
 ];
 ---
 
-<section class="py-24 bg-white dark:bg-gray-900 relative">
+<section class="section-padding bg-white dark:bg-gray-900 relative">
   <Container>
     <div class="max-w-3xl mx-auto text-center mb-16">
       <div class="badge-wrapper">
@@ -47,9 +50,9 @@ const featureCards = [
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
       {featureCards.map((card) => (
-        <div class="group card p-8 border border-gray-100 dark:border-gray-700 hover:border-greenberry-300 dark:hover:border-greenberry-600">
+        <div class="group card p-8 border border-gray-100 dark:border-gray-700 hover:border-greenberry-600 dark:hover:border-greenberry-600 transition-all duration-300 card-hover">
           <div class="flex gap-6">
-            <div class={`${card.color} text-4xl shrink-0 mt-1`}>
+            <div class={`${card.textColor} text-4xl shrink-0 mt-1`}>
               <div class="w-14 h-14 rounded-2xl bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:scale-110 transition-all duration-300">
                 <i class={card.icon}></i>
               </div>
@@ -68,10 +71,10 @@ const featureCards = [
     </div>
     
     <!-- Feature highlight box -->
-    <div class="mt-16 bg-gradient-to-br from-greenberry-50 to-greenberry-100 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-10 border border-greenberry-200 dark:border-greenberry-900/30 relative overflow-hidden">
+    <div class="mt-16 bg-gradient-to-br from-greenberry-50 to-greenberry-100 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-10 border border-greenberry-200 dark:border-greenberry-900/30 relative overflow-hidden group hover:shadow-lg hover:shadow-greenberry-500/10 transition-all duration-300">
       <!-- Background decorative elements -->
-      <div class="absolute -top-20 -right-20 w-40 h-40 bg-greenberry-500/20 rounded-full filter blur-3xl opacity-70"></div>
-      <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-greenberry-400/20 rounded-full filter blur-3xl opacity-60"></div>
+      <div class="absolute -top-20 -right-20 w-40 h-40 bg-greenberry-500/20 rounded-full filter blur-3xl opacity-70 group-hover:opacity-90 transition-opacity duration-700"></div>
+      <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-greenberry-400/20 rounded-full filter blur-3xl opacity-60 group-hover:opacity-80 transition-opacity duration-700"></div>
       
       <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
         <div>
@@ -106,7 +109,7 @@ const featureCards = [
             <div class="absolute top-1/2 -right-5 w-8 h-8 bg-blue-500 rounded-full opacity-20 animate-ping-slow animation-delay-700"></div>
             <div class="absolute -bottom-5 left-1/3 w-12 h-12 bg-yellow-500 rounded-full opacity-20 animate-ping-slow animation-delay-1500"></div>
             
-            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" alt="Managed services illustration" class="w-full h-auto rounded-2xl shadow-lg" />
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" alt="Managed services illustration" class="w-full h-auto rounded-2xl shadow-lg group-hover:shadow-xl transition-shadow duration-300" />
           </div>
         </div>
       </div>

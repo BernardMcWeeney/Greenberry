@@ -1,6 +1,7 @@
 ---
 import Container from './Container.astro';
 import Button from './Button.astro';
+import Badge from '../ui/Badge.astro';
 import { COMPANY, SOCIAL_LINKS, NAVIGATION } from '../../config';
 
 const currentYear = new Date().getFullYear();
@@ -10,10 +11,10 @@ const serviceItems = NAVIGATION.footer.services;
 const resourceItems = NAVIGATION.footer.resources;
 
 const socialLinks = [
-  { icon: "fa-brands fa-facebook", path: SOCIAL_LINKS.facebook },
-  { icon: "fa-brands fa-twitter", path: SOCIAL_LINKS.twitter },
-  { icon: "fa-brands fa-linkedin", path: SOCIAL_LINKS.linkedin },
-  { icon: "fa-brands fa-instagram", path: SOCIAL_LINKS.instagram },
+  { icon: "fa-brands fa-facebook", path: SOCIAL_LINKS.facebook, color: "hover:bg-blue-500" },
+  { icon: "fa-brands fa-twitter", path: SOCIAL_LINKS.twitter, color: "hover:bg-blue-400" },
+  { icon: "fa-brands fa-linkedin", path: SOCIAL_LINKS.linkedin, color: "hover:bg-blue-700" },
+  { icon: "fa-brands fa-instagram", path: SOCIAL_LINKS.instagram, color: "hover:bg-pink-600" },
 ];
 ---
 
@@ -23,7 +24,10 @@ const socialLinks = [
     <Container>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
         <div>
-          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+          <div class="badge-wrapper">
+            <Badge text="STAY CONNECTED" variant="primary" size="md" />
+          </div>
+          <h3 class="heading-secondary mb-3">
             Stay updated with Greenberry
           </h3>
           <p class="text-gray-600 dark:text-gray-300 mb-0">
@@ -66,7 +70,7 @@ const socialLinks = [
             </span>
           </a>
           <p class="text-gray-600 dark:text-gray-400 mb-6">
-            Hassle-free website solutions and fully managed IT services for businesses across Ireland.
+            {COMPANY.tagline}
           </p>
           <div class="flex gap-4">
             {socialLinks.map(social => (
@@ -74,7 +78,7 @@ const socialLinks = [
                 href={social.path} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                class="w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 hover:bg-greenberry-500 hover:text-white dark:text-gray-400 dark:hover:bg-greenberry-600 dark:hover:text-white transition-colors"
+                class={`w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 ${social.color} hover:text-white dark:text-gray-400 dark:hover:text-white transition-colors duration-300`}
                 aria-label={`Follow us on ${social.icon.split('-').pop()}`}
               >
                 <i class={social.icon}></i>
@@ -107,19 +111,25 @@ const socialLinks = [
         <div class="col-span-1 md:col-span-2">
           <h3 class="font-semibold text-gray-900 dark:text-white mb-5">Services</h3>
           <ul class="space-y-3">
-            {serviceItems.map(item => (
-              <li>
-                <a 
-                  href={item.href} 
-                  class="text-gray-600 hover:text-greenberry-600 dark:text-gray-400 dark:hover:text-greenberry-400 transition-colors inline-flex items-center group"
-                >
-                  <span class="text-xs mr-2 text-greenberry-500 dark:text-greenberry-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-chevron-right"></i>
-                  </span>
-                  {item.name}
-                </a>
-              </li>
-            ))}
+            {serviceItems.map((item, index) => {
+              // Define different colors for each service
+              const colors = ["text-blue-500", "text-green-500", "text-yellow-500", "text-red-500"];
+              const color = colors[index % colors.length];
+              
+              return (
+                <li>
+                  <a 
+                    href={item.href} 
+                    class={`text-gray-600 hover:${color} dark:text-gray-400 dark:hover:${color} transition-colors inline-flex items-center group`}
+                  >
+                    <span class={`text-xs mr-2 ${color} opacity-0 group-hover:opacity-100 transition-opacity`}>
+                      <i class="fa-solid fa-chevron-right"></i>
+                    </span>
+                    {item.name}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </div>
 
