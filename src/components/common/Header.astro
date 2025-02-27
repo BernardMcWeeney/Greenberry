@@ -1,0 +1,116 @@
+---
+import Container from './Container.astro';
+
+const navItems = [
+  {
+    title: "Home",
+    path: "/",
+  },
+  {
+    title: "About",
+    path: "/about",
+  },
+  {
+    title: "Services",
+    path: "/services",
+  },
+  {
+    title: "Blog",
+    path: "/blog",
+  },
+  {
+    title: "Contact",
+    path: "/contact",
+  },
+];
+---
+
+<header class="sticky top-0 z-40 flex-none w-full bg-white/90 backdrop-blur dark:bg-gray-900/90 shadow-sm">
+  <Container>
+    <div class="py-3 flex justify-between items-center">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-2">
+        <span class="text-green-600 text-2xl">
+          <i class="fa-solid fa-leaf"></i>
+        </span>
+        <span class="font-bold text-xl text-gray-900 dark:text-white">
+          <span class="text-green-600">Green</span>berry
+        </span>
+      </a>
+
+      <!-- Mobile menu toggle -->
+      <div class="block lg:hidden">
+        <button 
+          id="menu-toggle"
+          class="p-2 text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none dark:text-gray-400 dark:hover:bg-gray-700"
+        >
+          <i id="menu-icon" class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden lg:flex items-center gap-6">
+        {navItems.map(item => (
+          <a 
+            href={item.path} 
+            class="font-medium text-gray-600 hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500 transition-colors"
+          >
+            {item.title}
+          </a>
+        ))}
+        <a 
+          href="/contact" 
+          class="px-5 py-2.5 rounded-md bg-green-600 hover:bg-green-700 text-white font-medium transition-colors"
+        >
+          Get Started
+        </a>
+      </nav>
+    </div>
+  </Container>
+
+  <!-- Mobile Navigation (Hidden by default) -->
+  <div id="mobile-menu" class="hidden lg:hidden w-full">
+    <Container>
+      <div class="py-4 border-t border-gray-200 dark:border-gray-700">
+        <nav class="flex flex-col space-y-4">
+          {navItems.map(item => (
+            <a 
+              href={item.path} 
+              class="font-medium text-gray-600 hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500 transition-colors"
+            >
+              {item.title}
+            </a>
+          ))}
+          <a 
+            href="/contact" 
+            class="px-5 py-2.5 rounded-md bg-green-600 hover:bg-green-700 text-white font-medium transition-colors text-center"
+          >
+            Get Started
+          </a>
+        </nav>
+      </div>
+    </Container>
+  </div>
+</header>
+
+<script>
+  // Mobile menu toggle
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const menuIcon = document.getElementById('menu-icon');
+
+  if (menuToggle && mobileMenu && menuIcon) {
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      
+      // Toggle icon between bars and x
+      if (menuIcon.classList.contains('fa-bars')) {
+        menuIcon.classList.remove('fa-bars');
+        menuIcon.classList.add('fa-xmark');
+      } else {
+        menuIcon.classList.remove('fa-xmark');
+        menuIcon.classList.add('fa-bars');
+      }
+    });
+  }
+</script>

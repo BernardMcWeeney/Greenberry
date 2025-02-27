@@ -1,0 +1,141 @@
+---
+import Container from './Container.astro';
+
+const currentYear = new Date().getFullYear();
+
+const companyItems = [
+  { title: "About", path: "/about" },
+  { title: "Services", path: "/services" },
+  { title: "Blog", path: "/blog" },
+  { title: "Contact", path: "/contact" },
+];
+
+const serviceItems = [
+  { title: "Website Solutions", path: "/services#websites" },
+  { title: "Upgrades & Maintenance", path: "/services#maintenance" },
+  { title: "SEO Packages", path: "/services#seo" },
+  { title: "Email Solutions", path: "/services#email" },
+];
+
+const resourceItems = [
+  { title: "Help Center", path: "/help" },
+  { title: "Terms of Service", path: "/terms" },
+  { title: "Privacy Policy", path: "/privacy" },
+];
+
+const socialLinks = [
+  { icon: "fa-brands fa-facebook", path: "https://facebook.com/" },
+  { icon: "fa-brands fa-twitter", path: "https://twitter.com/" },
+  { icon: "fa-brands fa-linkedin", path: "https://linkedin.com/" },
+  { icon: "fa-brands fa-instagram", path: "https://instagram.com/" },
+];
+---
+
+<footer class="bg-gray-50 dark:bg-gray-800 mt-20">
+  <Container>
+    <div class="py-16">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- Branding & Social -->
+        <div class="col-span-1 md:col-span-1">
+          <a href="/" class="flex items-center gap-2 mb-4">
+            <span class="text-green-600 text-xl">
+              <i class="fa-solid fa-leaf"></i>
+            </span>
+            <span class="font-bold text-gray-900 dark:text-white">
+              <span class="text-green-600">Green</span>berry
+            </span>
+          </a>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">
+            Hassle-free website solutions and fully managed IT services for businesses across Ireland.
+          </p>
+          <div class="flex gap-4 mt-4">
+            {socialLinks.map(social => (
+              <a 
+                href={social.path} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="text-gray-500 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-500 transition-colors"
+              >
+                <i class={social.icon}></i>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <!-- Company -->
+        <div>
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Company</h3>
+          <ul class="space-y-2">
+            {companyItems.map(item => (
+              <li>
+                <a 
+                  href={item.path} 
+                  class="text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-500 transition-colors"
+                >
+                  {item.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Services -->
+        <div>
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Services</h3>
+          <ul class="space-y-2">
+            {serviceItems.map(item => (
+              <li>
+                <a 
+                  href={item.path} 
+                  class="text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-500 transition-colors"
+                >
+                  {item.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Resources -->
+        <div>
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Resources</h3>
+          <ul class="space-y-2">
+            {resourceItems.map(item => (
+              <li>
+                <a 
+                  href={item.path} 
+                  class="text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-500 transition-colors"
+                >
+                  {item.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="py-6 border-t border-gray-200 dark:border-gray-700">
+      <div class="flex flex-col sm:flex-row justify-between items-center">
+        <p class="text-sm text-gray-600 dark:text-gray-400">
+          &copy; {currentYear} Greenberry. All rights reserved.
+        </p>
+        <div class="flex gap-4 mt-4 sm:mt-0">
+          <a 
+            href="/terms" 
+            class="text-sm text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-500 transition-colors"
+          >
+            Terms
+          </a>
+          <a 
+            href="/privacy" 
+            class="text-sm text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-500 transition-colors"
+          >
+            Privacy
+          </a>
+        </div>
+      </div>
+    </div>
+  </Container>
+</footer>

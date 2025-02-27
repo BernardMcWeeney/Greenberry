@@ -1,0 +1,35 @@
+/* Import Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom global styles */
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold;
+  }
+}
+
+/* Custom component classes */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-5 py-2.5 rounded-md font-medium transition-colors;
+  }
+  
+  .btn-primary {
+    @apply bg-greenberry-600 hover:bg-greenberry-700 text-white;
+  }
+  
+  .btn-outline {
+    @apply bg-transparent border-2 border-greenberry-600 text-greenberry-600 hover:bg-greenberry-50 dark:border-greenberry-500 dark:text-greenberry-500 dark:hover:bg-gray-800;
+  }
+}

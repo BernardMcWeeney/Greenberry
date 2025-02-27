@@ -1,0 +1,82 @@
+---
+import Container from '../common/Container.astro';
+import Button from '../common/Button.astro';
+---
+
+<section class="py-20 lg:py-28">
+  <Container>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <span class="inline-block py-1 px-3 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 rounded-full text-sm font-medium mb-4">
+          Irish Web Development
+        </span>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight mb-6">
+          Hassle-Free Websites with <span class="text-green-600">Greenberry</span>
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
+          Fully managed IT solutions designed for Irish businesses. Modern websites that convert and scale with your business.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <Button href="/contact" size="lg">
+            Get Started
+            <span class="ml-2"><i class="fa-solid fa-arrow-right text-sm"></i></span>
+          </Button>
+          <Button href="/about" variant="outline" size="lg">
+            Learn More
+          </Button>
+        </div>
+        
+        <div class="mt-10 flex items-center gap-6">
+          <div class="flex -space-x-2">
+            <img 
+              src="https://randomuser.me/api/portraits/women/21.jpg" 
+              alt="Customer" 
+              class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800"
+            />
+            <img 
+              src="https://randomuser.me/api/portraits/men/32.jpg" 
+              alt="Customer" 
+              class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800"
+            />
+            <img 
+              src="https://randomuser.me/api/portraits/women/45.jpg" 
+              alt="Customer" 
+              class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800"
+            />
+          </div>
+          <div class="text-gray-600 dark:text-gray-400 text-sm">
+            <span class="font-semibold text-gray-900 dark:text-white">Trusted by</span> Irish businesses across the country
+          </div>
+        </div>
+      </div>
+      
+      <div class="relative">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden p-2 relative z-10">
+          <!-- Mock browser UI -->
+          <div class="flex items-center gap-1.5 p-3 border-b border-gray-200 dark:border-gray-700">
+            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+            <div class="flex-1 ml-2">
+              <div class="bg-gray-100 dark:bg-gray-700 rounded-md text-xs px-3 py-1 text-center text-gray-600 dark:text-gray-300">
+                greenberry.ie
+              </div>
+            </div>
+          </div>
+          <!-- Website mockup content -->
+          <div class="aspect-video overflow-hidden bg-gray-50 dark:bg-gray-900 relative">
+            <img 
+              src="https://placehold.co/1200x800/38a169/FFFFFF/png?text=Greenberry+Website" 
+              alt="Greenberry website preview" 
+              class="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+        
+        <!-- Decorative elements -->
+        <div class="absolute -bottom-6 -right-6 w-40 h-40 bg-green-600/20 rounded-full blur-2xl"></div>
+        <div class="absolute -top-6 -left-6 w-40 h-40 bg-blue-600/20 rounded-full blur-2xl"></div>
+      </div>
+    </div>
+  </Container>
+</section>

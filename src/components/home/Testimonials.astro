@@ -1,0 +1,68 @@
+---
+import Container from '../common/Container.astro';
+
+const testimonials = [
+  {
+    content: "Greenberry transformed our online presence. Their team was professional, responsive, and delivered a stunning website that has significantly increased our customer inquiries.",
+    author: "Sarah O'Brien",
+    position: "Owner, Dublin Café",
+    image: "https://randomuser.me/api/portraits/women/48.jpg"
+  },
+  {
+    content: "Working with Greenberry was hassle-free from start to finish. They managed everything from design to hosting, and even helped improve our search rankings. Highly recommended!",
+    author: "Michael Collins",
+    position: "Director, Cork Retail Group",
+    image: "https://randomuser.me/api/portraits/men/32.jpg"
+  },
+  {
+    content: "As a small business owner, I needed a website that would stand out without breaking the bank. Greenberry delivered exactly that, plus their ongoing support has been invaluable.",
+    author: "Emma Fitzgerald",
+    position: "Founder, Galway Artisans",
+    image: "https://randomuser.me/api/portraits/women/65.jpg"
+  }
+];
+---
+
+<section class="py-20">
+  <Container>
+    <div class="max-w-3xl mx-auto text-center mb-16">
+      <span class="inline-block py-1 px-3 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 rounded-full text-sm font-medium mb-4">
+        Client Testimonials
+      </span>
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
+        What Our Clients Say
+      </h2>
+      <p class="text-xl text-gray-600 dark:text-gray-300">
+        Don't just take our word for it. Here's what businesses across Ireland have to say about working with Greenberry.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {testimonials.map((testimonial) => (
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col">
+          <div class="mb-4 text-green-600">
+            <i class="fa-solid fa-quote-left text-3xl opacity-20"></i>
+          </div>
+          <p class="text-gray-600 dark:text-gray-300 italic mb-6 flex-grow">
+            "{testimonial.content}"
+          </p>
+          <div class="flex items-center mt-auto">
+            <img 
+              src={testimonial.image} 
+              alt={testimonial.author} 
+              class="w-12 h-12 rounded-full mr-4"
+            />
+            <div>
+              <h4 class="font-medium text-gray-900 dark:text-white">
+                {testimonial.author}
+              </h4>
+              <p class="text-sm text-gray-500 dark:text-gray-400">
+                {testimonial.position}
+              </p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </Container>
+</section>
