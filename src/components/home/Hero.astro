@@ -92,13 +92,20 @@ import Badge from '../ui/Badge.astro';
             </div>
           </div>
           
-          <!-- Website preview -->
-          <div class="aspect-[16/10] overflow-hidden">
+          <!-- Website preview with text overlay -->
+          <div class="aspect-[16/10] overflow-hidden relative">
             <img 
               src="/hero.png" 
               alt="Greenberry website preview" 
               class="w-full h-full object-cover"
             />
+            <!-- Text overlay with plain white text and shadow -->
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="text-center">
+                <h2 class="text-white text-3xl md:text-4xl font-bold mb-2 text-shadow-lg">Greenberry</h2>
+                <p class="text-white text-xl md:text-2xl text-shadow-md">Simplifying websites for Irish businesses</p>
+              </div>
+            </div>
           </div>
         </div>
         
@@ -161,5 +168,12 @@ import Badge from '../ui/Badge.astro';
   
   .animation-delay-300 {
     animation-delay: 300ms;
+  }
+
+  .text-shadow-lg {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  }
+  .text-shadow-md {
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
   }
 </style>

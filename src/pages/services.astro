@@ -1,0 +1,336 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Container from '../components/common/Container.astro';
+import Button from '../components/common/Button.astro';
+import Badge from '../components/ui/Badge.astro';
+import PartnersLogos from '../components/home/PartnersLogos.astro';
+import TrackRecord from '../components/home/TrackRecord.astro';
+import Cta from '../components/home/Cta.astro';
+
+// Define service offerings
+const services = [
+  {
+    id: "websites",
+    title: "Website Solutions",
+    description: "Modern and cutting-edge websites featuring responsive and lightweight designs that help your business stand out and convert visitors into customers.",
+    icon: "fa-solid fa-globe",
+    color: "blue",
+    features: [
+      "Custom website design and development",
+      "Mobile-responsive layouts",
+      "Content management systems",
+      "E-commerce solutions",
+      "Performance optimization",
+      "SEO-friendly architecture"
+    ]
+  },
+  {
+    id: "maintenance",
+    title: "Upgrades & Maintenance",
+    description: "Keep your website secure, up-to-date, and performing at its best with our comprehensive maintenance packages.",
+    icon: "fa-solid fa-arrows-rotate",
+    color: "green",
+    features: [
+      "Regular software updates",
+      "Security monitoring",
+      "Daily backups",
+      "Performance optimization",
+      "Technical support",
+      "Content updates"
+    ]
+  },
+  {
+    id: "seo",
+    title: "SEO Packages",
+    description: "Improve your search engine rankings, drive more targeted traffic, and increase conversions with our data-driven SEO services.",
+    icon: "fa-solid fa-magnifying-glass-chart",
+    color: "orange",
+    features: [
+      "Keyword research and optimization",
+      "On-page SEO improvements",
+      "Content strategy and creation",
+      "Technical SEO audits",
+      "Local SEO optimization",
+      "Performance tracking and reporting"
+    ]
+  },
+  {
+    id: "email",
+    title: "Email Solutions",
+    description: "Professional email services that enhance your brand credibility, improve team collaboration, and ensure your important communications are secure.",
+    icon: "fa-solid fa-envelope",
+    color: "red",
+    features: [
+      "Custom domain email addresses",
+      "Spam and malware protection",
+      "Mobile email access",
+      "Shared calendars and contacts",
+      "Email backup and recovery",
+      "Seamless integration with other tools"
+    ]
+  }
+];
+
+// Define process steps
+const process = [
+  {
+    number: "01",
+    title: "Discovery",
+    description: "We begin by understanding your business, goals, and target audience to create a tailored solution.",
+    icon: "fa-solid fa-comments"
+  },
+  {
+    number: "02",
+    title: "Planning",
+    description: "We develop a detailed project plan with clear timelines, milestones, and deliverables.",
+    icon: "fa-solid fa-clipboard-list"
+  },
+  {
+    number: "03",
+    title: "Development",
+    description: "Our team builds your solution using the latest technologies, with regular check-ins throughout.",
+    icon: "fa-solid fa-code"
+  },
+  {
+    number: "04",
+    title: "Launch",
+    description: "After thorough testing, we launch your project and provide training on how to use your new tools.",
+    icon: "fa-solid fa-rocket"
+  },
+  {
+    number: "05",
+    title: "Support",
+    description: "We provide ongoing support to ensure your digital presence continues to perform optimally.",
+    icon: "fa-solid fa-headset"
+  }
+];
+---
+
+<Layout title="Services | Greenberry">
+  <!-- Hero Section -->
+  <section class="pt-20 pb-16 bg-green-50 dark:bg-gray-800 section-bg-decoration">
+    <Container>
+      <div class="max-w-3xl mx-auto text-center">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
+          Our Services
+        </h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          Comprehensive digital solutions to help your Irish business thrive online.
+        </p>
+      </div>
+    </Container>
+  </section>
+  
+  <!-- Partners Section -->
+  <PartnersLogos />
+
+  <!-- Services Section -->
+  <section class="py-16 bg-white dark:bg-gray-900">
+    <Container>
+      <div class="max-w-3xl mx-auto text-center mb-16">
+        <div class="flex justify-center mb-4">
+          <Badge text="OUR EXPERTISE" variant="primary" size="md" />
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
+          Complete Digital Solutions for Your Business
+        </h2>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          From website development to ongoing maintenance and marketing, we provide everything you need to establish and grow your online presence.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+        {services.map((service) => (
+          <div id={service.id} class={`bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border-t-4 border-${service.color}-500 p-6`}>
+            <div class={`text-${service.color}-500 text-4xl mb-4`}>
+              <i class={service.icon}></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+              {service.title}
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-6">
+              {service.description}
+            </p>
+            <ul class="space-y-2 mb-6">
+              {service.features.map((feature) => (
+                <li class="flex items-start">
+                  <span class="text-greenberry-500 mr-2 mt-1"><i class="fa-solid fa-check"></i></span>
+                  <span class="text-gray-700 dark:text-gray-300">{feature}</span>
+                </li>
+              ))}
+            </ul>
+            <a 
+              href={`/services/${service.id}`} 
+              class="inline-flex items-center text-greenberry-600 hover:text-greenberry-700 dark:text-greenberry-400 dark:hover:text-greenberry-300 font-medium group"
+            >
+              Learn more
+              <span class="ml-1 text-xs group-hover:translate-x-1 transition-transform duration-300">
+                <i class="fa-solid fa-arrow-right"></i>
+              </span>
+            </a>
+          </div>
+        ))}
+      </div>
+    </Container>
+  </section>
+  
+  <!-- Process Section -->
+  <section class="py-16 bg-gray-50 dark:bg-gray-800/50">
+    <Container>
+      <div class="max-w-3xl mx-auto text-center mb-16">
+        <div class="flex justify-center mb-4">
+          <Badge text="OUR PROCESS" variant="primary" size="md" />
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
+          How We Work
+        </h2>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          Our proven process ensures consistent results and a smooth experience.
+        </p>
+      </div>
+      
+      <div class="relative">
+        <!-- Timeline line -->
+        <div class="hidden md:block absolute left-1/2 top-8 bottom-8 w-1 bg-greenberry-200 dark:bg-greenberry-800 transform -translate-x-1/2"></div>
+        
+        <div class="space-y-12 relative">
+          {process.map((step, index) => (
+            <div class="relative grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <div class={`md:text-right ${index % 2 === 1 ? 'md:order-2' : ''}`}>
+                <div class="text-3xl font-bold text-greenberry-500 dark:text-greenberry-400 mb-2">
+                  {step.number}
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+                  {step.title}
+                </h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                  {step.description}
+                </p>
+              </div>
+              
+              <div class={`flex ${index % 2 === 1 ? 'md:justify-end' : 'md:justify-start'}`}>
+                <div class="hidden md:flex absolute left-1/2 transform -translate-x-1/2 z-10">
+                  <div class="w-12 h-12 rounded-full bg-greenberry-500 text-white flex items-center justify-center text-lg">
+                    <i class={step.icon}></i>
+                  </div>
+                </div>
+                
+                <div class="flex md:hidden w-12 h-12 rounded-full bg-greenberry-500 text-white items-center justify-center text-lg mr-4">
+                  <i class={step.icon}></i>
+                </div>
+                
+                <div class={`bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm flex-1 ${index % 2 === 1 ? 'md:text-right' : ''}`}>
+                  <p class="text-gray-700 dark:text-gray-300">
+                    {index === 0 && "We'll learn about your business goals and target audience."}
+                    {index === 1 && "We'll create a roadmap for your project with clear milestones."}
+                    {index === 2 && "Our experts will build your solution using cutting-edge technology."}
+                    {index === 3 && "We thoroughly test everything before taking your project live."}
+                    {index === 4 && "We provide ongoing support to ensure continued success."}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </Container>
+  </section>
+  
+  <!-- Features Highlight -->
+  <section class="py-16 bg-white dark:bg-gray-900">
+    <Container>
+      <div class="bg-gradient-to-br from-greenberry-50 to-greenberry-100 dark:from-greenberry-900 dark:to-greenberry-800 rounded-2xl p-10 border border-greenberry-200 dark:border-greenberry-700 relative overflow-hidden group hover:shadow-lg hover:shadow-greenberry-500/10 transition-all duration-300">
+        <!-- Background decorative elements -->
+        <div class="absolute -top-20 -right-20 w-40 h-40 bg-greenberry-500/20 rounded-full filter blur-3xl opacity-70 group-hover:opacity-90 transition-opacity duration-700"></div>
+        <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-greenberry-400/20 rounded-full filter blur-3xl opacity-60 group-hover:opacity-80 transition-opacity duration-700"></div>
+        
+        <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div>
+            <div class="mb-3">
+              <Badge text="100% MANAGED SERVICE" variant="primary" size="md" />
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+              We Handle Everything So You Don't Have To
+            </h3>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              From domain registration to hosting, maintenance, and security updates, we take care of all the technical details so you can focus on running your business.
+            </p>
+            <ul class="space-y-2">
+              {[
+                "24/7 website monitoring",
+                "Regular security updates",
+                "Daily backups",
+                "Performance optimization",
+                "Technical support"
+              ].map(item => (
+                <li class="flex items-center text-gray-700 dark:text-gray-300">
+                  <span class="text-greenberry-600 dark:text-greenberry-400 mr-2"><i class="fa-solid fa-check"></i></span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="relative h-full flex items-center justify-center">
+            <div class="w-full max-w-xs h-auto relative">
+              <!-- Decorative elements -->
+              <div class="absolute -top-5 -left-5 w-10 h-10 bg-greenberry-500 rounded-full opacity-20 animate-pulse"></div>
+              <div class="absolute top-1/2 -right-5 w-8 h-8 bg-greenberry-600 rounded-full opacity-20 animate-pulse animation-delay-700"></div>
+              <div class="absolute -bottom-5 left-1/3 w-12 h-12 bg-greenberry-400 rounded-full opacity-20 animate-pulse animation-delay-1500"></div>
+              
+              <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" alt="Managed services illustration" class="w-full h-auto rounded-2xl shadow-lg group-hover:shadow-xl transition-shadow duration-300" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <!-- Track Record Section -->
+  <TrackRecord />
+  
+  <!-- CTA Section -->
+  <Cta />
+</Layout>
+
+<style>
+  /* Custom section background decoration */
+  .section-bg-decoration {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .section-bg-decoration::before {
+    content: "";
+    position: absolute;
+    right: -5%;
+    top: -5%;
+    width: 20%;
+    height: 20%;
+    background-color: rgba(72, 187, 120, 0.1);
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: 0;
+  }
+  
+  .section-bg-decoration::after {
+    content: "";
+    position: absolute;
+    left: -5%;
+    bottom: -5%;
+    width: 20%;
+    height: 20%;
+    background-color: rgba(72, 187, 120, 0.1);
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: 0;
+  }
+
+  /* Animation delays */
+  .animation-delay-700 {
+    animation-delay: 700ms;
+  }
+  
+  .animation-delay-1500 {
+    animation-delay: 1500ms;
+  }
+</style>
