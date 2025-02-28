@@ -52,7 +52,7 @@ const googleRating = 4.9;
 const totalReviews = 87;
 ---
 
-<section class="section-padding bg-white dark:bg-gray-900 relative overflow-hidden pb-24 sm:pb-32">
+<section class="section-padding bg-white dark:bg-gray-900 relative overflow-hidden pb-12 sm:pb-16">
   <!-- Background elements for depth -->
   <div class="absolute inset-0 overflow-hidden">
     <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-greenberry-500/10 rounded-full filter blur-3xl opacity-50"></div>
@@ -69,8 +69,8 @@ const totalReviews = 87;
       </h2>
     </div>
     
-    <!-- Full-width Testimonial Tapefeed with improved margin spacing -->
-    <div class="testimonial-tapefeed-container relative w-full overflow-hidden mt-8 mb-12">
+    <!-- Full-width Testimonial Tapefeed with reduced margin spacing -->
+    <div class="testimonial-tapefeed-container relative w-full overflow-hidden mt-8 mb-6">
       <div id="testimonial-tapefeed" class="flex space-x-6">
         {[...testimonials, ...testimonials].map((testimonial) => (
           <div class="testimonial-card flex-shrink-0" style="width: 400px;">
@@ -111,7 +111,7 @@ const totalReviews = 87;
       </div>
     </div>
     
-    <div class="text-center mt-16 mb-8">
+    <div class="text-center mt-10 mb-4">
       <a href="/testimonials" class="text-greenberry-600 hover:text-greenberry-700 dark:text-greenberry-400 dark:hover:text-greenberry-300 inline-flex items-center font-medium group bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm hover:shadow border border-white/10 dark:border-gray-700/10">
         View all testimonials 
         <span class="ml-2 text-sm group-hover:translate-x-1 transition-transform duration-300">
@@ -196,7 +196,7 @@ const totalReviews = 87;
     position: relative;
     width: 100%;
     overflow-x: hidden;
-    margin-bottom: 2rem; /* Add additional margin to container */
+    margin-bottom: 1rem; /* Reduced from 2rem */
   }
   
   .testimonial-tapefeed-container::before,
@@ -231,7 +231,7 @@ const totalReviews = 87;
   /* Tape feed effect for cards */
   .testimonial-card {
     position: relative;
-    margin-bottom: 1rem; /* Add space below each card */
+    margin-bottom: 0.5rem; /* Reduced from 1rem */
   }
   
   .testimonial-card::before {
@@ -251,7 +251,7 @@ const totalReviews = 87;
   @media (max-width: 640px) {
     .testimonial-card {
       width: 85vw !important;
-      margin-bottom: 1.5rem; /* More bottom margin on mobile */
+      margin-bottom: 0.75rem; /* Reduced from 1.5rem */
     }
   }
 </style>
