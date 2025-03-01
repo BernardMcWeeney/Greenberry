@@ -1,0 +1,128 @@
+---
+import Container from '../common/Container.astro';
+import Badge from '../ui/Badge.astro';
+
+export interface Props {
+  title: string;
+  description?: string;
+  images: string[];
+  projectTitle: string;
+  badgeText?: string;
+}
+
+const { 
+  title, 
+  description, 
+  images, 
+  projectTitle,
+  badgeText = "PROJECT SHOWCASE" 
+} = Astro.props;
+---
+
+<section class="py-16 bg-white dark:bg-gray-900">
+  <Container>
+    <div class="max-w-3xl mx-auto text-center mb-10">
+      <div class="badge-wrapper">
+        <Badge text={badgeText} variant="primary" size="md" />
+      </div>
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
+        {title}
+      </h2>
+      {description && (
+        <p class="text-lg text-gray-600 dark:text-gray-300">
+          {description}
+        </p>
+      )}
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-4 auto-rows-[200px] md:auto-rows-[250px] gap-4">
+      {images.map((image, index) => (
+        <div class={`group relative rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all ${
+          index === 0 ? "md:col-span-2 md:row-span-2" : 
+          index === 1 ? "md:col-span-2" :
+          index % 5 === 4 ? "md:col-span-2" :
+          "md:col-span-1"
+        }`}>
+          <img 
+            src={image} 
+            alt={`${projectTitle} - Gallery image ${index + 1}`} 
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading={index < 2 ? "eager" : "lazy"}
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+            <div class="w-full flex justify-between items-center">
+              <span class="text-white text-sm font-medium">View detail</span>
+              <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                <i class="fa-solid fa-magnifying-glass text-white text-xs"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+    
+    <!-- Floating Scroll Indicator for Mobile -->
+    <div class="mt-6 flex justify-center md:hidden">
+      <div class="flex gap-1">
+        {[...Array(Math.min(5, images.length))].map((_, i) => (
+          <div class={`w-2 h-2 rounded-full ${i === 0 ? "bg-greenberry-500" : "bg-gray-300 dark:bg-gray-600"}`}></div>
+        ))}
+      </div>
+      <div class="text-sm text-gray-500 dark:text-gray-400 ml-2">Swipe to explore</div>
+    </div>
+  </Container>
+</section>
+
+<script>
+  // Optional: Add lightbox functionality for gallery images
+  document.addEventListener('DOMContentLoaded', () => {
+    const galleryItems = document.querySelectorAll('.group.relative.rounded-xl');
+    
+    galleryItems.forEach(item => {
+      item.addEventListener('click', () => {
+        // You could implement a lightbox here or link to full-size images
+        const img = item.querySelector('img');
+        if (img) {
+          // For now, we'll just log - you could replace with actual lightbox code
+          console.log('Opening image:', img.src);
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Add styles for mobile swipe indicator animation */
+  @keyframes pulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+  }
+  
+  .bg-greenberry-500 {
+    animation: pulse 2s infinite ease-in-out;
+  }
+  
+  /* For touch devices, add horizontal scroll on mobile */
+  @media (max-width: 768px) {
+    .grid {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 1rem;
+    }
+    
+    .grid > div {
+      flex: 0 0 90%;
+      width: 90%;
+      scroll-snap-align: start;
+      margin-right: 0.75rem;
+    }
+    
+    .grid > div:first-child {
+      flex: 0 0 90%;
+      width: 90%;
+    }
+  }
+</style>

@@ -1,0 +1,121 @@
+---
+export interface Step {
+  number: string;
+  title: string;
+  description: string;
+}
+
+export interface Props {
+  steps: Step[];
+  color?: string;
+}
+
+const { steps, color = "blue" } = Astro.props;
+
+// Color classes based on the color prop
+const textColorClass = `text-${color}-600`;
+const darkTextColorClass = `dark:text-${color}-400`;
+const bgColorClass = `bg-${color}-500`;
+const bgLightColorClass = `bg-${color}-100`;
+const darkBgLightColorClass = `dark:bg-${color}-900/30`;
+---
+
+<div class="mt-8 relative">
+  <!-- Desktop Version: Horizontal Process Steps -->
+  <div class="hidden lg:block">
+    <div class="flex justify-between items-start relative mb-8">
+      {/* Horizontal connector line */}
+      <div class="absolute top-10 left-0 right-0 h-0.5 bg-gray-200 dark:bg-gray-700 z-0"></div>
+      
+      {steps.map((step) => (
+        <div class="relative z-10 flex flex-col items-center group" style="width: 20%;">
+          <div class={`w-20 h-20 ${bgColorClass} rounded-full flex items-center justify-center text-white text-2xl font-bold mb-6 shadow-md group-hover:shadow-lg transition-all duration-300 transform group-hover:scale-110`}>
+            {step.number}
+          </div>
+          <h3 class={`text-xl font-bold ${textColorClass} ${darkTextColorClass} mb-3 text-center group-hover:translate-y-[-2px] transition-transform`}>
+            {step.title}
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300 text-center text-sm">
+            {step.description}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+  
+  <!-- Tablet Version: Modified Horizontal Layout -->
+  <div class="hidden md:block lg:hidden">
+    <div class="grid grid-cols-3 gap-6">
+      {steps.map((step, index) => (
+        <div class="group relative">
+          {/* Connector for tablets - horizontal within rows */}
+          {index < steps.length - 1 && index % 3 !== 2 && (
+            <div class="absolute top-8 left-[calc(50%+20px)] right-0 h-0.5 bg-gray-200 dark:bg-gray-700 z-0"></div>
+          )}
+          {/* Connector for tablets - vertical between rows */}
+          {index < 3 && (
+            <div class="absolute bottom-[-24px] left-1/2 h-[24px] w-0.5 bg-gray-200 dark:bg-gray-700 z-0"></div>
+          )}
+          
+          <div class="flex flex-col items-center">
+            <div class={`w-16 h-16 ${bgColorClass} rounded-full flex items-center justify-center text-white text-xl font-bold mb-4 shadow-md relative z-10 group-hover:shadow-lg transition-all duration-300 transform group-hover:scale-110`}>
+              {step.number}
+            </div>
+            <div class="text-center">
+              <h3 class={`text-lg font-bold ${textColorClass} ${darkTextColorClass} mb-2`}>
+                {step.title}
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm">
+                {step.description}
+              </p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+  
+  <!-- Mobile Version: Vertical Timeline Style -->
+  <div class="md:hidden">
+    <div class="space-y-6 relative">
+      {/* Vertical timeline line */}
+      <div class="absolute top-0 bottom-0 left-7 w-0.5 bg-gray-200 dark:bg-gray-700 z-0"></div>
+      
+      {steps.map((step) => (
+        <div class="flex relative z-10">
+          <div class="mr-6">
+            <div class={`w-14 h-14 ${bgColorClass} rounded-full flex items-center justify-center text-white text-xl font-bold shadow-md group-hover:shadow-lg transition-all duration-300`}>
+              {step.number}
+            </div>
+          </div>
+          <div class={`grow p-4 rounded-lg border border-gray-100 dark:border-gray-700 ${bgLightColorClass} ${darkBgLightColorClass} shadow-sm`}>
+            <h3 class={`text-lg font-bold ${textColorClass} ${darkTextColorClass} mb-2`}>
+              {step.title}
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 text-sm">
+              {step.description}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Hover animation for step numbers */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+  
+  .group:hover .w-20,
+  .group:hover .w-16,
+  .group:hover .w-14 {
+    animation: float 3s ease-in-out infinite;
+  }
+</style>

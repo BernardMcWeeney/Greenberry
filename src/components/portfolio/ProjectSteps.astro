@@ -1,0 +1,104 @@
+---
+import Container from '../common/Container.astro';
+import Badge from '../ui/Badge.astro';
+
+export interface Step {
+  title: string;
+  description: string;
+  icon: string;
+  color: string;
+  borderColor: string;
+  textColor: string;
+}
+
+export interface Props {
+  steps: Step[];
+  title?: string;
+  description?: string;
+  badgeText?: string;
+}
+
+const { 
+  steps,
+  title = "Our Approach",
+  description = "How we turned challenges into results",
+  badgeText = "PROJECT PROCESS"
+} = Astro.props;
+---
+
+<section class="py-16 bg-white dark:bg-gray-900">
+  <Container>
+    {(title || description) && (
+      <div class="max-w-3xl mx-auto text-center mb-12">
+        <div class="badge-wrapper">
+          <Badge text={badgeText} variant="primary" size="md" />
+        </div>
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+          {title}
+        </h2>
+        <p class="text-lg text-gray-600 dark:text-gray-300">
+          {description}
+        </p>
+      </div>
+    )}
+    
+    <!-- Desktop & Tablet View: Horizontal Process Steps -->
+    <div class="hidden md:block relative">
+      <div class="grid md:grid-cols-3 gap-6">
+        {steps.map((step, index) => (
+          <div class={`group relative bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-all overflow-hidden border-t-4 ${step.borderColor}`}>
+            {/* Process number */}
+            <div class="absolute top-0 right-0 w-16 h-16 bg-gray-50 dark:bg-gray-700/50 rounded-bl-2xl flex items-center justify-center">
+              <span class={`text-2xl font-bold ${step.textColor}`}>0{index + 1}</span>
+            </div>
+            
+            <div class="p-8 pt-12">
+              <div class={`${step.textColor} text-3xl mb-4`}>
+                <i class={step.icon}></i>
+              </div>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                {step.title}
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300">
+                {step.description}
+              </p>
+            </div>
+            
+            {/* Connector line for desktop (not for the last item) */}
+            {index < steps.length - 1 && (
+              <div class="hidden lg:block absolute top-1/2 left-full w-6 h-0.5 bg-gray-200 dark:bg-gray-700 transform -translate-x-3"></div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Mobile View: Vertical Process Timeline -->
+    <div class="md:hidden relative">
+      <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200 dark:bg-gray-700 z-0"></div>
+      
+      <div class="space-y-8 relative z-10">
+        {steps.map((step, index) => (
+          <div class="flex">
+            <div class={`w-8 h-8 rounded-full ${step.color === 'red' ? 'bg-red-500' : step.color === 'blue' ? 'bg-blue-500' : 'bg-green-500'} flex items-center justify-center text-white text-sm font-bold mr-6 z-10`}>
+              {index + 1}
+            </div>
+            <div class={`flex-1 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 ${step.borderColor}`}>
+              <div class="flex items-center mb-3">
+                <div class={`${step.textColor} text-xl mr-3`}>
+                  <i class={step.icon}></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">
+                  {step.title}
+                </h3>
+              </div>
+              <p class="text-gray-600 dark:text-gray-300">
+                {step.description}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </Container>
+</section>

@@ -1,0 +1,30 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  icon: string;
+  color: string;
+}
+
+const { title, description, icon, color = "blue" } = Astro.props;
+
+const textColorClass = `text-${color}-500`;
+const bgColorLight = `bg-${color}-50`;
+const bgColorDark = `dark:bg-${color}-900/30`;
+---
+
+<div class="group bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-100 dark:border-gray-700 p-6 hover:shadow-md hover:border-greenberry-500 dark:hover:border-greenberry-500 transition-all duration-300">
+  <div class={`${textColorClass} text-3xl mb-4`}>
+    <div class={`w-14 h-14 rounded-full ${bgColorLight} ${bgColorDark} flex items-center justify-center group-hover:scale-110 transition-all duration-300`}>
+      <i class={icon}></i>
+    </div>
+  </div>
+  
+  <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-greenberry-600 dark:group-hover:text-greenberry-400 transition-colors">
+    {title}
+  </h3>
+  
+  <p class="text-gray-600 dark:text-gray-300">
+    {description}
+  </p>
+</div>

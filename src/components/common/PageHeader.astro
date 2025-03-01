@@ -1,0 +1,103 @@
+---
+import Badge from '../ui/Badge.astro';
+import Container from './Container.astro';
+
+export interface Props {
+  title: string;
+  description?: string;
+  badgeText?: string;
+  badgeVariant?: 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'purple' | 'blue' | 'green' | 'yellow' | 'red';
+  highlightedText?: string;
+  highlightPosition?: 'start' | 'middle' | 'end'; // Where the highlighted text appears in the title
+  backgroundVariant?: 'green' | 'gray' | 'cool-gray' | 'decorated';
+  centered?: boolean;
+  paddingY?: 'sm' | 'md' | 'lg';
+}
+
+const {
+  title,
+  description,
+  badgeText,
+  badgeVariant = 'primary',
+  highlightedText,
+  highlightPosition = 'end',
+  backgroundVariant = 'green',
+  centered = true,
+  paddingY = 'md',
+} = Astro.props;
+
+// Background variants
+const backgrounds = {
+  green: 'bg-green-50 dark:bg-gray-800',
+  gray: 'bg-gray-50 dark:bg-gray-800/50',
+  'cool-gray': 'bg-cool-gray-50 dark:bg-gray-800/50',
+  decorated: 'bg-green-50 dark:bg-gray-800 section-bg-decoration',
+};
+
+// Padding variants
+const paddingClasses = {
+  sm: 'py-12',
+  md: 'py-16',
+  lg: 'py-20',
+};
+
+// Helper function to handle title with highlighted part
+const renderTitle = () => {
+  if (!highlightedText) {
+    return title;
+  }
+
+  if (highlightPosition === 'start') {
+    return `<span class="relative inline-block text-greenberry-600">${highlightedText}
+            <span class="absolute -bottom-1 left-0 w-full h-1.5 bg-greenberry-500/40 rounded-full"></span></span> ${title.replace(highlightedText, '')}`;
+  } else if (highlightPosition === 'end') {
+    return `${title.replace(highlightedText, '')} <span class="relative inline-block text-greenberry-600">${highlightedText}
+            <span class="absolute -bottom-1 left-0 w-full h-1.5 bg-greenberry-500/40 rounded-full"></span></span>`;
+  } else {
+    // Middle position - we'll need to split the title
+    const parts = title.split(highlightedText);
+    return `${parts[0]} <span class="relative inline-block text-greenberry-600">${highlightedText}
+            <span class="absolute -bottom-1 left-0 w-full h-1.5 bg-greenberry-500/40 rounded-full"></span></span> ${parts[1]}`;
+  }
+};
+
+const titleHtml = renderTitle();
+const containerClass = centered ? 'max-w-3xl mx-auto text-center' : '';
+---
+
+<section class={`${paddingClasses[paddingY]} ${backgrounds[backgroundVariant]} relative overflow-hidden`}>
+  <!-- Decorative elements for background styling -->
+  {backgroundVariant === 'cool-gray' && (
+    <div class="absolute inset-0">
+      <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-greenberry-500/10 rounded-full filter blur-3xl opacity-70 -translate-y-1/2 translate-x-1/3"></div>
+      <div class="absolute bottom-0 left-0 w-1/3 h-1/3 bg-greenberry-500/10 rounded-full filter blur-3xl opacity-60 translate-y-1/2 -translate-x-1/3"></div>
+    </div>
+  )}
+  
+  <Container>
+    <div class={`relative z-10 ${containerClass}`}>
+      {badgeText && (
+        <div class="badge-wrapper mb-4">
+          <Badge 
+            text={badgeText} 
+            variant={badgeVariant} 
+            size="md" 
+            class={backgroundVariant === 'cool-gray' ? "bg-white/40 dark:bg-gray-800/40 backdrop-blur-md shadow-sm border border-white/20 dark:border-gray-700/20" : ""}
+          />
+        </div>
+      )}
+      
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-6" set:html={titleHtml} />
+      
+      {description && (
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+          <slot name="description">
+            {description}
+          </slot>
+        </p>
+      )}
+      
+      <slot />
+    </div>
+  </Container>
+</section>

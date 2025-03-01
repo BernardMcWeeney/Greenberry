@@ -1,0 +1,108 @@
+---
+import Container from './Container.astro';
+import Button from './Button.astro';
+import Badge from '../ui/Badge.astro';
+
+export interface Props {
+  title: string;
+  description?: string;
+  badgeText?: string;
+  primaryButtonText?: string;
+  primaryButtonHref?: string;
+  primaryButtonIcon?: string;
+  secondaryButtonText?: string;
+  secondaryButtonHref?: string;
+  secondaryButtonIcon?: string;
+  footnote?: string;
+  paddingY?: 'sm' | 'md' | 'lg';
+  backgroundVariant?: 'default' | 'light' | 'dark';
+}
+
+const {
+  title,
+  description,
+  badgeText,
+  primaryButtonText = 'Get Your Free Consultation',
+  primaryButtonHref = '/contact',
+  primaryButtonIcon = 'fa-solid fa-arrow-right',
+  secondaryButtonText,
+  secondaryButtonHref = '/services',
+  secondaryButtonIcon = 'fa-solid fa-list-check',
+  footnote,
+  paddingY = 'lg',
+  backgroundVariant = 'default',
+} = Astro.props;
+
+// Padding variants
+const paddingClasses = {
+  sm: 'py-12',
+  md: 'py-16',
+  lg: 'py-20',
+};
+
+// Background variants
+const backgrounds = {
+  default: 'bg-cool-gray-50 dark:bg-gray-800/50',
+  light: 'bg-white dark:bg-gray-900',
+  dark: 'bg-gray-100 dark:bg-gray-800',
+};
+---
+
+<section class={`${paddingClasses[paddingY]} ${backgrounds[backgroundVariant]} relative overflow-hidden`}>
+  <!-- Decorative elements -->
+  <div class="absolute inset-0">
+    <div class="absolute top-1/2 left-1/4 w-64 h-64 bg-greenberry-500/10 rounded-full filter blur-3xl opacity-70"></div>
+    <div class="absolute bottom-0 right-1/4 w-64 h-64 bg-greenberry-600/10 rounded-full filter blur-3xl opacity-60"></div>
+  </div>
+  
+  <Container>
+    <div class="max-w-4xl mx-auto bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl shadow-xl p-10 border border-white/40 dark:border-gray-700/40 relative z-10">
+      <div class="text-center mb-8">
+        {badgeText && (
+          <Badge text={badgeText} variant="primary" size="md" class="mb-4" />
+        )}
+        
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+          {title}
+        </h2>
+        
+        {description && (
+          <p class="text-xl text-gray-600 dark:text-gray-300">
+            {description}
+          </p>
+        )}
+        <slot name="description" />
+      </div>
+      
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <Button href={primaryButtonHref} size="lg" class="font-semibold shadow-lg shadow-greenberry-500/20">
+          {primaryButtonText}
+          {primaryButtonIcon && (
+            <span class="ml-2"><i class={primaryButtonIcon}></i></span>
+          )}
+        </Button>
+        
+        {secondaryButtonText && (
+          <a 
+            href={secondaryButtonHref} 
+            class="px-6 py-3 rounded-lg font-medium border border-greenberry-500/40 bg-white dark:bg-gray-800/30 backdrop-blur-sm text-greenberry-700 dark:text-greenberry-300 hover:bg-white/50 dark:hover:bg-gray-800/50 transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center"
+          >
+            {secondaryButtonIcon && (
+              <span class="mr-2"><i class={secondaryButtonIcon}></i></span>
+            )}
+            {secondaryButtonText}
+          </a>
+        )}
+        
+        <slot name="buttons" />
+      </div>
+      
+      {footnote && (
+        <p class="mt-6 text-gray-500 dark:text-gray-400 text-sm text-center">
+          {footnote}
+        </p>
+      )}
+      <slot name="footnote" />
+    </div>
+  </Container>
+</section>

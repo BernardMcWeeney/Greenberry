@@ -1,0 +1,511 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Container from '../../components/common/Container.astro';
+import Button from '../../components/common/Button.astro';
+import Badge from '../../components/ui/Badge.astro';
+import PageHeader from '../../components/common/PageHeader.astro';
+import PageCta from '../../components/common/PageCta.astro';
+import FeatureCard from '../../components/services/FeatureCard.astro';
+import ProcessSteps from '../../components/services/ProcessSteps.astro';
+import PricingTable from '../../components/services/PricingTable.astro';
+import ServiceFAQ from '../../components/services/ServiceFAQ.astro';
+
+// Import services data
+import { services } from '../../data/services';
+
+export async function getStaticPaths() {
+  return services.map(service => ({
+    params: { slug: service.id },
+    props: { service },
+  }));
+}
+
+const { service } = Astro.props;
+
+// Process steps are customized for each service
+const processSteps = {
+  websites: [
+    {
+      number: "01",
+      title: "Discovery & Planning",
+      description: "We start by understanding your business, goals, and target audience. This helps us create a tailored strategy."
+    },
+    {
+      number: "02",
+      title: "Design & Wireframing",
+      description: "We create visual designs and wireframes for your approval, ensuring the look and feel matches your brand."
+    },
+    {
+      number: "03",
+      title: "Development",
+      description: "Our team builds your website using modern technologies, focusing on performance, security, and SEO."
+    },
+    {
+      number: "04",
+      title: "Testing & Launch",
+      description: "We rigorously test across devices and browsers before going live, ensuring everything works perfectly."
+    },
+    {
+      number: "05",
+      title: "Ongoing Support",
+      description: "After launch, we provide ongoing maintenance and support to keep your website running smoothly."
+    }
+  ],
+  maintenance: [
+    {
+      number: "01",
+      title: "Initial Audit",
+      description: "We perform a comprehensive audit of your existing website to identify areas for improvement."
+    },
+    {
+      number: "02",
+      title: "Security Updates",
+      description: "Regular security patches and updates to protect your website from threats and vulnerabilities."
+    },
+    {
+      number: "03",
+      title: "Performance Optimization",
+      description: "Continuous monitoring and optimization to ensure your website loads quickly and functions smoothly."
+    },
+    {
+      number: "04",
+      title: "Content Updates",
+      description: "Regular updates to your website content, ensuring it remains fresh and relevant."
+    },
+    {
+      number: "05",
+      title: "Monthly Reporting",
+      description: "Detailed reports on website performance, traffic, and maintenance activities."
+    }
+  ],
+  seo: [
+    {
+      number: "01",
+      title: "SEO Audit",
+      description: "Comprehensive analysis of your current website performance and search engine visibility."
+    },
+    {
+      number: "02",
+      title: "Keyword Research",
+      description: "Identifying high-value keywords that your target audience is searching for."
+    },
+    {
+      number: "03",
+      title: "On-Page Optimization",
+      description: "Optimizing your website content, structure, and metadata for better search engine rankings."
+    },
+    {
+      number: "04",
+      title: "Content Strategy",
+      description: "Developing a content plan that attracts and engages your target audience."
+    },
+    {
+      number: "05",
+      title: "Performance Tracking",
+      description: "Ongoing monitoring and reporting on your website's search performance and improvements."
+    }
+  ],
+  email: [
+    {
+      number: "01",
+      title: "Requirements Analysis",
+      description: "Understanding your email needs, volume, and specific requirements."
+    },
+    {
+      number: "02",
+      title: "Solution Selection",
+      description: "Recommending the most appropriate email solution for your business."
+    },
+    {
+      number: "03",
+      title: "Setup & Configuration",
+      description: "Setting up your email accounts, aliases, groups, and security features."
+    },
+    {
+      number: "04",
+      title: "Migration",
+      description: "Safely moving your existing emails, contacts, and calendars to the new system."
+    },
+    {
+      number: "05",
+      title: "Training & Support",
+      description: "Providing training and ongoing support to ensure you get the most from your email solution."
+    }
+  ]
+};
+
+// Feature cards are customized for each service
+const featureCards = {
+  websites: [
+    {
+      title: "Custom Design",
+      description: "Unique designs tailored to your brand identity and business goals.",
+      icon: "fa-solid fa-palette",
+      color: "purple"
+    },
+    {
+      title: "Mobile Optimization",
+      description: "Responsive layouts that work perfectly on smartphones, tablets, and desktops.",
+      icon: "fa-solid fa-mobile-screen",
+      color: "blue"
+    },
+    {
+      title: "SEO-Friendly",
+      description: "Built with search engines in mind to help improve your rankings.",
+      icon: "fa-solid fa-magnifying-glass",
+      color: "green"
+    },
+    {
+      title: "Fast Performance",
+      description: "Optimized code and assets for lightning-fast loading speeds.",
+      icon: "fa-solid fa-bolt",
+      color: "yellow"
+    },
+    {
+      title: "Content Management",
+      description: "Easy-to-use CMS so you can update your content without technical knowledge.",
+      icon: "fa-solid fa-pen-to-square",
+      color: "red"
+    },
+    {
+      title: "Analytics Integration",
+      description: "Tracking and reporting tools to measure your website's performance.",
+      icon: "fa-solid fa-chart-line",
+      color: "blue"
+    }
+  ],
+  maintenance: [
+    {
+      title: "Security Updates",
+      description: "Regular security patches to protect against vulnerabilities and threats.",
+      icon: "fa-solid fa-shield-halved",
+      color: "red"
+    },
+    {
+      title: "Performance Monitoring",
+      description: "Continuous monitoring of your website's speed and performance.",
+      icon: "fa-solid fa-gauge-high",
+      color: "blue"
+    },
+    {
+      title: "Regular Backups",
+      description: "Daily backups of your website to ensure your data is never lost.",
+      icon: "fa-solid fa-database",
+      color: "green"
+    },
+    {
+      title: "Content Updates",
+      description: "Regular updates to your website content to keep it fresh and relevant.",
+      icon: "fa-solid fa-pen-to-square",
+      color: "purple"
+    },
+    {
+      title: "Technical Support",
+      description: "Responsive support for any technical issues or questions.",
+      icon: "fa-solid fa-headset",
+      color: "yellow"
+    },
+    {
+      title: "Monthly Reporting",
+      description: "Detailed reports on your website's performance and maintenance activities.",
+      icon: "fa-solid fa-file-lines",
+      color: "orange"
+    }
+  ],
+  seo: [
+    {
+      title: "Keyword Research",
+      description: "Identifying the most valuable search terms for your business.",
+      icon: "fa-solid fa-magnifying-glass",
+      color: "blue"
+    },
+    {
+      title: "On-Page SEO",
+      description: "Optimizing your website content, structure, and metadata.",
+      icon: "fa-solid fa-file-code",
+      color: "green"
+    },
+    {
+      title: "Technical SEO",
+      description: "Ensuring your website is technically optimized for search engines.",
+      icon: "fa-solid fa-gears",
+      color: "purple"
+    },
+    {
+      title: "Local SEO",
+      description: "Optimizing your online presence for local search results.",
+      icon: "fa-solid fa-location-dot",
+      color: "red"
+    },
+    {
+      title: "Content Creation",
+      description: "Developing high-quality, optimized content that attracts and engages.",
+      icon: "fa-solid fa-pen-fancy",
+      color: "yellow"
+    },
+    {
+      title: "Performance Tracking",
+      description: "Monitoring and reporting on your search engine rankings and traffic.",
+      icon: "fa-solid fa-chart-simple",
+      color: "orange"
+    }
+  ],
+  email: [
+    {
+      title: "Custom Domains",
+      description: "Professional email addresses with your business domain name.",
+      icon: "fa-solid fa-globe",
+      color: "blue"
+    },
+    {
+      title: "Security Features",
+      description: "Advanced spam filtering and malware protection.",
+      icon: "fa-solid fa-shield-halved",
+      color: "red"
+    },
+    {
+      title: "Mobile Access",
+      description: "Access your emails, contacts, and calendar from any device.",
+      icon: "fa-solid fa-mobile-screen",
+      color: "green"
+    },
+    {
+      title: "Collaboration Tools",
+      description: "Shared calendars, contacts, and documents for team collaboration.",
+      icon: "fa-solid fa-users-gear",
+      color: "purple"
+    },
+    {
+      title: "Data Backup",
+      description: "Regular backups of your emails and contacts for peace of mind.",
+      icon: "fa-solid fa-database",
+      color: "yellow"
+    },
+    {
+      title: "Simple Migration",
+      description: "Seamless transition from your existing email provider.",
+      icon: "fa-solid fa-arrows-rotate",
+      color: "orange"
+    }
+  ]
+};
+
+// Service-specific FAQs
+const faqs = {
+  websites: [
+    {
+      question: "How long does it take to build a website?",
+      answer: "The timeline for building a website depends on its complexity. A basic website typically takes 4-6 weeks, while more complex sites with custom functionality may take 8-12 weeks or more."
+    },
+    {
+      question: "Do I need to provide content for my website?",
+      answer: "While we recommend you provide core content as you know your business best, we can help with content creation, editing, and optimization. We also offer copywriting services if needed."
+    },
+    {
+      question: "Will my website work on mobile devices?",
+      answer: "Absolutely! All our websites are built with mobile-first design principles, ensuring they work perfectly on smartphones, tablets, and desktop computers."
+    },
+    {
+      question: "Can I update the website myself?",
+      answer: "Yes, we build websites with user-friendly content management systems (CMS) that allow you to easily update content without technical knowledge. We also provide training on how to use the CMS."
+    },
+    {
+      question: "Do you provide hosting and domain registration?",
+      answer: "Yes, we offer comprehensive hosting and domain registration services as part of our website packages. Our hosting is optimized for speed, security, and reliability."
+    }
+  ],
+  maintenance: [
+    {
+      question: "What's included in your maintenance packages?",
+      answer: "Our maintenance packages include regular software updates, security monitoring, daily backups, performance optimization, technical support, and content updates."
+    },
+    {
+      question: "How often do you perform updates?",
+      answer: "We perform routine updates on a monthly basis, with security updates applied as soon as they're available. We'll also run performance optimizations quarterly."
+    },
+    {
+      question: "What happens if my website goes down?",
+      answer: "We monitor websites 24/7 and will be alerted immediately if your site goes down. We'll work to resolve the issue as quickly as possible, typically within hours."
+    },
+    {
+      question: "Can you make changes to my website content?",
+      answer: "Yes, our maintenance packages include a set number of content updates each month. For more extensive changes, we can discuss additional services."
+    },
+    {
+      question: "Do I need a maintenance package if I already have hosting?",
+      answer: "Hosting and maintenance are different services. Hosting provides the server where your website lives, while maintenance ensures it remains secure, up-to-date, and performing well."
+    }
+  ],
+  seo: [
+    {
+      question: "How long does it take to see results from SEO?",
+      answer: "SEO is a long-term strategy. You may start seeing improvements within 3-6 months, but significant results typically take 6-12 months, depending on your industry, competition, and starting point."
+    },
+    {
+      question: "What reporting do you provide for SEO services?",
+      answer: "We provide monthly reports detailing your website's search engine rankings, organic traffic, conversion rates, and other key metrics. We'll also include recommendations for ongoing improvements."
+    },
+    {
+      question: "Do you guarantee first-page rankings?",
+      answer: "No reputable SEO agency can guarantee specific rankings as search algorithms are complex and constantly changing. We focus on sustainable, white-hat SEO practices that build long-term success."
+    },
+    {
+      question: "Can you help with local SEO for my Irish business?",
+      answer: "Absolutely! Local SEO is a specialty of ours. We'll optimize your Google Business Profile, local citations, and ensure your website is optimized for local search terms."
+    },
+    {
+      question: "Do you follow ethical SEO practices?",
+      answer: "Yes, we only use white-hat SEO techniques that comply with search engine guidelines. This ensures sustainable results without the risk of penalties."
+    }
+  ],
+  email: [
+    {
+      question: "Can I use my own domain name for email?",
+      answer: "Yes, we'll set up professional email addresses using your business domain name (e.g., name@yourbusiness.com), which helps build brand credibility."
+    },
+    {
+      question: "Can you migrate emails from my current provider?",
+      answer: "Yes, we provide complete migration services to move your existing emails, contacts, and calendars to your new email solution with minimal disruption."
+    },
+    {
+      question: "How secure are your email solutions?",
+      answer: "Our email solutions include advanced security features such as spam filtering, malware protection, encryption, and multi-factor authentication to keep your communications secure."
+    },
+    {
+      question: "Can I access my email on my mobile device?",
+      answer: "Yes, our email solutions are fully compatible with smartphones and tablets, allowing you to access your emails, contacts, and calendar on the go."
+    },
+    {
+      question: "What if I need help with my email setup?",
+      answer: "We provide full technical support for all our email solutions. Whether you have a question or encounter an issue, we're here to help."
+    }
+  ]
+};
+
+// Determine the appropriate color for the service
+const serviceColor = service.color || "blue";
+const textColorClass = `text-${serviceColor}-500`;
+const bgColorClass = `bg-${serviceColor}-500`;
+const borderColorClass = `border-${serviceColor}-500`;
+---
+
+<Layout title={`${service.title} | Greenberry - Web Design for Irish Businesses`}>
+  <!-- Service Hero Header -->
+  <PageHeader
+    title={service.title}
+    description={service.description}
+    backgroundVariant="decorated"
+    badgeText="OUR SERVICES"
+    highlightedText={service.title.split(' ')[0]}
+    highlightPosition="start"
+    paddingY="lg"
+  />
+  
+  <!-- Service Features -->
+  <section class="py-16 bg-white dark:bg-gray-900">
+    <Container>
+      <div class="max-w-3xl mx-auto text-center mb-12">
+        <div class="badge-wrapper">
+          <Badge text="KEY FEATURES" variant={service.color} size="md" />
+        </div>
+        <h2 class="heading-primary">
+          Everything You Need
+        </h2>
+        <p class="section-description">
+          Our {service.title.toLowerCase()} are designed to provide you with everything you need for success.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {featureCards[service.id].map((feature) => (
+          <FeatureCard
+            title={feature.title}
+            description={feature.description}
+            icon={feature.icon}
+            color={feature.color}
+          />
+        ))}
+      </div>
+    </Container>
+  </section>
+  
+  <!-- Our Process -->
+  <section class="py-16 bg-gray-50 dark:bg-gray-800/50">
+    <Container>
+      <div class="max-w-3xl mx-auto text-center mb-12">
+        <div class="badge-wrapper">
+          <Badge text="OUR PROCESS" variant={service.color} size="md" />
+        </div>
+        <h2 class="heading-primary">
+          How We Work
+        </h2>
+        <p class="section-description">
+          Our structured approach ensures consistent, high-quality results for every project.
+        </p>
+      </div>
+      
+      <ProcessSteps steps={processSteps[service.id]} color={service.color} />
+    </Container>
+  </section>
+  
+  <!-- Pricing -->
+  <section class="py-16 bg-white dark:bg-gray-900">
+    <Container>
+      <div class="max-w-3xl mx-auto text-center mb-12">
+        <div class="badge-wrapper">
+          <Badge text="PRICING OPTIONS" variant={service.color} size="md" />
+        </div>
+        <h2 class="heading-primary">
+          Transparent Pricing
+        </h2>
+        <p class="section-description">
+          Choose the package that best suits your business needs and budget.
+        </p>
+      </div>
+      
+      <PricingTable serviceId={service.id} />
+    </Container>
+  </section>
+  
+  <!-- FAQs -->
+  <section class="py-16 bg-gray-50 dark:bg-gray-800/50">
+    <Container>
+      <div class="max-w-3xl mx-auto text-center mb-12">
+        <div class="badge-wrapper">
+          <Badge text="FAQ" variant={service.color} size="md" />
+        </div>
+        <h2 class="heading-primary">
+          Common Questions
+        </h2>
+        <p class="section-description">
+          Get answers to frequently asked questions about our {service.title.toLowerCase()}.
+        </p>
+      </div>
+      
+      <ServiceFAQ faqs={faqs[service.id]} />
+    </Container>
+  </section>
+  
+  <!-- CTA Section -->
+  <PageCta
+    title={`Ready to get started with our ${service.title.toLowerCase()}?`}
+    description="Get in touch today for a free consultation and let's discuss how we can help your business grow online."
+    badgeText="GET STARTED"
+    primaryButtonText={service.ctaText || "Learn More"}
+    primaryButtonHref="/contact"
+    secondaryButtonText="See Our Portfolio"
+    secondaryButtonHref="/portfolio"
+    footnote="No commitment required. We'll respond within 24 hours."
+  />
+</Layout>
+
+<style>
+  /* Animation delays */
+  .animation-delay-700 {
+    animation-delay: 700ms;
+  }
+  
+  .animation-delay-1500 {
+    animation-delay: 1500ms;
+  }
+</style>

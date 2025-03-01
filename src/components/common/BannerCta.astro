@@ -1,0 +1,122 @@
+---
+import Container from './Container.astro';
+import Button from './Button.astro';
+import Badge from '../ui/Badge.astro';
+
+export interface Props {
+  title: string;
+  description?: string;
+  badgeText?: string;
+  primaryButtonText?: string;
+  primaryButtonHref?: string;
+  primaryButtonIcon?: string;
+  secondaryButtonText?: string;
+  secondaryButtonHref?: string;
+  secondaryButtonIcon?: string;
+  footnote?: string;
+  paddingY?: 'sm' | 'md' | 'lg';
+}
+
+const {
+  title,
+  description,
+  badgeText,
+  primaryButtonText = 'Get Started',
+  primaryButtonHref = '/contact',
+  primaryButtonIcon = 'fa-solid fa-arrow-right',
+  secondaryButtonText,
+  secondaryButtonHref,
+  secondaryButtonIcon = 'fa-solid fa-feather',
+  footnote,
+  paddingY = 'lg',
+} = Astro.props;
+
+// Padding variants
+const paddingClasses = {
+  sm: 'py-12',
+  md: 'py-16',
+  lg: 'py-20',
+};
+---
+
+<section class={`${paddingClasses[paddingY]} bg-gradient-to-br from-greenberry-600 to-greenberry-700 dark:from-greenberry-700 dark:to-greenberry-800 relative overflow-hidden`}>
+  <!-- Decorative elements -->
+  <div class="absolute inset-0">
+    <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/3"></div>
+    <div class="absolute bottom-0 left-0 w-1/3 h-1/3 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/3"></div>
+    
+    <!-- Leaf pattern -->
+    <div class="absolute inset-0 opacity-5">
+      <div class="absolute top-10 left-10 text-6xl">
+        <i class="fa-solid fa-leaf"></i>
+      </div>
+      <div class="absolute top-20 right-20 text-4xl">
+        <i class="fa-solid fa-leaf"></i>
+      </div>
+      <div class="absolute bottom-20 left-1/4 text-5xl">
+        <i class="fa-solid fa-leaf"></i>
+      </div>
+      <div class="absolute bottom-10 right-1/4 text-3xl">
+        <i class="fa-solid fa-leaf"></i>
+      </div>
+    </div>
+  </div>
+  
+  <Container>
+    <div class="max-w-4xl mx-auto text-center relative z-10">
+      {badgeText && (
+        <div class="badge-wrapper">
+          <Badge text={badgeText} variant="primary" size="md" class="bg-white/20 text-white" />
+        </div>
+      )}
+      
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
+        {title}
+      </h2>
+      
+      {description && (
+        <p class="text-lg md:text-xl text-greenberry-100 mb-10 max-w-3xl mx-auto">
+          {description}
+        </p>
+      )}
+      <slot name="description" />
+      
+      <div class="flex flex-col sm:flex-row justify-center gap-6">
+        <Button 
+          href={primaryButtonHref}
+          variant="secondary" 
+          size="lg"
+          class="font-semibold"
+        >
+          {primaryButtonText}
+          {primaryButtonIcon && (
+            <span class="ml-2"><i class={primaryButtonIcon}></i></span>
+          )}
+        </Button>
+        
+        {secondaryButtonText && secondaryButtonHref && (
+          <Button 
+            href={secondaryButtonHref}
+            variant="outline" 
+            size="lg"
+            class="border-white text-white hover:bg-white/10 dark:hover:bg-white/10 font-semibold"
+          >
+            {secondaryButtonIcon && (
+              <span class="mr-2"><i class={secondaryButtonIcon}></i></span>
+            )}
+            {secondaryButtonText}
+          </Button>
+        )}
+        
+        <slot name="buttons" />
+      </div>
+      
+      {footnote && (
+        <p class="mt-8 text-white/70 text-sm">
+          {footnote}
+        </p>
+      )}
+      <slot name="footnote" />
+    </div>
+  </Container>
+</section>

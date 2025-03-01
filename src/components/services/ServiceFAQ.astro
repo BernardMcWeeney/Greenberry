@@ -1,0 +1,57 @@
+---
+export interface FAQ {
+  question: string;
+  answer: string;
+}
+
+export interface Props {
+  faqs: FAQ[];
+}
+
+const { faqs } = Astro.props;
+---
+
+<div class="max-w-3xl mx-auto space-y-6">
+  {faqs.map((faq, index) => (
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+      <details class="group" open={index === 0}>
+        <summary class="flex items-center justify-between p-6 cursor-pointer">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+            {faq.question}
+          </h3>
+          <div class="text-greenberry-500 dark:text-greenberry-400 transition-transform duration-300 group-open:rotate-180">
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+        </summary>
+        <div class="px-6 pb-6 pt-0 text-gray-600 dark:text-gray-300">
+          <p>{faq.answer}</p>
+        </div>
+      </details>
+    </div>
+  ))}
+</div>
+
+<script>
+  // Make details elements togglable
+  document.addEventListener('DOMContentLoaded', () => {
+    const details = document.querySelectorAll('details');
+    
+    details.forEach((detail) => {
+      detail.addEventListener('click', (e) => {
+        // Only run if the click was directly on the summary element
+        if (e.target.tagName.toLowerCase() === 'summary' || e.target.closest('summary')) {
+          const currentDetail = e.currentTarget;
+          
+          // Close other details if this one is being opened
+          if (!currentDetail.open) {
+            details.forEach((otherDetail) => {
+              if (otherDetail !== currentDetail && otherDetail.open) {
+                otherDetail.open = false;
+              }
+            });
+          }
+        }
+      });
+    });
+  });
+</script>

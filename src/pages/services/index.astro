@@ -1,0 +1,287 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Container from '../../components/common/Container.astro';
+import Button from '../../components/common/Button.astro';
+import Badge from '../../components/ui/Badge.astro';
+import PageHeader from '../../components/common/PageHeader.astro';
+import BannerCta from '../../components/common/BannerCta.astro';
+import ServiceCard from '../../components/services/ServiceCard.astro';
+import FeatureHighlight from '../../components/services/FeatureHighlight.astro';
+import Testimonials from '../../components/home/Testimonials.astro';
+import PartnersLogos from '../../components/home/PartnersLogos.astro';
+
+// Define service offerings with more detailed data
+const services = [
+  {
+    id: "websites",
+    title: "Website Solutions",
+    description: "Modern and cutting-edge websites featuring responsive and lightweight designs that help your business stand out and convert visitors into customers.",
+    icon: "fa-solid fa-globe",
+    color: "blue",
+    borderColor: "border-t-blue-500",
+    textColor: "text-blue-500",
+    features: [
+      "Custom website design and development",
+      "Mobile-responsive layouts",
+      "Content management systems",
+      "E-commerce solutions",
+      "Performance optimization",
+      "SEO-friendly architecture"
+    ],
+    link: "/services/websites",
+    ctaText: "Explore Website Solutions"
+  },
+  {
+    id: "maintenance",
+    title: "Upgrades & Maintenance",
+    description: "Keep your website secure, up-to-date, and performing at its best with our comprehensive maintenance packages.",
+    icon: "fa-solid fa-arrows-rotate",
+    color: "green",
+    borderColor: "border-t-green-500", 
+    textColor: "text-green-500",
+    features: [
+      "Regular software updates",
+      "Security monitoring",
+      "Daily backups",
+      "Performance optimization",
+      "Technical support",
+      "Content updates"
+    ],
+    link: "/services/maintenance",
+    ctaText: "Learn About Maintenance"
+  },
+  {
+    id: "seo",
+    title: "SEO Packages",
+    description: "Improve your search engine rankings, drive more targeted traffic, and increase conversions with our data-driven SEO services.",
+    icon: "fa-solid fa-magnifying-glass-chart",
+    color: "orange",
+    borderColor: "border-t-orange-500",
+    textColor: "text-orange-500",
+    features: [
+      "Keyword research and optimization",
+      "On-page SEO improvements",
+      "Content strategy and creation",
+      "Technical SEO audits",
+      "Local SEO optimization",
+      "Performance tracking and reporting"
+    ],
+    link: "/services/seo",
+    ctaText: "Boost Your SEO"
+  },
+  {
+    id: "email",
+    title: "Email Solutions",
+    description: "Professional email services that enhance your brand credibility, improve team collaboration, and ensure your important communications are secure.",
+    icon: "fa-solid fa-envelope",
+    color: "red",
+    borderColor: "border-t-red-500",
+    textColor: "text-red-500",
+    features: [
+      "Custom domain email addresses",
+      "Spam and malware protection",
+      "Mobile email access",
+      "Shared calendars and contacts",
+      "Email backup and recovery",
+      "Seamless integration with other tools"
+    ],
+    link: "/services/email",
+    ctaText: "Get Email Solutions"
+  }
+];
+
+// Define key features that make Greenberry different
+const keyFeatures = [
+  {
+    title: "Lightning Fast Websites",
+    description: "We build websites that load in milliseconds, not seconds. Speed is critical for user experience and search engine rankings.",
+    icon: "fa-solid fa-bolt",
+    color: "yellow",
+    textColor: "text-yellow-500"
+  },
+  {
+    title: "Mobile-First Design",
+    description: "Every website we build is fully responsive and optimized for all devices, from smartphones to desktop computers.",
+    icon: "fa-solid fa-mobile-screen",
+    color: "blue",
+    textColor: "text-blue-500"
+  },
+  {
+    title: "SEO Optimization",
+    description: "We implement the latest SEO best practices to ensure your website ranks well and attracts more organic traffic.",
+    icon: "fa-solid fa-magnifying-glass-chart",
+    color: "green",
+    textColor: "text-green-500"
+  },
+  {
+    title: "Secure & Reliable",
+    description: "We implement robust security measures to protect your website and your customers' data from threats.",
+    icon: "fa-solid fa-shield-halved",
+    color: "red",
+    textColor: "text-red-500"
+  }
+];
+---
+
+<Layout title="Services | Greenberry - Web Design for Irish Businesses">
+  <!-- Hero Section using PageHeader component -->
+  <PageHeader
+    title="Our Services"
+    description="Comprehensive digital solutions to help your Irish business thrive online."
+    backgroundVariant="decorated"
+    badgeText="WHAT WE OFFER"
+    highlightedText="Services"
+    paddingY="lg"
+  />
+
+  <!-- Track Record Section to break up the flow -->
+  <PartnersLogos />
+  
+  <!-- Services Overview Section -->
+  <section class="py-16 bg-cool-gray-50 dark:bg-gray-800/50 section-bg-decoration relative overflow-hidden">
+    <Container>
+      <div class="max-w-3xl mx-auto text-center mb-16 relative z-10">
+        <div class="badge-wrapper">
+          <Badge text="OUR EXPERTISE" variant="primary" size="md" />
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
+          Complete Digital Solutions for Your Business
+        </h2>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          From website development to ongoing maintenance and marketing, we provide everything you need to establish and grow your online presence.
+        </p>
+      </div>
+      
+      <!-- Services Cards Grid - Expanded with details -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 relative z-10">
+        {services.map((service) => (
+          <ServiceCard 
+            id={service.id}
+            title={service.title}
+            description={service.description}
+            icon={service.icon}
+            color={service.color}
+            textColor={service.textColor}
+            borderColor={service.borderColor}
+            features={service.features}
+            link={service.link}
+            ctaText={service.ctaText}
+          />
+        ))}
+      </div>
+    </Container>
+  </section>
+  
+  <!-- Key Features Section -->
+  <section class="py-16 bg-white dark:bg-gray-900">
+    <Container>
+      <div class="max-w-3xl mx-auto text-center mb-16">
+        <div class="badge-wrapper">
+          <Badge text="WHY CHOOSE GREENBERRY" variant="primary" size="md" />
+        </div>
+        <h2 class="heading-primary">
+          Features That Make Us Different
+        </h2>
+        <p class="section-description">
+          We combine cutting-edge technology with beautiful design to create websites that perform.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        {keyFeatures.map((feature) => (
+          <div class="group card p-8 border-2 border-gray-100 dark:border-gray-700 hover:border-greenberry-600 dark:hover:border-greenberry-600 transition-all duration-300 card-hover rounded-lg shadow-sm hover:shadow-md">
+            <div class="flex gap-6">
+              <div class={`${feature.textColor} text-4xl shrink-0 mt-1`}>
+                <div class="w-14 h-14 rounded-2xl bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:scale-110 transition-all duration-300">
+                  <i class={feature.icon}></i>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-greenberry-600 dark:group-hover:text-greenberry-400 transition-colors">
+                  {feature.title}
+                </h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                  {feature.description}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Container>
+  </section>
+  
+  <!-- Feature Highlight - Managed Service -->
+  <FeatureHighlight 
+    title="We Handle Everything So You Don't Have To"
+    description="From domain registration to hosting, maintenance, and security updates, we take care of all the technical details so you can focus on running your business."
+    badgeText="100% MANAGED SERVICE"
+    imageSrc="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
+    imageAlt="Managed services illustration"
+    features={[
+      "24/7 website monitoring",
+      "Regular security updates",
+      "Daily backups",
+      "Performance optimization",
+      "Technical support"
+    ]}
+  />
+  
+  <!-- Testimonials Section -->
+  <Testimonials />
+  
+  <!-- CTA Section -->
+  <BannerCta
+    title="Ready to grow your business with a website that works?"
+    description="Get in touch today and let's discuss how Greenberry can help your business thrive online. We'll create a custom solution tailored to your specific needs and goals."
+    badgeText="GET STARTED TODAY"
+    primaryButtonText="Get Started"
+    primaryButtonHref="/contact"
+    secondaryButtonText="Get A Quote Now"
+    secondaryButtonHref="tel:+353123456789"
+    footnote="No commitment required. We'll respond within 24 hours."
+  />
+</Layout>
+
+<style>
+  /* Custom section background decoration */
+  .section-bg-decoration {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .section-bg-decoration::before {
+    content: "";
+    position: absolute;
+    right: -5%;
+    top: -5%;
+    width: 20%;
+    height: 20%;
+    background-color: rgba(72, 187, 120, 0.1);
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: 0;
+  }
+  
+  .section-bg-decoration::after {
+    content: "";
+    position: absolute;
+    left: -5%;
+    bottom: -5%;
+    width: 20%;
+    height: 20%;
+    background-color: rgba(72, 187, 120, 0.1);
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: 0;
+  }
+
+  /* Animation delays */
+  .animation-delay-700 {
+    animation-delay: 700ms;
+  }
+  
+  .animation-delay-1500 {
+    animation-delay: 1500ms;
+  }
+</style>

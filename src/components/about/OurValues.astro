@@ -1,0 +1,107 @@
+---
+import Container from '../common/Container.astro';
+import Badge from '../ui/Badge.astro';
+
+export interface ValueItem {
+  title: string;
+  description: string;
+  icon: string;
+}
+
+export interface Props {
+  values: ValueItem[];
+}
+
+const { values } = Astro.props;
+
+// Define colors for value cards - matching services exactly
+const colors = [
+  { 
+    borderColor: "border-t-blue-500", 
+    textColor: "text-blue-500"
+  },
+  { 
+    borderColor: "border-t-green-500", 
+    textColor: "text-green-500"
+  },
+  { 
+    borderColor: "border-t-orange-500", 
+    textColor: "text-orange-500"
+  },
+  { 
+    borderColor: "border-t-red-500", 
+    textColor: "text-red-500"
+  }
+];
+---
+
+<section class="py-16 bg-cool-gray-50 dark:bg-gray-800/50 section-bg-decoration">
+  <Container>
+    <div class="max-w-3xl mx-auto text-center mb-16 relative z-10">
+      <div class="badge-wrapper">
+        <Badge text="OUR VALUES" variant="primary" size="md" />
+      </div>
+      <h2 class="heading-primary">
+        What drives us every day
+      </h2>
+      <p class="section-description">
+        These core principles guide everything we do at Greenberry.
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+      {values.map((value, index) => {
+        const colorSet = colors[index % colors.length];
+        return (
+          <div class={`group bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border-t-4 ${colorSet.borderColor}`}>
+            <div class="p-6">
+              <div class={`${colorSet.textColor} text-4xl mb-4`}>
+                <i class={value.icon}></i>
+              </div>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                {value.title}
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 mb-4">
+                {value.description}
+              </p>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </Container>
+</section>
+
+<style>
+  /* Custom section background decoration */
+  .section-bg-decoration {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .section-bg-decoration::before {
+    content: "";
+    position: absolute;
+    right: -5%;
+    top: -5%;
+    width: 20%;
+    height: 20%;
+    background-color: rgba(72, 187, 120, 0.1);
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: 0;
+  }
+  
+  .section-bg-decoration::after {
+    content: "";
+    position: absolute;
+    left: -5%;
+    bottom: -5%;
+    width: 20%;
+    height: 20%;
+    background-color: rgba(72, 187, 120, 0.1);
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: 0;
+  }
+</style>

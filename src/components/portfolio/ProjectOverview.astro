@@ -1,0 +1,76 @@
+---
+import Container from '../common/Container.astro';
+import Badge from '../ui/Badge.astro';
+
+export interface Props {
+  title: string;
+  description?: string; 
+  technologies?: string[];
+  badgeText?: string;
+}
+
+const { 
+  title,
+  description = "", 
+  technologies = [],
+  badgeText = "ABOUT THE PROJECT"
+} = Astro.props;
+
+// Handle multiline descriptions
+const paragraphs = description ? description.split('\n\n') : [];
+---
+
+<section class="py-16 bg-cool-gray-50 dark:bg-gray-800/50 relative overflow-hidden">
+  <div class="absolute inset-0">
+    <div class="absolute top-1/2 left-1/4 w-64 h-64 bg-greenberry-500/10 rounded-full filter blur-3xl opacity-70"></div>
+    <div class="absolute bottom-0 right-1/4 w-64 h-64 bg-greenberry-600/10 rounded-full filter blur-3xl opacity-60"></div>
+  </div>
+  
+  <Container>
+    <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl shadow-lg p-8 md:p-10 border border-white/40 dark:border-gray-700/40 relative z-10">
+      <div class="badge-wrapper mb-4">
+        <Badge text={badgeText} variant="primary" size="md" />
+      </div>
+      
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+        {title}
+      </h2>
+      
+      <div class="prose prose-lg dark:prose-invert max-w-none">
+        {paragraphs.map((paragraph, i) => (
+          <p key={i} class="text-gray-700 dark:text-gray-300 mb-4">{paragraph}</p>
+        ))}
+      </div>
+      
+      <!-- Project Technologies -->
+      {technologies.length > 0 && (
+        <div class="mt-8 p-6 bg-gray-50 dark:bg-gray-700/30 rounded-xl border border-gray-100 dark:border-gray-700">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+            <span class="mr-2 text-greenberry-500 dark:text-greenberry-400">
+              <i class="fa-solid fa-code"></i>
+            </span>
+            Technologies Used
+          </h3>
+          <div class="flex flex-wrap gap-3">
+            {technologies.map(tech => (
+              <div class="bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-sm font-medium px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 shadow-sm flex items-center">
+                {/* Add tech icons based on common technologies */}
+                {tech.toLowerCase().includes('react') && <i class="fa-brands fa-react text-blue-500 mr-2"></i>}
+                {tech.toLowerCase().includes('vue') && <i class="fa-brands fa-vuejs text-green-500 mr-2"></i>}
+                {tech.toLowerCase().includes('angular') && <i class="fa-brands fa-angular text-red-500 mr-2"></i>}
+                {tech.toLowerCase().includes('node') && <i class="fa-brands fa-node text-green-600 mr-2"></i>}
+                {tech.toLowerCase().includes('php') && <i class="fa-brands fa-php text-indigo-500 mr-2"></i>}
+                {tech.toLowerCase().includes('wordpress') && <i class="fa-brands fa-wordpress text-blue-500 mr-2"></i>}
+                {tech.toLowerCase().includes('shopify') && <i class="fa-brands fa-shopify text-green-500 mr-2"></i>}
+                {tech.toLowerCase().includes('html') && <i class="fa-brands fa-html5 text-orange-500 mr-2"></i>}
+                {tech.toLowerCase().includes('css') && <i class="fa-brands fa-css3-alt text-blue-500 mr-2"></i>}
+                {tech.toLowerCase().includes('js') && <i class="fa-brands fa-js text-yellow-500 mr-2"></i>}
+                {tech}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </Container>
+</section>

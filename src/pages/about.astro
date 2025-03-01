@@ -3,6 +3,9 @@ import Layout from '../layouts/Layout.astro';
 import Container from '../components/common/Container.astro';
 import Button from '../components/common/Button.astro';
 import Badge from '../components/ui/Badge.astro';
+import PageHeader from '../components/common/PageHeader.astro';
+import PageCta from '../components/common/PageCta.astro';
+import OurValues from '../components/about/OurValues.astro';
 import { COMPANY } from '../config';
 
 const teamMembers = [
@@ -51,19 +54,15 @@ const values = [
 ---
 
 <Layout title="About Us | Greenberry">
-  <!-- Hero Section -->
-  <section class="pt-20 pb-16 bg-green-50 dark:bg-gray-800 section-bg-decoration">
-    <Container>
-      <div class="max-w-3xl mx-auto text-center">
-        <h1 class="heading-primary">
-          About Greenberry
-        </h1>
-        <p class="section-description">
-          We're an Irish web development agency specializing in creating beautiful, functional websites that help businesses grow.
-        </p>
-      </div>
-    </Container>
-  </section>
+  <!-- Hero Section using the new PageHeader component -->
+  <PageHeader
+    title="About Greenberry"
+    description="We're an Irish web development agency specializing in creating beautiful, functional websites that help businesses grow."
+    backgroundVariant="decorated"
+    #badgeText="ABOUT US"
+    highlightedText="Greenberry"
+    paddingY="lg"
+  />
   
   <!-- Our Story -->
   <section class="py-16 bg-white dark:bg-gray-900">
@@ -101,37 +100,7 @@ const values = [
   </section>
   
   <!-- Our Values -->
-  <section class="py-16 bg-gray-50 dark:bg-gray-800/50">
-    <Container>
-      <div class="max-w-3xl mx-auto text-center mb-16">
-        <div class="badge-wrapper">
-          <Badge text="OUR VALUES" variant="primary" size="md" />
-        </div>
-        <h2 class="heading-primary">
-          What drives us every day
-        </h2>
-        <p class="section-description">
-          These core principles guide everything we do at Greenberry.
-        </p>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {values.map((value) => (
-          <div class="card p-6">
-            <div class="feature-icon mb-4">
-              <i class={value.icon}></i>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              {value.title}
-            </h3>
-            <p class="text-gray-600 dark:text-gray-400">
-              {value.description}
-            </p>
-          </div>
-        ))}
-      </div>
-    </Container>
-  </section>
+  <OurValues values={values} />
   
   <!-- Team Section -->
   <section class="py-16 bg-white dark:bg-gray-900">
@@ -176,21 +145,12 @@ const values = [
     </Container>
   </section>
   
-  <!-- CTA Section -->
-  <section class="py-16 bg-green-50 dark:bg-gray-800/50 section-bg-decoration">
-    <Container>
-      <div class="max-w-3xl mx-auto text-center">
-        <h2 class="heading-primary">
-          Ready to work with us?
-        </h2>
-        <p class="section-description mb-8">
-          Let's discuss how Greenberry can help your business thrive online.
-        </p>
-        <Button href="/contact" size="lg">
-          Get in Touch
-          <span class="ml-2"><i class="fa-solid fa-arrow-right"></i></span>
-        </Button>
-      </div>
-    </Container>
-  </section>
+  <!-- CTA Section with PageCta component -->
+  <PageCta
+    title="Ready to work with us?"
+    description="Let's discuss how Greenberry can help your business thrive online."
+    primaryButtonText="Get in Touch"
+    primaryButtonIcon="fa-solid fa-arrow-right"
+    backgroundVariant="light"
+  />
 </Layout>
