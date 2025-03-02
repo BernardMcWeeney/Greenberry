@@ -12,12 +12,49 @@ export interface Props {
 
 const { steps, color = "blue" } = Astro.props;
 
-// Color classes based on the color prop
-const textColorClass = `text-${color}-600`;
-const darkTextColorClass = `dark:text-${color}-400`;
-const bgColorClass = `bg-${color}-500`;
-const bgLightColorClass = `bg-${color}-100`;
-const darkBgLightColorClass = `dark:bg-${color}-900/30`;
+// Fix: Use a color mapping to ensure orange and other colors work correctly
+function getColorClass(colorName, type) {
+  const colorMap = {
+    blue: {
+      bg: "bg-blue-500",
+      text: "text-blue-600",
+      darkText: "dark:text-blue-400"
+    },
+    green: {
+      bg: "bg-green-500",
+      text: "text-green-600",
+      darkText: "dark:text-green-400"
+    },
+    red: {
+      bg: "bg-red-500",
+      text: "text-red-600",
+      darkText: "dark:text-red-400"
+    },
+    orange: {
+      bg: "bg-orange-500",
+      text: "text-orange-600",
+      darkText: "dark:text-orange-400"
+    },
+    yellow: {
+      bg: "bg-yellow-500",
+      text: "text-yellow-600",
+      darkText: "dark:text-yellow-400"
+    },
+    purple: {
+      bg: "bg-purple-500",
+      text: "text-purple-600",
+      darkText: "dark:text-purple-400"
+    }
+  };
+
+  // Return the mapped color or fallback to the default blue
+  return colorMap[colorName]?.[type] || colorMap.blue[type];
+}
+
+// Use the helper function to get the correct color classes
+const bgColorClass = getColorClass(color, "bg");
+const textColorClass = getColorClass(color, "text");
+const darkTextColorClass = getColorClass(color, "darkText");
 ---
 
 <div class="mt-8 relative">
@@ -88,7 +125,7 @@ const darkBgLightColorClass = `dark:bg-${color}-900/30`;
               {step.number}
             </div>
           </div>
-          <div class={`grow p-4 rounded-lg border border-gray-100 dark:border-gray-700 ${bgLightColorClass} ${darkBgLightColorClass} shadow-sm`}>
+          <div class="grow p-4 rounded-lg border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
             <h3 class={`text-lg font-bold ${textColorClass} ${darkTextColorClass} mb-2`}>
               {step.title}
             </h3>

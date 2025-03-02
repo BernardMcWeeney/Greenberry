@@ -10,7 +10,7 @@ import FeatureHighlight from '../../components/services/FeatureHighlight.astro';
 import Testimonials from '../../components/home/Testimonials.astro';
 import PartnersLogos from '../../components/home/PartnersLogos.astro';
 
-// Define service offerings with more detailed data
+// Define service offerings with more detailed data and consistent button styling
 const services = [
   {
     id: "websites",
@@ -20,6 +20,7 @@ const services = [
     color: "blue",
     borderColor: "border-t-blue-500",
     textColor: "text-blue-500",
+    buttonTextColor: "text-green-500", // Set consistent green for all buttons
     features: [
       "Custom website design and development",
       "Mobile-responsive layouts",
@@ -28,7 +29,7 @@ const services = [
       "Performance optimization",
       "SEO-friendly architecture"
     ],
-    link: "/services/websites",
+    link: "websites",
     ctaText: "Explore Website Solutions"
   },
   {
@@ -39,6 +40,7 @@ const services = [
     color: "green",
     borderColor: "border-t-green-500", 
     textColor: "text-green-500",
+    buttonTextColor: "text-green-500", // Already green - maintained for consistency
     features: [
       "Regular software updates",
       "Security monitoring",
@@ -47,7 +49,7 @@ const services = [
       "Technical support",
       "Content updates"
     ],
-    link: "/services/maintenance",
+    link: "maintenance",
     ctaText: "Learn About Maintenance"
   },
   {
@@ -58,6 +60,7 @@ const services = [
     color: "orange",
     borderColor: "border-t-orange-500",
     textColor: "text-orange-500",
+    buttonTextColor: "text-green-500", // Changed from orange to green
     features: [
       "Keyword research and optimization",
       "On-page SEO improvements",
@@ -66,7 +69,7 @@ const services = [
       "Local SEO optimization",
       "Performance tracking and reporting"
     ],
-    link: "/services/seo",
+    link: "seo",
     ctaText: "Boost Your SEO"
   },
   {
@@ -77,6 +80,7 @@ const services = [
     color: "red",
     borderColor: "border-t-red-500",
     textColor: "text-red-500",
+    buttonTextColor: "text-green-500", // Changed from red to green
     features: [
       "Custom domain email addresses",
       "Spam and malware protection",
@@ -85,7 +89,7 @@ const services = [
       "Email backup and recovery",
       "Seamless integration with other tools"
     ],
-    link: "/services/email",
+    link: "email",
     ctaText: "Get Email Solutions"
   }
 ];
@@ -163,6 +167,7 @@ const keyFeatures = [
             color={service.color}
             textColor={service.textColor}
             borderColor={service.borderColor}
+            buttonTextColor={service.buttonTextColor}
             features={service.features}
             link={service.link}
             ctaText={service.ctaText}

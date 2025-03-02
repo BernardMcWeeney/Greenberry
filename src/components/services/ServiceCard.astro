@@ -9,6 +9,7 @@ export interface Props {
   color: string;
   textColor: string;
   borderColor: string;
+  buttonTextColor?: string; // New prop for button text color
   features: string[];
   link: string;
   ctaText?: string;
@@ -22,10 +23,15 @@ const {
   color,
   textColor,
   borderColor,
+  buttonTextColor = "text-greenberry-500",
   features,
   link,
   ctaText = "Learn More"
 } = Astro.props;
+
+// Construct the full link URL using the CMS value.
+// For example, if link = "websites", then linkUrl becomes "/services/websites"
+const linkUrl = `/services/${link}`;
 ---
 
 <div id={id} class={`bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border-t-4 ${borderColor}`}>
@@ -50,7 +56,7 @@ const {
     </ul>
     
     <div class="mt-6">
-      <Button href={link} variant="outline" size="md" class={`w-full justify-center font-medium ${textColor} border-current hover:bg-gray-50 dark:hover:bg-gray-700/50`}>
+      <Button href={linkUrl} variant="outline" size="md" class={`w-full justify-center font-medium ${buttonTextColor} border-current hover:bg-gray-50 dark:hover:bg-gray-700/50`}>
         {ctaText}
         <span class="ml-2"><i class="fa-solid fa-arrow-right"></i></span>
       </Button>
