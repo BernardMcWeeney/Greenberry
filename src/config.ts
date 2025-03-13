@@ -12,7 +12,7 @@ export const SITE = {
   export const COMPANY = {
     name: 'Greenberry',
     address: 'Meath, Ireland',
-    email: 'hello@greenberry.ie',
+    email: 'office@greenberry.ie',
     phone: '+353 (0) 1 234 5678',
     foundedYear: 2018,
   };

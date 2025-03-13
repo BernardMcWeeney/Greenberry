@@ -1,7 +1,6 @@
 ---
 import Container from './Container.astro';
-import Button from './Button.astro';
-import Badge from '../ui/Badge.astro';
+import EmailSubscribe from './EmailSubscribe.astro';
 import { COMPANY, SOCIAL_LINKS, NAVIGATION } from '../../config';
 
 const currentYear = new Date().getFullYear();
@@ -19,41 +18,8 @@ const socialLinks = [
 ---
 
 <footer class="bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 relative overflow-hidden">
-  <!-- Newsletter Section -->
-  <div class="bg-gray-50 dark:bg-gray-800/50 py-16 relative section-bg-decoration">
-    <Container>
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-        <div>
-          <div class="badge-wrapper">
-            <Badge text="STAY CONNECTED" variant="primary" size="md" />
-          </div>
-          <h3 class="heading-secondary mb-3">
-            Stay updated with Greenberry
-          </h3>
-          <p class="text-gray-600 dark:text-gray-300 mb-0">
-            Get the latest web development insights and special offers delivered to your inbox.
-          </p>
-        </div>
-        <div>
-          <form class="flex flex-col sm:flex-row gap-3">
-            <input 
-              type="email" 
-              placeholder="Enter your email" 
-              class="flex-1 px-4 py-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-greenberry-500 focus:border-greenberry-500"
-              required
-            />
-            <Button type="submit" size="md">
-              Subscribe
-              <i class="fa-solid fa-paper-plane ml-2 text-sm"></i>
-            </Button>
-          </form>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
-            We respect your privacy. Unsubscribe at any time.
-          </p>
-        </div>
-      </div>
-    </Container>
-  </div>
+  <!-- Newsletter Section - Now using the EmailSubscribe component -->
+  <EmailSubscribe />
 
   <!-- Main Footer Content -->
   <div class="py-16">

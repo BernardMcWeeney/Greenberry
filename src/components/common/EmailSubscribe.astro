@@ -1,0 +1,124 @@
+---
+import Button from './Button.astro';
+import Badge from '../ui/Badge.astro';
+
+// Access environment variable for Turnstile site key
+const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+---
+
+<div class="bg-gray-50 dark:bg-gray-800/50 py-16 relative section-bg-decoration">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+      <div>
+        <div class="badge-wrapper">
+          <Badge text="STAY CONNECTED" variant="primary" size="md" />
+        </div>
+        <h3 class="heading-secondary mb-3">
+          Stay updated with Greenberry
+        </h3>
+        <p class="text-gray-600 dark:text-gray-300 mb-0">
+          Get the latest web development insights and special offers delivered to your inbox.
+        </p>
+      </div>
+      <div>
+        <!-- Form status messages -->
+        <div id="subscribe-success" class="hidden mb-4 p-3 rounded-lg bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+          <div class="flex items-center">
+            <i class="fa-solid fa-circle-check mr-2"></i>
+            <span>Thank you! You've been successfully subscribed.</span>
+          </div>
+        </div>
+
+        <div id="subscribe-error" class="hidden mb-4 p-3 rounded-lg bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
+          <div class="flex items-center">
+            <i class="fa-solid fa-circle-exclamation mr-2"></i>
+            <span id="subscribe-error-message">There was a problem subscribing. Please try again.</span>
+          </div>
+        </div>
+        
+        <!-- Subscription form -->
+        <form id="subscribe-form" class="flex flex-col sm:flex-row gap-3">
+          <input 
+            type="email" 
+            name="email"
+            id="subscriber-email"
+            placeholder="Enter your email" 
+            class="flex-1 px-4 py-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-greenberry-500 focus:border-greenberry-500"
+            required
+          />
+          <!-- Turnstile widget - hidden by default with a smaller size -->
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAAWsI1fJREzBYF91" data-theme="auto" data-size="compact"></div>
+          
+          <Button type="submit" id="subscribe-button" size="md">
+            Subscribe
+            <i class="fa-solid fa-paper-plane ml-2 text-sm"></i>
+          </Button>
+        </form>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+          We respect your privacy. Unsubscribe at any time.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const subscribeForm = document.getElementById('subscribe-form');
+    const subscribeButton = document.getElementById('subscribe-button');
+    const successMessage = document.getElementById('subscribe-success');
+    const errorMessage = document.getElementById('subscribe-error');
+    const errorText = document.getElementById('subscribe-error-message');
+    
+    if (subscribeForm) {
+      subscribeForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Disable submit button and show loading state
+        if (subscribeButton) {
+          subscribeButton.disabled = true;
+          subscribeButton.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Subscribing...';
+        }
+        
+        // Hide any previous status messages
+        successMessage.classList.add('hidden');
+        errorMessage.classList.add('hidden');
+        
+        try {
+          // Submit the form to our Cloudflare Function
+          const formData = new FormData(subscribeForm);
+          const response = await fetch('/api/subscribe', {
+            method: 'POST',
+            body: formData
+          });
+          
+          const result = await response.json();
+          
+          if (response.ok && result.success) {
+            // Show success message
+            successMessage.classList.remove('hidden');
+            
+            // Reset the form
+            subscribeForm.reset();
+          } else {
+            // Show error message
+            errorText.textContent = result.message || 'There was a problem subscribing. Please try again.';
+            errorMessage.classList.remove('hidden');
+          }
+        } catch (error) {
+          console.error('Error submitting form:', error);
+          
+          // Show error message
+          errorText.textContent = 'There was a problem connecting to the server. Please try again later.';
+          errorMessage.classList.remove('hidden');
+        } finally {
+          // Re-enable submit button
+          if (subscribeButton) {
+            subscribeButton.disabled = false;
+            subscribeButton.innerHTML = 'Subscribe <i class="fa-solid fa-paper-plane ml-2 text-sm"></i>';
+          }
+        }
+      });
+    }
+  });
+</script>
