@@ -33,8 +33,23 @@ import { COMPANY } from '../config';
           <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">
             Let us know how we can help
           </h2>
+
+          <!-- Form Status Messages -->
+          <div id="form-status-success" class="hidden mb-6 p-4 rounded-lg bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+            <div class="flex items-center">
+              <i class="fa-solid fa-circle-check mr-2"></i>
+              <span>Thank you! Your message has been sent successfully.</span>
+            </div>
+          </div>
+
+          <div id="form-status-error" class="hidden mb-6 p-4 rounded-lg bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
+            <div class="flex items-center">
+              <i class="fa-solid fa-circle-exclamation mr-2"></i>
+              <span id="error-message">There was a problem sending your message. Please try again.</span>
+            </div>
+          </div>
           
-          <form class="space-y-6 relative z-10">
+          <form id="contact-form" class="space-y-6 relative z-10">
             
               <div>
                 <label for="full-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -111,7 +126,7 @@ import { COMPANY } from '../config';
               ></textarea>
             </div>
             
-            <Button type="submit" size="lg" class="w-full justify-center font-medium shadow-md hover:shadow-lg hover:shadow-[#17A34A]/10">
+            <Button id="submit-button" type="submit" size="lg" class="w-full justify-center font-medium shadow-md hover:shadow-lg hover:shadow-[#17A34A]/10">
               Send Message
               <i class="fa-solid fa-paper-plane ml-2"></i>
             </Button>
@@ -230,3 +245,64 @@ import { COMPANY } from '../config';
     </Container>
   </section>
 </Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const contactForm = document.getElementById('contact-form');
+    const submitButton = document.getElementById('submit-button');
+    const successMessage = document.getElementById('form-status-success');
+    const errorMessage = document.getElementById('form-status-error');
+    const errorText = document.getElementById('error-message');
+    
+    if (contactForm) {
+      contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Disable submit button and show loading state
+        if (submitButton) {
+          submitButton.disabled = true;
+          submitButton.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Sending...';
+        }
+        
+        // Hide any previous status messages
+        successMessage.classList.add('hidden');
+        errorMessage.classList.add('hidden');
+        
+        try {
+          // Submit the form to our Cloudflare Function
+          const formData = new FormData(contactForm);
+          const response = await fetch('/api/contact', {
+            method: 'POST',
+            body: formData
+          });
+          
+          const result = await response.json();
+          
+          if (response.ok && result.success) {
+            // Show success message
+            successMessage.classList.remove('hidden');
+            
+            // Reset the form
+            contactForm.reset();
+          } else {
+            // Show error message
+            errorText.textContent = result.message || 'There was a problem sending your message. Please try again.';
+            errorMessage.classList.remove('hidden');
+          }
+        } catch (error) {
+          console.error('Error submitting form:', error);
+          
+          // Show error message
+          errorText.textContent = 'There was a problem connecting to the server. Please try again later.';
+          errorMessage.classList.remove('hidden');
+        } finally {
+          // Re-enable submit button
+          if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.innerHTML = 'Send Message <i class="fa-solid fa-paper-plane ml-2"></i>';
+          }
+        }
+      });
+    }
+  });
+</script>
