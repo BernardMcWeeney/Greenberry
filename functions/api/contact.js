@@ -11,12 +11,37 @@ export async function onRequestPost(context) {
     const phone = formData.get('phone') || 'Not provided';
     const service = formData.get('service') || 'Not specified';
     const message = formData.get('message');
+    const turnstileToken = formData.get('cf-turnstile-response');
     
     // Validate required fields
     if (!name || !email || !message) {
       return new Response(JSON.stringify({ 
         success: false, 
         message: 'Missing required fields' 
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    
+    // Validate Turnstile token
+    if (!turnstileToken) {
+      return new Response(JSON.stringify({ 
+        success: false, 
+        message: 'CAPTCHA verification failed' 
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    
+    // Verify the token with Cloudflare
+    const turnstileVerification = await verifyTurnstileToken(turnstileToken, context.request.headers.get('CF-Connecting-IP'), context);
+    
+    if (!turnstileVerification.success) {
+      return new Response(JSON.stringify({ 
+        success: false, 
+        message: 'CAPTCHA verification failed' 
       }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
@@ -94,5 +119,33 @@ Message: ${message}
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     });
+  }
+}
+
+/**
+ * Verifies a Turnstile token with Cloudflare's API
+ * @param {string} token - The token to verify
+ * @param {string} ip - The IP address of the client
+ * @param {Object} context - The request context containing environment variables
+ * @returns {Promise<Object>} - The verification result
+ */
+async function verifyTurnstileToken(token, ip, context) {
+  try {
+    const formData = new FormData();
+    formData.append('secret', context.env.TURNSTILE_SECRET_KEY);
+    formData.append('response', token);
+    if (ip) {
+      formData.append('remoteip', ip);
+    }
+
+    const result = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body: formData
+    });
+
+    return await result.json();
+  } catch (error) {
+    console.error('Turnstile verification error:', error);
+    return { success: false, error: 'Verification failed' };
   }
 }

@@ -7,6 +7,9 @@ import PageHeader from '../components/common/PageHeader.astro';
 import { COMPANY } from '../config';
 ---
 
+<!-- Add Turnstile script in the head -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
 <Layout title="Contact Us | Greenberry">
   <!-- Page Header using the reusable component -->
   <PageHeader
@@ -124,6 +127,11 @@ import { COMPANY } from '../config';
                 class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#17A34A] focus:border-[#17A34A] transition-all"
                 required
               ></textarea>
+            </div>
+            
+            <!-- Add Turnstile widget -->
+            <div class="flex justify-center mb-4">
+              <div class="cf-turnstile" data-sitekey="0x4AAAAAAAWsI1fJREzBYF91" data-theme="auto"></div>
             </div>
             
             <Button id="submit-button" type="submit" size="lg" class="w-full justify-center font-medium shadow-md hover:shadow-lg hover:shadow-[#17A34A]/10">
