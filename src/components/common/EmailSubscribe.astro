@@ -1,9 +1,6 @@
 ---
 import Button from './Button.astro';
 import Badge from '../ui/Badge.astro';
-
-// Access environment variable for Turnstile site key
-const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 ---
 
 <div class="bg-gray-50 dark:bg-gray-800/50 py-16 relative section-bg-decoration">
@@ -37,22 +34,28 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
         </div>
         
         <!-- Subscription form -->
-        <form id="subscribe-form" class="flex flex-col sm:flex-row gap-3">
-          <input 
-            type="email" 
-            name="email"
-            id="subscriber-email"
-            placeholder="Enter your email" 
-            class="flex-1 px-4 py-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-greenberry-500 focus:border-greenberry-500"
-            required
-          />
-          <!-- Turnstile widget - hidden by default with a smaller size -->
-          <div class="cf-turnstile" data-sitekey="0x4AAAAAAAWsI1fJREzBYF91" data-theme="auto" data-size="compact"></div>
+        <form id="subscribe-form" class="flex flex-col gap-3">
+          <!-- Email input and button in one row -->
+          <div class="flex flex-col sm:flex-row gap-3">
+            <input 
+              type="email" 
+              name="email"
+              id="subscriber-email"
+              placeholder="Enter your email" 
+              class="flex-1 px-4 py-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-greenberry-500 focus:border-greenberry-500"
+              required
+            />
+            
+            <Button type="submit" id="subscribe-button" size="md">
+              Subscribe
+              <i class="fa-solid fa-paper-plane ml-2 text-sm"></i>
+            </Button>
+          </div>
           
-          <Button type="submit" id="subscribe-button" size="md">
-            Subscribe
-            <i class="fa-solid fa-paper-plane ml-2 text-sm"></i>
-          </Button>
+          <!-- Turnstile widget in its own row, centered -->
+          <div class="flex justify-center sm:justify-start mt-2">
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAAAWsI1fJREzBYF91" data-theme="auto" data-size="compact"></div>
+          </div>
         </form>
         <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
           We respect your privacy. Unsubscribe at any time.
