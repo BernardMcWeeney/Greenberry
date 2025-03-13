@@ -4,7 +4,14 @@ import Container from '../components/common/Container.astro';
 import Button from '../components/common/Button.astro';
 import Badge from '../components/ui/Badge.astro';
 import PageHeader from '../components/common/PageHeader.astro';
-import { COMPANY } from '../config';
+import { COMPANY, SOCIAL_LINKS } from '../config';
+
+const socialLinks = [
+  { icon: "fa-brands fa-facebook", path: SOCIAL_LINKS.facebook, color: "hover:bg-blue-500" },
+  { icon: "fa-brands fa-twitter", path: SOCIAL_LINKS.twitter, color: "hover:bg-blue-400" },
+  { icon: "fa-brands fa-linkedin", path: SOCIAL_LINKS.linkedin, color: "hover:bg-blue-700" },
+  { icon: "fa-brands fa-instagram", path: SOCIAL_LINKS.instagram, color: "hover:bg-pink-600" },
+];
 ---
 
 <Layout title="Contact Us | Greenberry">
@@ -168,23 +175,6 @@ import { COMPANY } from '../config';
                   </p>
                 </div>
               </div>
-              
-              <div class="flex gap-4 items-start">
-                <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white shrink-0">
-                  <i class="fa-solid fa-phone"></i>
-                </div>
-                <div>
-                  <h3 class="text-lg font-medium text-white">Call Us</h3>
-                  <p class="mt-1 text-white/90">
-                    <a href={`tel:${COMPANY.phone}`} class="hover:underline">
-                      {COMPANY.phone}
-                    </a>
-                  </p>
-                  <p class="mt-1 text-sm text-white/70">
-                    Monday-Friday, 9am-5pm IST
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
           
@@ -225,27 +215,25 @@ import { COMPANY } from '../config';
           </div>
           
           <!-- Social Media -->
-          <div class="bg-gray-50 dark:bg-gray-800/50 rounded-2xl shadow-md p-8">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 p-8">
             <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
               <span class="mr-2 text-[#17A34A]"><i class="fa-solid fa-share-nodes"></i></span>
               Find us online
             </h3>
             <div class="flex gap-4 mt-4">
-              <a href="#" class="w-10 h-10 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center text-gray-600 hover:bg-[#17A34A] hover:text-white dark:text-gray-400 dark:hover:bg-[#17A34A] dark:hover:text-white transition-colors shadow-sm hover:shadow-md">
-                <i class="fa-brands fa-facebook-f"></i>
-              </a>
-              <a href="#" class="w-10 h-10 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center text-gray-600 hover:bg-[#17A34A] hover:text-white dark:text-gray-400 dark:hover:bg-[#17A34A] dark:hover:text-white transition-colors shadow-sm hover:shadow-md">
-                <i class="fa-brands fa-twitter"></i>
-              </a>
-              <a href="#" class="w-10 h-10 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center text-gray-600 hover:bg-[#17A34A] hover:text-white dark:text-gray-400 dark:hover:bg-[#17A34A] dark:hover:text-white transition-colors shadow-sm hover:shadow-md">
-                <i class="fa-brands fa-linkedin-in"></i>
-              </a>
-              <a href="#" class="w-10 h-10 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center text-gray-600 hover:bg-[#17A34A] hover:text-white dark:text-gray-400 dark:hover:bg-[#17A34A] dark:hover:text-white transition-colors shadow-sm hover:shadow-md">
-                <i class="fa-brands fa-instagram"></i>
-              </a>
+              {socialLinks.map(social => (
+                <a
+                  href={social.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class={`w-10 h-10 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center text-gray-600 ${social.color} hover:bg-[#17A34A] hover:text-white dark:text-gray-400 dark:hover:bg-[#17A34A] dark:hover:text-white transition-colors shadow-sm hover:shadow-md`}
+                  aria-label={`Follow us on ${social.name}`}
+                >
+                  <i class={social.icon}></i>
+                </a>
+              ))}
             </div>
           </div>
-        </div>
       </div>
     </Container>
   </section>

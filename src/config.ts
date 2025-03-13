@@ -41,10 +41,10 @@ export const SITE = {
         { name: 'Contact', href: '/contact' },
       ],
       services: [
-        { name: 'Website Solutions', href: '/services#websites' },
-        { name: 'Upgrades & Maintenance', href: '/services#maintenance' },
-        { name: 'SEO Packages', href: '/services#seo' },
-        { name: 'Email Solutions', href: '/services#email' },
+        { name: 'Website Solutions', href: '/services/websites' },
+        { name: 'Upgrades & Maintenance', href: '/services/maintenance' },
+        { name: 'SEO Packages', href: '/services/seo' },
+        { name: 'Email Solutions', href: '/services/email' },
       ],
       resources: [
         { name: 'Help Center', href: '/help' },

@@ -4,7 +4,7 @@ import Container from '../components/common/Container.astro';
 import Button from '../components/common/Button.astro';
 import Badge from '../components/ui/Badge.astro';
 import PageHeader from '../components/common/PageHeader.astro';
-import PageCta from '../components/common/PageCta.astro';
+import Cta from '../components/home/Cta.astro';
 import OurValues from '../components/about/OurValues.astro';
 import { COMPANY } from '../config';
 
@@ -102,55 +102,9 @@ const values = [
   <!-- Our Values -->
   <OurValues values={values} />
   
-  <!-- Team Section -->
-  <section class="py-16 bg-white dark:bg-gray-900">
-    <Container>
-      <div class="max-w-3xl mx-auto text-center mb-16">
-        <div class="badge-wrapper">
-          <Badge text="OUR TEAM" variant="primary" size="md" />
-        </div>
-        <h2 class="heading-primary">
-          Meet the people behind Greenberry
-        </h2>
-        <p class="section-description">
-          A small but dedicated team of web experts passionate about helping Irish businesses succeed online.
-        </p>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {teamMembers.map((member) => (
-          <div class="card overflow-hidden group">
-            <div class="relative">
-              <img 
-                src={member.image} 
-                alt={member.name} 
-                class="w-full h-64 object-cover object-center group-hover:scale-105 transition-transform duration-500"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            </div>
-            <div class="p-6">
-              <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-1">
-                {member.name}
-              </h3>
-              <p class="text-greenberry-600 dark:text-greenberry-400 font-medium mb-4">
-                {member.position}
-              </p>
-              <p class="text-gray-600 dark:text-gray-400">
-                {member.bio}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </Container>
-  </section>
+  
   
   <!-- CTA Section with PageCta component -->
-  <PageCta
-    title="Ready to work with us?"
-    description="Let's discuss how Greenberry can help your business thrive online."
-    primaryButtonText="Get in Touch"
-    primaryButtonIcon="fa-solid fa-arrow-right"
-    backgroundVariant="light"
-  />
+  <Cta/>
+  
 </Layout>
