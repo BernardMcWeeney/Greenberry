@@ -4,7 +4,16 @@ import Badge from '../ui/Badge.astro';
 import { fetchWithAssets } from '../../utils/api';
 
 // Fetch testimonials from the CMS with resolved image URLs
-const testimonials = await fetchWithAssets('testimonials', ['image']);
+// Add explicit image formats and dimensions to improve loading on mobile/Safari
+const testimonials = await fetchWithAssets('testimonials', ['image'], {
+  assetOptions: {
+    width: 100, 
+    height: 100,
+    fit: 'cover',
+    format: 'jpg',
+    quality: 80
+  }
+});
 
 // Calculate average Google review rating
 const googleRating = 4.9;
@@ -58,7 +67,11 @@ const totalReviews = 87;
                     src={testimonial.image_url} 
                     alt={testimonial.author} 
                     class="w-full h-full object-cover"
-                    onerror="this.src='https://randomuser.me/api/portraits/lego/1.jpg';"
+                    width="48"
+                    height="48"
+                    loading="lazy"
+                    decoding="async"
+                    onerror="this.onerror=null; this.src='https://randomuser.me/api/portraits/lego/1.jpg';"
                   />
                 </div>
                 <div>
@@ -209,6 +222,29 @@ const totalReviews = 87;
     window.addEventListener('beforeunload', () => {
       stopAnimation();
     });
+    
+    // Mobile Safari specific handling for images
+    const preloadImages = () => {
+      const images = document.querySelectorAll('.testimonial-card img');
+      images.forEach(img => {
+        // Force image loading
+        if ((img as HTMLImageElement).complete) {
+          // Image already loaded
+          if ((img as HTMLImageElement).naturalHeight === 0) {
+            // Image failed to load, try fallback
+            (img as HTMLImageElement).src = 'https://randomuser.me/api/portraits/lego/1.jpg';
+          }
+        } else {
+          // Add event listeners for loading errors
+          img.addEventListener('error', () => {
+            (img as HTMLImageElement).src = 'https://randomuser.me/api/portraits/lego/1.jpg';
+          });
+        }
+      });
+    };
+    
+    // Run image preloading after a small delay to ensure DOM is ready
+    setTimeout(preloadImages, 100);
   });
 </script>
 
