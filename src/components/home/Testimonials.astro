@@ -4,16 +4,7 @@ import Badge from '../ui/Badge.astro';
 import { fetchWithAssets } from '../../utils/api';
 
 // Fetch testimonials from the CMS with resolved image URLs
-// Add explicit image formats and dimensions to improve loading on mobile/Safari
-const testimonials = await fetchWithAssets('testimonials', ['image'], {
-  assetOptions: {
-    width: 100, 
-    height: 100,
-    fit: 'cover',
-    format: 'jpg',
-    quality: 80
-  }
-});
+const testimonials = await fetchWithAssets('testimonials', ['image']);
 
 // Calculate average Google review rating
 const googleRating = 4.9;
@@ -37,11 +28,21 @@ const totalReviews = 87;
       </h2>
     </div>
     
-    <!-- Full-width Testimonial Tapefeed with reduced margin spacing -->
-    <div class="testimonial-tapefeed-container relative w-full overflow-hidden mt-8 mb-6">
-      <div id="testimonial-tapefeed" class="flex space-x-6">
-        {[...testimonials, ...testimonials].map((testimonial) => (
-          <div class="testimonial-card flex-shrink-0" style="width: 400px;">
+    <!-- Testimonial Slider Container -->
+    <div class="testimonial-slider-container relative w-full overflow-hidden">
+      <!-- Navigation Arrows -->
+      <button id="prev-btn" class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md">
+        <i class="fas fa-chevron-left text-gray-500 dark:text-gray-400"></i>
+      </button>
+      
+      <button id="next-btn" class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md">
+        <i class="fas fa-chevron-right text-gray-500 dark:text-gray-400"></i>
+      </button>
+      
+      <!-- Testimonial Slide Track -->
+      <div id="testimonial-track" class="flex transition-transform duration-500">
+        {testimonials.map((testimonial) => (
+          <div class="testimonial-slide flex-shrink-0 px-3">
             <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm h-full flex flex-col border border-gray-100 dark:border-gray-700">
               {/* Rating Stars */}
               <div class="flex text-yellow-400 mb-4">
@@ -67,11 +68,8 @@ const totalReviews = 87;
                     src={testimonial.image_url} 
                     alt={testimonial.author} 
                     class="w-full h-full object-cover"
-                    width="48"
-                    height="48"
                     loading="lazy"
                     decoding="async"
-                    onerror="this.onerror=null; this.src='https://randomuser.me/api/portraits/lego/1.jpg';"
                   />
                 </div>
                 <div>
@@ -103,207 +101,267 @@ const totalReviews = 87;
           </div>
         ))}
       </div>
+      
+      <!-- Dots Navigation -->
+      <div class="dots-container flex justify-center mt-6 space-x-2">
+        {testimonials.map((_, index) => (
+          <button 
+            class="dot w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-700" 
+            data-index={index}
+            aria-label={`Go to testimonial ${index + 1}`}
+          ></button>
+        ))}
+      </div>
     </div>
   </Container>
 </section>
 
 <script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
-    const tapefeed = document.getElementById('testimonial-tapefeed');
-    if (!tapefeed) return;
+    // Get DOM elements
+    const track = document.getElementById('testimonial-track');
+    const slides = document.querySelectorAll('.testimonial-slide');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const dots = document.querySelectorAll('.dot');
     
-    // Clone the testimonials to ensure smooth looping
-    const cloneItems = () => {
-      const items = tapefeed.children;
-      const itemsArray = Array.from(items);
+    // Variables
+    let currentIndex = 0;
+    let slideWidth;
+    let slidesToShow;
+    let autoplayTimeout;
+    let isTransitioning = false;
+    const originalSlides = slides.length;
+    
+    // Clone slides for infinite loop
+    function cloneSlides() {
+      // Clone slides at the beginning and end to create infinite loop effect
+      for (let i = 0; i < slides.length; i++) {
+        const clone = slides[i].cloneNode(true);
+        track.appendChild(clone);
+      }
       
-      // Clone all items and append to tapefeed
-      itemsArray.forEach(item => {
-        const clone = item.cloneNode(true);
-        tapefeed.appendChild(clone);
+      // Set the first slide as active with no transition
+      moveToSlide(originalSlides, false);
+    }
+    
+    // Calculate slide dimensions
+    function calculateDimensions() {
+      // Reset the transition while calculating
+      track.style.transition = 'none';
+      
+      // Determine slides to show based on screen width
+      if (window.innerWidth >= 1024) {
+        slidesToShow = 3; // Desktop
+      } else if (window.innerWidth >= 640) {
+        slidesToShow = 2; // Tablet
+      } else {
+        slidesToShow = 1; // Mobile
+      }
+      
+      // Calculate individual slide width
+      slideWidth = track.parentNode.clientWidth / slidesToShow;
+      
+      // Set width for all slides
+      document.querySelectorAll('.testimonial-slide').forEach(slide => {
+        slide.style.width = `${slideWidth}px`;
       });
-    };
-    
-    // We've already duplicated the list in HTML, but add extra for safety
-    cloneItems();
-    
-    // Calculate proper card width based on device width
-    const calculateCardWidth = () => {
-      if (window.innerWidth < 640) {
-        // For mobile, use 85% of viewport width plus gap
-        return (window.innerWidth * 0.85) + 24;
-      } else {
-        // For desktop use fixed width plus gap
-        return 400 + 24;
-      }
-    };
-    
-    // Initialize scroll variables
-    let scrollAmount = 0;
-    let cardWidth = calculateCardWidth();
-    let totalWidth = cardWidth * (tapefeed.children.length / 2);
-    let animationFrameId = null;
-    
-    // Different speeds for mobile and desktop
-    const getScrollSpeed = () => {
-      return window.innerWidth < 768 ? 0.6 : 0.3; // Adjusted for better mobile experience
-    };
-    
-    // Animation function
-    const scrollTapefeed = () => {
-      scrollAmount += getScrollSpeed();
       
-      // Loop back seamlessly when we've scrolled half the content
-      if (scrollAmount >= totalWidth) {
-        scrollAmount = 0;
-        tapefeed.style.transition = 'none';
-        tapefeed.style.transform = `translateX(0px)`;
-        
-        // Force reflow to enable animation again
-        tapefeed.offsetHeight;
-        tapefeed.style.transition = 'transform 0.5s linear';
-      }
+      // Set track width
+      track.style.width = `${slideWidth * track.children.length}px`;
       
-      tapefeed.style.transform = `translateX(-${scrollAmount}px)`;
-      animationFrameId = requestAnimationFrame(scrollTapefeed);
-    };
-    
-    // Start the animation
-    const startAnimation = () => {
-      // Reset scroll position
-      scrollAmount = 0;
-      tapefeed.style.transform = `translateX(0px)`;
+      // Restore the position without animation
+      moveToSlide(currentIndex, false);
       
-      // Recalculate widths
-      cardWidth = calculateCardWidth();
-      totalWidth = cardWidth * (tapefeed.children.length / 2);
+      // Re-enable transition after a brief delay
+      setTimeout(() => {
+        track.style.transition = 'transform 500ms ease';
+      }, 50);
+    }
+    
+    // Move to specific slide
+    function moveToSlide(index, animate = true) {
+      if (isTransitioning) return;
       
-      // Setup transition and start animation
-      tapefeed.style.transition = 'transform 0.5s linear';
-      animationFrameId = requestAnimationFrame(scrollTapefeed);
-    };
-    
-    // Stop animation function
-    const stopAnimation = () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = null;
-      }
-    };
-    
-    // Start animation immediately
-    startAnimation();
-    
-    // Adjust when window resizes
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-      // Debounce resize events
-      clearTimeout(resizeTimeout);
+      // Set transition based on animate parameter
+      track.style.transition = animate ? 'transform 500ms ease' : 'none';
       
-      // Stop animation during resize
-      stopAnimation();
+      // Calculate position and transform
+      const position = -index * slideWidth;
+      track.style.transform = `translateX(${position}px)`;
       
-      // Restart animation after resize completes
-      resizeTimeout = setTimeout(() => {
-        startAnimation();
-      }, 200);
-    });
-    
-    // Pause animation when page is not visible
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        stopAnimation();
-      } else {
-        startAnimation();
-      }
-    });
-    
-    // Clean up on page unload
-    window.addEventListener('beforeunload', () => {
-      stopAnimation();
-    });
-    
-    // Mobile Safari specific handling for images
-    const preloadImages = () => {
-      const images = document.querySelectorAll('.testimonial-card img');
-      images.forEach(img => {
-        // Force image loading
-        if ((img as HTMLImageElement).complete) {
-          // Image already loaded
-          if ((img as HTMLImageElement).naturalHeight === 0) {
-            // Image failed to load, try fallback
-            (img as HTMLImageElement).src = 'https://randomuser.me/api/portraits/lego/1.jpg';
+      // Update current index
+      currentIndex = index;
+      
+      // Update active dot
+      updateActiveDot();
+      
+      // Handle transition lock
+      if (animate) {
+        isTransitioning = true;
+        setTimeout(() => {
+          isTransitioning = false;
+          
+          // If we've moved past the clones, reset to the original slides
+          if (currentIndex >= originalSlides * 2) {
+            moveToSlide(originalSlides, false);
+          } else if (currentIndex < originalSlides) {
+            moveToSlide(originalSlides * 2 - 1, false);
           }
+        }, 500);
+      }
+    }
+    
+    // Update active dot
+    function updateActiveDot() {
+      // Calculate which original slide we're on
+      const activeDotIndex = (currentIndex - originalSlides) % originalSlides;
+      
+      // Update all dots
+      dots.forEach((dot, i) => {
+        if (i === activeDotIndex) {
+          dot.classList.add('bg-greenberry-500', 'dark:bg-greenberry-400');
+          dot.classList.remove('bg-gray-300', 'dark:bg-gray-700');
         } else {
-          // Add event listeners for loading errors
-          img.addEventListener('error', () => {
-            (img as HTMLImageElement).src = 'https://randomuser.me/api/portraits/lego/1.jpg';
-          });
+          dot.classList.remove('bg-greenberry-500', 'dark:bg-greenberry-400');
+          dot.classList.add('bg-gray-300', 'dark:bg-gray-700');
         }
       });
-    };
+    }
     
-    // Run image preloading after a small delay to ensure DOM is ready
-    setTimeout(preloadImages, 100);
+    // Start autoplay
+    function startAutoplay() {
+      stopAutoplay(); // Clear any existing timeout
+      autoplayTimeout = setTimeout(() => {
+        moveToSlide(currentIndex + 1);
+        startAutoplay();
+      }, 4000);
+    }
+    
+    // Stop autoplay
+    function stopAutoplay() {
+      if (autoplayTimeout) {
+        clearTimeout(autoplayTimeout);
+      }
+    }
+    
+    // Initialize slider
+    function initSlider() {
+      // Clone slides
+      cloneSlides();
+      
+      // Calculate dimensions
+      calculateDimensions();
+      
+      // Set initial dot
+      updateActiveDot();
+      
+      // Add event listeners
+      
+      // Next button
+      nextBtn.addEventListener('click', () => {
+        stopAutoplay();
+        moveToSlide(currentIndex + 1);
+        startAutoplay();
+      });
+      
+      // Previous button
+      prevBtn.addEventListener('click', () => {
+        stopAutoplay();
+        moveToSlide(currentIndex - 1);
+        startAutoplay();
+      });
+      
+      // Dot navigation
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+          stopAutoplay();
+          moveToSlide(i + originalSlides); // Add offset to account for clones
+          startAutoplay();
+        });
+      });
+      
+      // Pause on hover/touch
+      track.addEventListener('mouseenter', stopAutoplay);
+      track.addEventListener('touchstart', stopAutoplay, { passive: true });
+      
+      // Resume on mouse/touch leave
+      track.addEventListener('mouseleave', startAutoplay);
+      track.addEventListener('touchend', startAutoplay);
+      
+      // Handle window resize
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          calculateDimensions();
+        }, 200);
+      });
+      
+      // Handle visibility change (tab change)
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          stopAutoplay();
+        } else {
+          startAutoplay();
+        }
+      });
+      
+      // Fix for Safari image loading issues
+      document.querySelectorAll('.testimonial-slide img').forEach(img => {
+        img.onerror = function() {
+          this.src = 'https://randomuser.me/api/portraits/lego/1.jpg';
+        };
+        
+        // Ensure image is loaded
+        if (img.complete) {
+          if (img.naturalHeight === 0) {
+            img.src = 'https://randomuser.me/api/portraits/lego/1.jpg';
+          }
+        }
+      });
+      
+      // Start autoplay
+      startAutoplay();
+    }
+    
+    // Initialize when DOM is ready
+    if (track && slides.length > 0) {
+      initSlider();
+    }
   });
 </script>
 
 <style>
-  /* Tapefeed container styling */
-  .testimonial-tapefeed-container {
+  /* Testimonial slider container */
+  .testimonial-slider-container {
     position: relative;
-    width: 100%;
-    overflow-x: hidden;
-    margin-bottom: 1rem;
+    padding: 0 40px;
   }
   
-  .testimonial-tapefeed-container::before,
-  .testimonial-tapefeed-container::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    width: 100px;
-    height: 100%;
-    z-index: 2;
-    pointer-events: none;
+  /* Navigation buttons */
+  #prev-btn, #next-btn {
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
   }
   
-  .testimonial-tapefeed-container::before {
-    left: 0;
-    background: linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+  #prev-btn:hover, #next-btn:hover {
+    opacity: 1;
   }
   
-  .testimonial-tapefeed-container::after {
-    right: 0;
-    background: linear-gradient(to left, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+  /* Dot navigation */
+  .dot {
+    transition: background-color 0.3s ease;
   }
   
-  :global(.dark) .testimonial-tapefeed-container::before {
-    background: linear-gradient(to right, rgba(17, 24, 39, 0.9), rgba(17, 24, 39, 0));
-  }
-  
-  :global(.dark) .testimonial-tapefeed-container::after {
-    background: linear-gradient(to left, rgba(17, 24, 39, 0.9), rgba(17, 24, 39, 0));
-  }
-  
-  /* Tape feed effect for cards */
-  .testimonial-card {
-    position: relative;
-    margin-bottom: 0.5rem;
-    min-height: 280px;
-    display: flex;
-  }
-  
-  /* Mobile responsive adjustments */
+  /* Mobile adjustments */
   @media (max-width: 640px) {
-    .testimonial-card {
-      width: 85vw !important;
-      margin-bottom: 0.75rem;
+    .testimonial-slider-container {
+      padding: 0 30px;
     }
     
-    .testimonial-tapefeed-container::before,
-    .testimonial-tapefeed-container::after {
-      width: 60px; /* Smaller gradient on mobile */
+    #prev-btn, #next-btn {
+      padding: 0.5rem;
     }
   }
 </style>
