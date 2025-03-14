@@ -1,51 +1,10 @@
 ---
 import Container from '../common/Container.astro';
 import Badge from '../ui/Badge.astro';
+import { fetchWithAssets } from '../../utils/api';
 
-const testimonials = [
-  {
-    content: "Greenberry transformed our online presence. Their professional team delivered a stunning website that significantly increased our customer inquiries by 35% in the first month.",
-    author: "Sarah O'Brien",
-    position: "Dublin Café",
-    image: "https://randomuser.me/api/portraits/women/48.jpg",
-    rating: 5
-  },
-  {
-    content: "Working with Greenberry was hassle-free. They managed everything from design to hosting, and even improved our search rankings. Our site now loads 3x faster!",
-    author: "Michael Collins",
-    position: "Cork Retail Group",
-    image: "https://randomuser.me/api/portraits/men/32.jpg",
-    rating: 5
-  },
-  {
-    content: "As a small business owner, I needed a website that would stand out without breaking the bank. Greenberry delivered exactly that, and sales are up 20% year-over-year.",
-    author: "Emma Fitzgerald",
-    position: "Galway Artisans",
-    image: "https://randomuser.me/api/portraits/women/65.jpg",
-    rating: 5
-  },
-  {
-    content: "The team at Greenberry understood our vision perfectly. Our new website has received amazing feedback from clients, and our conversion rate has doubled.",
-    author: "James O'Connor",
-    position: "Limerick Legal Services",
-    image: "https://randomuser.me/api/portraits/men/45.jpg",
-    rating: 5
-  },
-  {
-    content: "The SEO services provided by Greenberry have put us on the map. We're now ranking on the first page for our key search terms.",
-    author: "Laura Murphy",
-    position: "Waterford Home Décor",
-    image: "https://randomuser.me/api/portraits/women/23.jpg",
-    rating: 5
-  },
-  {
-    content: "Our e-commerce site built by Greenberry has been a game-changer. The user experience is excellent and our mobile sales have tripled.",
-    author: "Sean Kennedy",
-    position: "Kilkenny Craft Shop",
-    image: "https://randomuser.me/api/portraits/men/67.jpg",
-    rating: 5
-  }
-];
+// Fetch testimonials from the CMS with resolved image URLs
+const testimonials = await fetchWithAssets('testimonials', ['image']);
 
 // Calculate average Google review rating
 const googleRating = 4.9;
@@ -91,9 +50,10 @@ const totalReviews = 87;
               <div class="flex items-center mt-auto">
                 <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-greenberry-200/50 dark:border-greenberry-800/30 mr-4">
                   <img 
-                    src={testimonial.image} 
+                    src={testimonial.image_url} 
                     alt={testimonial.author} 
                     class="w-full h-full object-cover"
+                    onerror="this.src='https://randomuser.me/api/portraits/lego/1.jpg';"
                   />
                 </div>
                 <div>
@@ -113,7 +73,7 @@ const totalReviews = 87;
   </Container>
 </section>
 
-<script>
+<script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
     const tapefeed = document.getElementById('testimonial-tapefeed');
     if (!tapefeed) return;
@@ -133,14 +93,26 @@ const totalReviews = 87;
     // We've already duplicated the list in HTML, but add extra for safety
     cloneItems();
     
-    // Smooth continuous infinite scroll
+    // Calculate proper card width based on device width
+    const calculateCardWidth = () => {
+      if (window.innerWidth < 640) {
+        // For mobile, use 85% of viewport width plus gap
+        return (window.innerWidth * 0.85) + 24;
+      } else {
+        // For desktop use fixed width plus gap
+        return 400 + 24;
+      }
+    };
+    
+    // Initialize scroll variables
     let scrollAmount = 0;
-    const cardWidth = 400 + 24; // Card width + gap
-    const totalWidth = cardWidth * (tapefeed.children.length / 2);
+    let cardWidth = calculateCardWidth();
+    let totalWidth = cardWidth * (tapefeed.children.length / 2);
+    let animationFrameId = null;
     
     // Different speeds for mobile and desktop
     const getScrollSpeed = () => {
-      return window.innerWidth < 768 ? 1.0 : 0.3; // Faster on mobile, slower on desktop
+      return window.innerWidth < 768 ? 0.6 : 0.3; // Adjusted for better mobile experience
     };
     
     // Animation function
@@ -159,24 +131,62 @@ const totalReviews = 87;
       }
       
       tapefeed.style.transform = `translateX(-${scrollAmount}px)`;
-      requestAnimationFrame(scrollTapefeed);
+      animationFrameId = requestAnimationFrame(scrollTapefeed);
     };
     
     // Start the animation
-    tapefeed.style.transition = 'transform 0.5s linear';
-    requestAnimationFrame(scrollTapefeed);
+    const startAnimation = () => {
+      // Reset scroll position
+      scrollAmount = 0;
+      tapefeed.style.transform = `translateX(0px)`;
+      
+      // Recalculate widths
+      cardWidth = calculateCardWidth();
+      totalWidth = cardWidth * (tapefeed.children.length / 2);
+      
+      // Setup transition and start animation
+      tapefeed.style.transition = 'transform 0.5s linear';
+      animationFrameId = requestAnimationFrame(scrollTapefeed);
+    };
+    
+    // Stop animation function
+    const stopAnimation = () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+    };
+    
+    // Start animation immediately
+    startAnimation();
     
     // Adjust when window resizes
+    let resizeTimeout;
     window.addEventListener('resize', () => {
-      // Re-measure card width in case viewport changed
-      const newCardWidth = 400 + 24;
-      const newTotalWidth = newCardWidth * (tapefeed.children.length / 2);
+      // Debounce resize events
+      clearTimeout(resizeTimeout);
       
-      // If we scrolled past the new halfway point, reset
-      if (scrollAmount >= newTotalWidth) {
-        scrollAmount = 0;
-        tapefeed.style.transform = `translateX(0px)`;
+      // Stop animation during resize
+      stopAnimation();
+      
+      // Restart animation after resize completes
+      resizeTimeout = setTimeout(() => {
+        startAnimation();
+      }, 200);
+    });
+    
+    // Pause animation when page is not visible
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        stopAnimation();
+      } else {
+        startAnimation();
       }
+    });
+    
+    // Clean up on page unload
+    window.addEventListener('beforeunload', () => {
+      stopAnimation();
     });
   });
 </script>
@@ -187,7 +197,7 @@ const totalReviews = 87;
     position: relative;
     width: 100%;
     overflow-x: hidden;
-    margin-bottom: 1rem; /* Reduced from 2rem */
+    margin-bottom: 1rem;
   }
   
   .testimonial-tapefeed-container::before,
@@ -222,7 +232,9 @@ const totalReviews = 87;
   /* Tape feed effect for cards */
   .testimonial-card {
     position: relative;
-    margin-bottom: 0.5rem; /* Reduced from 1rem */
+    margin-bottom: 0.5rem;
+    min-height: 250px; /* Ensure minimum height */
+    display: flex;
   }
   
   .testimonial-card::before {
@@ -242,7 +254,12 @@ const totalReviews = 87;
   @media (max-width: 640px) {
     .testimonial-card {
       width: 85vw !important;
-      margin-bottom: 0.75rem; /* Reduced from 1.5rem */
+      margin-bottom: 0.75rem;
+    }
+    
+    .testimonial-tapefeed-container::before,
+    .testimonial-tapefeed-container::after {
+      width: 60px; /* Smaller gradient on mobile */
     }
   }
 </style>
