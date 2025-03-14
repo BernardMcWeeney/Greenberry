@@ -239,7 +239,7 @@ const socialLinks = [
   </section>
 </Layout>
 
-<script>
+<script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
     const contactForm = document.getElementById('contact-form');
     const submitButton = document.getElementById('submit-button');
@@ -248,8 +248,10 @@ const socialLinks = [
     const errorText = document.getElementById('error-message');
     
     if (contactForm) {
-      contactForm.addEventListener('submit', async (e) => {
+      contactForm.addEventListener('submit', function(e) {
+        // Explicitly prevent default to stop page refresh
         e.preventDefault();
+        e.stopPropagation();
         
         // Disable submit button and show loading state
         if (submitButton) {
@@ -258,43 +260,48 @@ const socialLinks = [
         }
         
         // Hide any previous status messages
-        successMessage.classList.add('hidden');
-        errorMessage.classList.add('hidden');
+        if (successMessage) successMessage.classList.add('hidden');
+        if (errorMessage) errorMessage.classList.add('hidden');
         
-        try {
-          // Submit the form to our Cloudflare Function
-          const formData = new FormData(contactForm);
-          const response = await fetch('/api/contact', {
-            method: 'POST',
-            body: formData
-          });
-          
-          const result = await response.json();
-          
-          if (response.ok && result.success) {
+        // Create form data object
+        const formData = new FormData(contactForm);
+        
+        // Use fetch API with explicit promise handling
+        fetch('/api/contact', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(result => {
+          if (result.success) {
             // Show success message
-            successMessage.classList.remove('hidden');
+            if (successMessage) successMessage.classList.remove('hidden');
             
             // Reset the form
             contactForm.reset();
           } else {
             // Show error message
-            errorText.textContent = result.message || 'There was a problem sending your message. Please try again.';
-            errorMessage.classList.remove('hidden');
+            if (errorText) errorText.textContent = result.message || 'There was a problem sending your message. Please try again.';
+            if (errorMessage) errorMessage.classList.remove('hidden');
           }
-        } catch (error) {
+        })
+        .catch(error => {
           console.error('Error submitting form:', error);
           
           // Show error message
-          errorText.textContent = 'There was a problem connecting to the server. Please try again later.';
-          errorMessage.classList.remove('hidden');
-        } finally {
+          if (errorText) errorText.textContent = 'There was a problem connecting to the server. Please try again later.';
+          if (errorMessage) errorMessage.classList.remove('hidden');
+        })
+        .finally(() => {
           // Re-enable submit button
           if (submitButton) {
             submitButton.disabled = false;
             submitButton.innerHTML = 'Send Message <i class="fa-solid fa-paper-plane ml-2"></i>';
           }
-        }
+        });
+        
+        // Return false to ensure the form doesn't submit normally
+        return false;
       });
     }
   });
