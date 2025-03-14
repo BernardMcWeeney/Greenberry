@@ -4,7 +4,12 @@ import Badge from '../ui/Badge.astro';
 import { fetchWithAssets } from '../../utils/api';
 
 // Fetch testimonials from the CMS with resolved image URLs
-const testimonials = await fetchWithAssets('testimonials', ['image']);
+const testimonials = await fetchWithAssets('testimonials', ['image'], {
+  cache: 'no-store' // Ensure fresh data on each build
+});
+
+// Add error handling in case testimonials don't load
+const hasTestimonials = testimonials && testimonials.length > 0;
 
 // Calculate average Google review rating
 const googleRating = 4.9;
@@ -28,90 +33,101 @@ const totalReviews = 87;
       </h2>
     </div>
     
-    <!-- Testimonial Slider Container -->
-    <div class="testimonial-slider-container relative w-full overflow-hidden">
-      <!-- Navigation Arrows -->
-      <button id="prev-btn" class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md">
-        <i class="fas fa-chevron-left text-gray-500 dark:text-gray-400"></i>
-      </button>
-      
-      <button id="next-btn" class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md">
-        <i class="fas fa-chevron-right text-gray-500 dark:text-gray-400"></i>
-      </button>
-      
-      <!-- Testimonial Slide Track -->
-      <div id="testimonial-track" class="flex transition-transform duration-500">
-        {testimonials.map((testimonial) => (
-          <div class="testimonial-slide flex-shrink-0 px-3">
-            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm h-full flex flex-col border border-gray-100 dark:border-gray-700">
-              {/* Rating Stars */}
-              <div class="flex text-yellow-400 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <span class="mr-0.5">
-                    <i class={`fa-${i < testimonial.rating ? 'solid' : 'regular'} fa-star`}></i>
-                  </span>
-                ))}
-                <span class="text-gray-400 dark:text-gray-500 text-xs ml-2 font-medium mt-0.5">Verified Client</span>
-              </div>
-              
-              {/* Quote Content */}
-              <div class="mb-6 flex-grow">
-                <p class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
-                  "{testimonial.content}"
-                </p>
-              </div>
-              
-              {/* Client Info */}
-              <div class="flex items-start mt-auto pt-4 border-t border-gray-100 dark:border-gray-700">
-                <div class="w-12 h-12 rounded-full overflow-hidden mr-4 bg-gray-100 dark:bg-gray-700 flex-shrink-0">
-                  <img 
-                    src={testimonial.image_url} 
-                    alt={testimonial.author} 
-                    class="w-full h-full object-cover"
-                    decoding="async"
-                  />
+    {hasTestimonials ? (
+      <!-- Testimonial Slider Container -->
+      <div class="testimonial-slider-container relative w-full overflow-hidden">
+        <!-- Navigation Arrows -->
+        <button id="prev-btn" class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md">
+          <i class="fas fa-chevron-left text-gray-500 dark:text-gray-400"></i>
+        </button>
+        
+        <button id="next-btn" class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md">
+          <i class="fas fa-chevron-right text-gray-500 dark:text-gray-400"></i>
+        </button>
+        
+        <!-- Testimonial Slide Track -->
+        <div id="testimonial-track" class="flex transition-transform duration-500">
+          {testimonials.map((testimonial) => (
+            <div class="testimonial-slide flex-shrink-0 px-3">
+              <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm h-full flex flex-col border border-gray-100 dark:border-gray-700">
+                {/* Rating Stars */}
+                <div class="flex text-yellow-400 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <span class="mr-0.5">
+                      <i class={`fa-${i < testimonial.rating ? 'solid' : 'regular'} fa-star`}></i>
+                    </span>
+                  ))}
+                  <span class="text-gray-400 dark:text-gray-500 text-xs ml-2 font-medium mt-0.5">Verified Client</span>
                 </div>
-                <div>
-                  <h4 class="font-medium text-gray-900 dark:text-white">
-                    {testimonial.author}
-                  </h4>
-                  <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
-                    {testimonial.position}
+                
+                {/* Quote Content */}
+                <div class="mb-6 flex-grow">
+                  <p class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                    "{testimonial.content}"
                   </p>
-                  <p class="text-sm text-greenberry-600 dark:text-greenberry-500 font-medium mt-0.5">
-                    {testimonial.organisation}
-                  </p>
-                  
-                  {testimonial.url && (
-                    <a 
-                      href={`https://${testimonial.url}`} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      class="inline-flex items-center mt-2 text-xs text-greenberry-600 dark:text-greenberry-400 hover:text-greenberry-700 dark:hover:text-greenberry-300"
-                    >
-                      <i class="fas fa-globe text-greenberry-500 mr-1.5 text-xs"></i>
-                      <span>{testimonial.url}</span>
-                      <i class="fas fa-external-link-alt text-xs ml-1 opacity-70"></i>
-                    </a>
-                  )}
+                </div>
+                
+                {/* Client Info */}
+                <div class="flex items-start mt-auto pt-4 border-t border-gray-100 dark:border-gray-700">
+                  <div class="w-12 h-12 rounded-full overflow-hidden mr-4 bg-gray-100 dark:bg-gray-700 flex-shrink-0">
+                    <img 
+                      src={testimonial.image_url || `https://cms.greenberry.ie/assets/a9a2a00a-42d4-453b-a442-da38a56daabb{Math.floor(Math.random() * 8) + 1}.jpg`} 
+                      alt={testimonial.author || "Client"}
+                      class="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                      onError="this.src='https://cms.greenberry.ie/assets/a9a2a00a-42d4-453b-a442-da38a56daabb'"
+                    />
+                  </div>
+                  <div>
+                    <h4 class="font-medium text-gray-900 dark:text-white">
+                      {testimonial.author || "Happy Client"}
+                    </h4>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                      {testimonial.position || "Client"}
+                    </p>
+                    <p class="text-sm text-greenberry-600 dark:text-greenberry-500 font-medium mt-0.5">
+                      {testimonial.organisation || ""}
+                    </p>
+                    
+                    {testimonial.url && (
+                      <a 
+                        href={`https://${testimonial.url}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center mt-2 text-xs text-greenberry-600 dark:text-greenberry-400 hover:text-greenberry-700 dark:hover:text-greenberry-300"
+                      >
+                        <i class="fas fa-globe text-greenberry-500 mr-1.5 text-xs"></i>
+                        <span>{testimonial.url}</span>
+                        <i class="fas fa-external-link-alt text-xs ml-1 opacity-70"></i>
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+        
+        <!-- Dots Navigation -->
+        <div class="dots-container flex justify-center mt-6 space-x-2">
+          {testimonials.map((_, index) => (
+            <button 
+              class="dot w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-700" 
+              data-index={index}
+              aria-label={`Go to testimonial ${index + 1}`}
+            ></button>
+          ))}
+        </div>
       </div>
-      
-      <!-- Dots Navigation -->
-      <div class="dots-container flex justify-center mt-6 space-x-2">
-        {testimonials.map((_, index) => (
-          <button 
-            class="dot w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-700" 
-            data-index={index}
-            aria-label={`Go to testimonial ${index + 1}`}
-          ></button>
-        ))}
+    ) : (
+      <!-- Fallback if no testimonials are loaded -->
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-8 text-center">
+        <p class="text-gray-600 dark:text-gray-300">
+          We're currently updating our testimonials. Please check back soon!
+        </p>
       </div>
-    </div>
+    )}
   </Container>
 </section>
 
@@ -119,10 +135,15 @@ const totalReviews = 87;
   document.addEventListener('DOMContentLoaded', () => {
     // Get DOM elements
     const track = document.getElementById('testimonial-track');
+    if (!track) return; // Exit if no track element (no testimonials)
+    
     const slides = document.querySelectorAll('.testimonial-slide');
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
     const dots = document.querySelectorAll('.dot');
+    
+    // Guard clause if no testimonials
+    if (slides.length === 0) return;
     
     // Variables
     let currentIndex = 0;
@@ -131,6 +152,13 @@ const totalReviews = 87;
     let autoplayTimeout;
     let isTransitioning = false;
     const originalSlides = slides.length;
+    
+    // Fix for broken images
+    document.querySelectorAll('.testimonial-slide img').forEach(img => {
+      img.onerror = function() {
+        this.src = 'https://randomuser.me/api/portraits/lego/1.jpg';
+      };
+    });
     
     // Clone slides for infinite loop
     function cloneSlides() {
@@ -258,18 +286,22 @@ const totalReviews = 87;
       // Add event listeners
       
       // Next button
-      nextBtn.addEventListener('click', () => {
-        stopAutoplay();
-        moveToSlide(currentIndex + 1);
-        startAutoplay();
-      });
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          stopAutoplay();
+          moveToSlide(currentIndex + 1);
+          startAutoplay();
+        });
+      }
       
       // Previous button
-      prevBtn.addEventListener('click', () => {
-        stopAutoplay();
-        moveToSlide(currentIndex - 1);
-        startAutoplay();
-      });
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          stopAutoplay();
+          moveToSlide(currentIndex - 1);
+          startAutoplay();
+        });
+      }
       
       // Dot navigation
       dots.forEach((dot, i) => {
@@ -303,20 +335,6 @@ const totalReviews = 87;
           stopAutoplay();
         } else {
           startAutoplay();
-        }
-      });
-      
-      // Fix for Safari image loading issues
-      document.querySelectorAll('.testimonial-slide img').forEach(img => {
-        img.onerror = function() {
-          this.src = 'https://randomuser.me/api/portraits/lego/1.jpg';
-        };
-        
-        // Ensure image is loaded
-        if (img.complete) {
-          if (img.naturalHeight === 0) {
-            img.src = 'https://randomuser.me/api/portraits/lego/1.jpg';
-          }
         }
       });
       

@@ -35,7 +35,7 @@ export async function fetchFromCMS(
   // Fetch data from the API
   const res = await fetch(url, {
     headers: options.headers,
-    cache: options.cache || 'default'
+    cache: options.cache || 'no-store' // Changed from 'default' to 'no-store' to prevent caching issues
   });
 
   if (!res.ok) {
@@ -68,7 +68,7 @@ export function getAssetURL(
     return 'https://randomuser.me/api/portraits/lego/1.jpg';
   }
 
-  // Start with the base asset URL
+  // Start with the base asset URL and ensure the asset ID is properly formed
   let url = `${DIRECTUS_ASSETS_URL}/${assetId}`;
 
   // Add transformation parameters if provided
@@ -106,7 +106,13 @@ export function resolveAssets<T extends Record<string, any>>(
     
     for (const field of assetFields) {
       if (field in processed && processed[field]) {
-        processed[`${field}_url`] = getAssetURL(processed[field], assetOptions);
+        // Check if the field contains a valid asset ID
+        if (typeof processed[field] === 'string') {
+          processed[`${field}_url`] = getAssetURL(processed[field], assetOptions);
+        } else if (processed[field]?.id) {
+          // Handle case where field is an object with id property
+          processed[`${field}_url`] = getAssetURL(processed[field].id, assetOptions);
+        }
       }
     }
     
@@ -132,6 +138,14 @@ export async function fetchWithAssets<T extends Record<string, any>>(
     assetOptions?: Parameters<typeof getAssetURL>[1]
   } = {}
 ): Promise<T[]> {
-  const data = await fetchFromCMS(endpoint, options);
-  return resolveAssets(data, assetFields, options.assetOptions);
+  try {
+    const data = await fetchFromCMS(endpoint, {
+      ...options,
+      cache: 'no-store' // Ensure fresh data
+    });
+    return resolveAssets(data, assetFields, options.assetOptions);
+  } catch (error) {
+    console.error(`Error fetching assets from ${endpoint}:`, error);
+    return [];
+  }
 }
