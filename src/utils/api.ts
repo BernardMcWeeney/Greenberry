@@ -100,15 +100,13 @@ export function resolveAssets<T extends Record<string, any>>(
   items: T[],
   assetFields: string[] = ['image', 'thumbnail', 'avatar', 'cover', 'media'], 
   assetOptions: Parameters<typeof getAssetURL>[1] = {}
-): Array<T & Record<string, string>> {
+): T[] {
   return items.map(item => {
-    // Create a new object with the original properties
-    const processed = { ...item } as T & Record<string, string>;
+    const processed = { ...item };
     
-    // Add URL properties for each asset field
     for (const field of assetFields) {
-      if (field in item && item[field]) {
-        processed[`${field}_url`] = getAssetURL(item[field], assetOptions);
+      if (field in processed && processed[field]) {
+        processed[`${field}_url`] = getAssetURL(processed[field], assetOptions);
       }
     }
     
@@ -133,7 +131,7 @@ export async function fetchWithAssets<T extends Record<string, any>>(
     cache?: RequestCache,
     assetOptions?: Parameters<typeof getAssetURL>[1]
   } = {}
-): Promise<Array<T & Record<string, string>>> {
+): Promise<T[]> {
   const data = await fetchFromCMS(endpoint, options);
   return resolveAssets(data, assetFields, options.assetOptions);
 }
