@@ -19,7 +19,7 @@ export const SITE = {
   
   export const SOCIAL_LINKS = {
     facebook: 'https://facebook.com/greenberryie',
-    twitter: 'https://twitter.com/greenberryie',
+    twitter: 'https://twitter.com/greenberry',
     instagram: 'https://instagram.com/greenberryie',
     linkedin: 'https://linkedin.com/company/greenberryie',
   };
