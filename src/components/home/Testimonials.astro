@@ -118,7 +118,6 @@ const totalReviews = 87;
 
 <script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
-    // Get DOM elements
     const track = document.getElementById('testimonial-track');
     const slides = document.querySelectorAll('.testimonial-slide');
     const prevBtn = document.getElementById('prev-btn');
@@ -130,57 +129,40 @@ const totalReviews = 87;
     // Variables
     let currentIndex = 0;
     let slideWidth;
-    let slidesToShow;
     let autoplayTimeout;
     let isTransitioning = false;
     const slideCount = slides.length;
     
-    // Setup for true infinite loop
+    // Simplified infinite loop setup - add minimal clones needed
     function setupInfiniteLoop() {
-      // Clone slides before and after to create smooth infinite loop
-      for (let i = 0; i < slideCount; i++) {
-        // Add clones at the end
-        const endClone = slides[i].cloneNode(true);
-        track.appendChild(endClone);
-        
-        // Add clones at the beginning (in reverse order)
-        const startClone = slides[slideCount - 1 - i].cloneNode(true);
-        track.insertBefore(startClone, track.firstChild);
-      }
+      // Clone first and last slides for minimum needed clones
+      const firstClone = slides[0].cloneNode(true);
+      const lastClone = slides[slideCount - 1].cloneNode(true);
       
-      // Position initial slide (skip the prepended clones)
-      moveToSlide(slideCount, false);
+      track.appendChild(firstClone);
+      track.insertBefore(lastClone, track.firstChild);
+      
+      // Position at first real slide (index 1, since we added one at the beginning)
+      moveToSlide(1, false);
     }
     
-    // Calculate slide dimensions
+    // Calculate dimensions ensuring one full slide on mobile
     function calculateDimensions() {
-      // Reset the transition while calculating
       track.style.transition = 'none';
       
-      // Determine slides to show based on screen width
-      if (window.innerWidth >= 1024) {
-        slidesToShow = 3; // Desktop
-      } else if (window.innerWidth >= 640) {
-        slidesToShow = 2; // Tablet
-      } else {
-        slidesToShow = 1; // Mobile
-      }
+      // Always show exactly one full slide
+      slideWidth = track.parentNode.clientWidth;
       
-      // Calculate individual slide width
-      slideWidth = track.parentNode.clientWidth / slidesToShow;
-      
-      // Set width for all slides
+      // Set widths
       document.querySelectorAll('.testimonial-slide').forEach(slide => {
         slide.style.width = `${slideWidth}px`;
       });
       
-      // Set track width (original slides + clones on both sides)
       track.style.width = `${slideWidth * track.children.length}px`;
       
-      // Restore the position without animation
+      // Maintain position
       moveToSlide(currentIndex, false);
       
-      // Re-enable transition after a brief delay
       setTimeout(() => {
         track.style.transition = 'transform 500ms ease';
       }, 50);
@@ -190,45 +172,41 @@ const totalReviews = 87;
     function moveToSlide(index, animate = true) {
       if (isTransitioning) return;
       
-      // Set transition based on animate parameter
       track.style.transition = animate ? 'transform 500ms ease' : 'none';
       
-      // Calculate position and transform
       const position = -index * slideWidth;
       track.style.transform = `translateX(${position}px)`;
       
-      // Update current index
       currentIndex = index;
       
-      // Update active dot
       updateActiveDot();
       
-      // Handle transition lock and loop correction
       if (animate) {
         isTransitioning = true;
         setTimeout(() => {
           isTransitioning = false;
           
-          // If we reached the end clones, jump to corresponding original slides
-          if (currentIndex >= slideCount * 2) {
-            moveToSlide(currentIndex - slideCount, false);
+          // If at clone of last slide (position 0), jump to real last slide
+          if (currentIndex === 0) {
+            moveToSlide(slideCount, false);
           } 
-          // If we reached the beginning clones, jump to corresponding original slides
-          else if (currentIndex < slideCount) {
-            moveToSlide(currentIndex + slideCount, false);
+          // If at clone of first slide (position slideCount+1), jump to real first slide
+          else if (currentIndex === slideCount + 1) {
+            moveToSlide(1, false);
           }
         }, 500);
       }
     }
     
-    // Update active dot
+    // Update active dot - simplified
     function updateActiveDot() {
-      // Calculate which original slide we're on
-      const normalizedIndex = ((currentIndex - slideCount) % slideCount + slideCount) % slideCount;
+      // Calculate real slide index (accounting for clones)
+      let realIndex = currentIndex - 1;
+      if (realIndex < 0) realIndex = slideCount - 1;
+      if (realIndex >= slideCount) realIndex = 0;
       
-      // Update all dots
       dots.forEach((dot, i) => {
-        if (i === normalizedIndex) {
+        if (i === realIndex) {
           dot.classList.add('bg-greenberry-500', 'dark:bg-greenberry-400');
           dot.classList.remove('bg-gray-300', 'dark:bg-gray-700');
         } else {
@@ -248,21 +226,13 @@ const totalReviews = 87;
     }
     
     function stopAutoplay() {
-      if (autoplayTimeout) {
-        clearTimeout(autoplayTimeout);
-      }
+      if (autoplayTimeout) clearTimeout(autoplayTimeout);
     }
     
     // Initialize slider
     function initSlider() {
-      // Setup the infinite loop structure
       setupInfiniteLoop();
-      
-      // Calculate dimensions
       calculateDimensions();
-      
-      // Set initial active dot
-      updateActiveDot();
       
       // Event listeners
       nextBtn.addEventListener('click', () => {
@@ -281,51 +251,39 @@ const totalReviews = 87;
       dots.forEach((dot, i) => {
         dot.addEventListener('click', () => {
           stopAutoplay();
-          moveToSlide(i + slideCount); // Add offset to account for clones
+          moveToSlide(i + 1); // +1 because of the clone at the beginning
           startAutoplay();
         });
       });
       
-      // Pause on hover/touch
+      // Pause/resume on interaction
       track.addEventListener('mouseenter', stopAutoplay);
       track.addEventListener('touchstart', stopAutoplay, { passive: true });
-      
-      // Resume on mouse/touch leave
       track.addEventListener('mouseleave', startAutoplay);
       track.addEventListener('touchend', startAutoplay);
       
-      // Handle window resize
+      // Handle window resize - debounced
       let resizeTimer;
       window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(calculateDimensions, 200);
       });
       
-      // Handle visibility change (tab change)
+      // Handle visibility change
       document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-          stopAutoplay();
-        } else {
-          startAutoplay();
-        }
+        document.hidden ? stopAutoplay() : startAutoplay();
       });
       
-      // Fix for Safari image loading issues
+      // Fix for Safari image loading
       document.querySelectorAll('.testimonial-slide img').forEach(img => {
-        img.onerror = function() {
-          this.src = 'https://randomuser.me/api/portraits/lego/1.jpg';
-        };
-        
-        if (img.complete && img.naturalHeight === 0) {
+        if (img.complete && img.naturalHeight === 0 || img.onerror) {
           img.src = 'https://randomuser.me/api/portraits/lego/1.jpg';
         }
       });
       
-      // Start autoplay
       startAutoplay();
     }
     
-    // Initialize the slider
     initSlider();
   });
 </script>
