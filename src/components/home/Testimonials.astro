@@ -90,10 +90,10 @@ const totalReviews = 87;
                         href={`https://${testimonial.url}`} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        class="inline-flex items-center mt-2 text-xs text-greenberry-600 dark:text-greenberry-400 hover:text-greenberry-700 dark:hover:text-greenberry-300"
+                        class="inline-flex items-center mt-2 text-xs text-greenberry-600 dark:text-greenberry-400 hover:text-greenberry-700 dark:hover:text-greenberry-300 website-link"
                       >
                         <i class="fas fa-globe text-greenberry-500 mr-1.5 text-xs"></i>
-                        <span>{testimonial.url}</span>
+                        <span class="truncate max-w-[180px]">{testimonial.url}</span>
                         <i class="fas fa-external-link-alt text-xs ml-1 opacity-70"></i>
                       </a>
                     )}
@@ -325,6 +325,13 @@ const totalReviews = 87;
     padding: 0;
   }
   
+  /* Allow cards to be wider on mobile */
+  @media (max-width: 640px) {
+    .testimonial-slide {
+      width: 90vw !important;
+    }
+  }
+  
   /* Navigation buttons */
   #prev-btn, #next-btn {
     opacity: 0.7;
@@ -354,6 +361,19 @@ const totalReviews = 87;
     #prev-btn, #next-btn {
       width: 32px;
       height: 32px;
+    }
+    
+    /* Better website link handling on mobile */
+    .website-link {
+      max-width: 100%;
+      overflow: hidden;
+    }
+    
+    .website-link span {
+      display: block;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
 </style>
