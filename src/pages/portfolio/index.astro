@@ -15,36 +15,6 @@ portfolioProjects.forEach((project) => {
 // Convert Set to Array
 const categories = Array.from(categorySet);
 
-const stats = [
-  {
-    value: "5+",
-    label: "Years Experience",
-    icon: "fa-solid fa-calendar-check",
-    color: "bg-green-500",
-    textColor: "text-green-500"
-  },
-  {
-    value: "100+",
-    label: "Happy Clients",
-    icon: "fa-solid fa-users",
-    color: "bg-blue-500",
-    textColor: "text-blue-500"
-  },
-  {
-    value: "150+",
-    label: "Projects Completed",
-    icon: "fa-solid fa-check-circle",
-    color: "bg-yellow-500",
-    textColor: "text-yellow-500"
-  },
-  {
-    value: "99%",
-    label: "Client Satisfaction",
-    icon: "fa-solid fa-heart",
-    color: "bg-red-500",
-    textColor: "text-red-500"
-  }
-];
 ---
 
 <Layout title="Our Portfolio | Greenberry - Web Design for Irish Businesses">
@@ -59,24 +29,9 @@ const stats = [
     paddingY="md"
   />
   
-  <!-- Stats Section with Category Filter (Combined) -->
+
   <section class="pt-12 pb-6 bg-white dark:bg-gray-900">
     <Container>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8 mb-10">
-        {stats.map((stat) => (
-          <div class="relative bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl border border-gray-100 dark:border-gray-700 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-colors">
-            <div class={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${stat.color.replace('bg-', 'bg-')}/10 flex items-center justify-center ${stat.textColor} dark:${stat.textColor} text-lg sm:text-xl mb-3`}>
-              <i class={stat.icon}></i>
-            </div>
-            <p class={`text-2xl sm:text-3xl font-bold ${stat.textColor} dark:${stat.textColor} mb-1`}>
-              {stat.value}
-            </p>
-            <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
-              {stat.label}
-            </p>
-          </div>
-        ))}
-      </div>
       
       <!-- Category Filter -->
       <div class="flex flex-wrap justify-center gap-3 mb-8">
