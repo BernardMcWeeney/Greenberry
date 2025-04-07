@@ -30,14 +30,13 @@ export const SITE = {
       { name: 'About', href: '/about' },
       { name: 'Services', href: '/services' },
       { name: 'Portfolio', href: '/portfolio' },
-      { name: 'Blog', href: '/blog' },
       { name: 'Contact', href: '/contact' },
     ],
     footer: {
       company: [
         { name: 'About', href: '/about' },
         { name: 'Services', href: '/services' },
-        { name: 'Blog', href: '/blog' },
+        { name: 'Portfolio', href: '/portfolio' },
         { name: 'Contact', href: '/contact' },
       ],
       services: [
