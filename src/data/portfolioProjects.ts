@@ -30,16 +30,16 @@ export const portfolioProjects: PortfolioProject[] = [
     id: "duleek-bellewstown-parish",
     title: "Duleek-Bellewstown Parish Website",
     category: "Non-Profit",
-    client: "Duleek-Bellewstown Parish",
+    client: "Duleek Bellewstown Parish",
     completionDate: "April 2020",
     description: "A brand new website built during COVID to help a parish connect with its community through weekly newsletters and updated mass times.",
     longDescription: "Duleek-Bellewstown Parish did not have an existing website prior to 2020. When the COVID-19 pandemic hit, the parish realised the urgency of having a digital presence to stay connected with their community. Greenberry provided a fast, simple, and easy-to-manage website that became a vital communication channel for the church.\n\nThe website showcases weekly parish newsletters, up-to-date mass times, and other important community information. It is updated regularly by the parish team, who benefit from full support and maintenance from Greenberry to ensure nothing breaks and everything runs smoothly.",
-    image: "/projects/duleek-parish/cover.jpg",
+    image: "/projects/duleek-parish/duleek-parish-1.png",
     gallery: [
-      "/projects/duleek-parish/1.jpg",
-      "/projects/duleek-parish/2.jpg",
-      "/projects/duleek-parish/3.jpg",
-      "/projects/duleek-parish/4.jpg"
+      "/projects/duleek-parish/duleek-parish-1.png",
+      "/projects/duleek-parish/duleek-parish-2.png",
+      "/projects/duleek-parish/duleek-parish-3.png",
+      "/projects/duleek-parish/duleek-parish-4.png"
     ],
     challenge: "No existing website and no technical staff available. The parish needed a site that was easy to update and wouldn’t require technical maintenance on their end.",
     solution: "We designed and built a user-friendly website with weekly content sections for mass times and newsletters, along with full ongoing support from our team.",
@@ -59,12 +59,12 @@ export const portfolioProjects: PortfolioProject[] = [
     completionDate: "October 2021",
     description: "Website migration and redesign for a busy golf club with 24/7 tee time booking, business email setup, and ongoing technical support.",
     longDescription: "Bellewstown Golf Club’s previous website provider went out of business, leaving the club with an outdated, unsupported site. Greenberry stepped in to take over hosting, redesign the site, and ensure 24/7 uptime for their essential online tee time booking system.\n\nWe migrated the site securely, updated it with modern security standards, and provided the club with branded business email addresses. Our team continues to provide fast technical support to ensure the club’s website is always live and reliable.",
-    image: "/projects/bellewstown-golf/cover.jpg",
+    image: "/projects/bellewstown-golf/bellewstown-golf-1.png",
     gallery: [
-      "/projects/bellewstown-golf/1.jpg",
-      "/projects/bellewstown-golf/2.jpg",
-      "/projects/bellewstown-golf/3.jpg",
-      "/projects/bellewstown-golf/4.jpg"
+      "/projects/bellewstown-golf/bellewstown-golf-1.png",
+      "/projects/bellewstown-golf/bellewstown-golf-2.png",
+      "/projects/bellewstown-golf/bellewstown-golf-3.png",
+      "/projects/bellewstown-golf/bellewstown-golf-4.png"
     ],
     challenge: "The golf club was left unsupported with an out-of-date site and no access to hosting, leaving them vulnerable and without the ability to manage tee bookings.",
     solution: "We migrated the site, rebuilt it with a modern design and security in mind, and ensured reliable hosting with 24/7 uptime and dedicated support.",
@@ -80,16 +80,16 @@ export const portfolioProjects: PortfolioProject[] = [
     id: "stmarys-parish-drogheda",
     title: "St. Mary’s Parish Website Redesign",
     category: "Non-Profit",
-    client: "St. Mary’s Parish, Drogheda",
+    client: "St Marys Drogheda",
     completionDate: "January 2024",
     description: "A complete redesign and migration of an outdated parish website to a modern, content-rich WordPress CMS with custom APIs.",
     longDescription: "St. Mary’s Parish had an outdated PHP-based website that, while functional, lacked the features modern parishioners expect. Greenberry delivered a complete redesign and migration to a flexible WordPress CMS. We built a custom API that dynamically fetches and displays daily mass readings, saints of the day, feast day content, and Sunday homilies.\n\nThe result is a modern, mobile-friendly site packed with dynamic spiritual content and parish updates, ensuring parishioners have access to rich, relevant information every day.",
-    image: "/projects/stmarys/cover.jpg",
+    image: "/projects/stmarys/stmarys-drogheda-1.png",
     gallery: [
-      "/projects/stmarys/1.jpg",
-      "/projects/stmarys/2.jpg",
-      "/projects/stmarys/3.jpg",
-      "/projects/stmarys/4.jpg"
+      "/projects/stmarys/stmarys-drogheda-1.png",
+      "/projects/stmarys/stmarys-drogheda-2.png",
+      "/projects/stmarys/stmarys-drogheda-3.png",
+      "/projects/stmarys/stmarys-drogheda-4.png"
     ],
     challenge: "The existing PHP website was outdated, difficult to update, and lacked modern content features required by a large parish.",
     solution: "We migrated the content to WordPress, refreshed the entire design, and built a custom API to deliver dynamic liturgical content daily.",
@@ -109,12 +109,12 @@ export const portfolioProjects: PortfolioProject[] = [
     completionDate: "December 2021",
     description: "A fast-launch website with a custom group directory, events calendar, and full email support for a busy community centre.",
     longDescription: "Duleek Community Facility needed a website to represent their many clubs, events, and initiatives. Greenberry delivered a quick-turnaround project with a beautiful, modern design, integrated email system, and a custom-built group directory to showcase the variety of organisations using the centre.\n\nThe site features a calendar of community activities and a visual layout for browsing local clubs and services. As a non-profit, they appreciated Greenberry’s full support offering and ongoing assistance with updates, content changes, and hosting.",
-    image: "/projects/duleek-facility/cover.jpg",
+    image: "/projects/duleek-facility/cover.png",
     gallery: [
-      "/projects/duleek-facility/1.jpg",
-      "/projects/duleek-facility/2.jpg",
-      "/projects/duleek-facility/3.jpg",
-      "/projects/duleek-facility/4.jpg"
+      "/projects/duleek-facility/1.png",
+      "/projects/duleek-facility/2.png",
+      "/projects/duleek-facility/3.png",
+      "/projects/duleek-facility/4.png"
     ],
     challenge: "The client needed a beautiful and functional website built quickly to showcase their growing community and events, with little technical expertise in-house.",
     solution: "We created a user-friendly WordPress site with a club directory, events calendar, and full email and hosting support.",
@@ -134,12 +134,12 @@ export const portfolioProjects: PortfolioProject[] = [
     completionDate: "April 2020",
     description: "A school website built during COVID to provide a digital hub for parents, with a custom enrolment form and full support.",
     longDescription: "During the uncertainty of the COVID-19 pandemic, Mount Hanover NS needed a reliable website to keep parents and guardians informed. Greenberry delivered a clear, professional site that became a focal point for school communication.\n\nWe built a custom online enrolment form tailored to the school’s admissions process, helping streamline paperwork during lockdown. The school team received full training and support, and the website has since become an essential platform for distributing newsletters, policies, calendar dates, and more.",
-    image: "/projects/mount-hanover/cover.jpg",
+    image: "/projects/mount-hanover/cover.png",
     gallery: [
-      "/projects/mount-hanover/1.jpg",
-      "/projects/mount-hanover/2.jpg",
-      "/projects/mount-hanover/3.jpg",
-      "/projects/mount-hanover/4.jpg"
+      "/projects/mount-hanover/1.png",
+      "/projects/mount-hanover/2.png",
+      "/projects/mount-hanover/3.png",
+      "/projects/mount-hanover/4.png"
     ],
     challenge: "The school had no real digital presence and needed a dependable, easy-to-use site to connect with families during a period of uncertainty.",
     solution: "We created a professional WordPress site with a custom enrolment form, training materials, and full ongoing support for staff.",
@@ -159,12 +159,12 @@ export const portfolioProjects: PortfolioProject[] = [
     completionDate: "September 2022",
     description: "Ireland’s first online dress rental e-commerce platform, with full SEO and business email setup.",
     longDescription: "BOA Dress Hire is a fashion-forward Irish business run by four sisters who wanted to make sustainable style accessible through online dress rental. Greenberry built a complete e-commerce platform with a seamless rental process, stock calendar, and size filtering system.\n\nWe also set up professional business emails, configured an SEO package, and ensured the site was mobile-friendly for fashion shoppers on the go. BOA has since become a leader in Irish fashion rental, offering hundreds of dresses through a modern online experience.",
-    image: "/projects/boa-dress/cover.jpg",
+    image: "/projects/boa-dress/cover.png",
     gallery: [
-      "/projects/boa-dress/1.jpg",
-      "/projects/boa-dress/2.jpg",
-      "/projects/boa-dress/3.jpg",
-      "/projects/boa-dress/4.jpg"
+      "/projects/boa-dress/1.png",
+      "/projects/boa-dress/2.png",
+      "/projects/boa-dress/3.png",
+      "/projects/boa-dress/4.png"
     ],
     challenge: "No existing e-commerce platform in Ireland offered dress rental. BOA needed a system that handled short-term rentals, calendar-based availability, and stock control.",
     solution: "We developed a custom WooCommerce solution tailored for rental workflows, with email, SEO, and ongoing support built in.",
@@ -184,12 +184,12 @@ export const portfolioProjects: PortfolioProject[] = [
     completionDate: "Feburary 2025",
     description: "A secure, mobile-friendly GAA club website with full site redesign and ongoing support after a previous hosting hack.",
     longDescription: "ISSC Vancouver approached Greenberry after a serious hack of their old website left them vulnerable. We immediately migrated the site to our secure infrastructure, patched vulnerabilities, and delivered a full redesign that better reflected the club’s identity.\n\nWe implemented a full site editing experience for the PRO, giving them control to post updates and content without needing technical help. The site is mobile-friendly, fast, and fully supported by Greenberry’s team. It now serves as a trusted hub for fixtures, news, and club info in Vancouver.",
-    image: "/projects/issc-vancouver/cover.jpg",
+    image: "/projects/issc-vancouver/cover.png",
     gallery: [
-      "/projects/issc-vancouver/1.jpg",
-      "/projects/issc-vancouver/2.jpg",
-      "/projects/issc-vancouver/3.jpg",
-      "/projects/issc-vancouver/4.jpg"
+      "/projects/issc-vancouver/1.png",
+      "/projects/issc-vancouver/2.png",
+      "/projects/issc-vancouver/3.png",
+      "/projects/issc-vancouver/4.png"
     ],
     challenge: "The club’s previous hosting provider had been compromised, and the team needed a secure, easy-to-manage solution they could trust.",
     solution: "We migrated the website securely, redesigned it with modern club branding, and enabled full on-site editing for the public relations officer.",
@@ -209,12 +209,12 @@ export const portfolioProjects: PortfolioProject[] = [
     completionDate: "August 2023",
     description: "A modern parish website with online donation facilities, social media integration, and centralised communication hub.",
     longDescription: "Oldcastle & Moylagh Parish wanted a digital presence that would support online giving and act as a central hub for parish communications. Greenberry built a clean, easy-to-manage WordPress site that includes integrated online donations and live mass schedules.\n\nThe site connects directly with the parish’s Facebook and Instagram accounts, making it a true hub-and-spoke system – content is published once and flows out to social platforms automatically. With full Greenberry support, the parish can focus on their mission while we handle the technical side.",
-    image: "/projects/oldcastle-parish/cover.jpg",
+    image: "/projects/oldcastle-parish/cover.png",
     gallery: [
-      "/projects/oldcastle-parish/1.jpg",
-      "/projects/oldcastle-parish/2.jpg",
-      "/projects/oldcastle-parish/3.jpg",
-      "/projects/oldcastle-parish/4.jpg"
+      "/projects/oldcastle-parish/1.png",
+      "/projects/oldcastle-parish/2.png",
+      "/projects/oldcastle-parish/3.png",
+      "/projects/oldcastle-parish/4.png"
     ],
     challenge: "The parish needed to introduce online donations and improve communication with parishioners, without taking on any technical overhead.",
     solution: "We created a modern site with secure donation functionality and tight integration with their existing social media channels.",
@@ -234,12 +234,12 @@ export const portfolioProjects: PortfolioProject[] = [
     completionDate: "June 2024",
     description: "A fast, modern site for Vancouver GAA with custom sports plugin, directory of services, and full Greenberry support.",
     longDescription: "Greenberry developed a robust new website for Vancouver GAA, featuring a clean design and custom-built sports plugin for displaying fixtures, results, and tables. The site also includes a directory of affiliated services and sponsors.\n\nIt’s mobile-optimised and fully content-managed, allowing the Public Relations Officer to quickly publish results, club news, and key information. The project was praised internally for both its aesthetics and ease of use – and backed by ongoing Greenberry support and hosting.",
-    image: "/projects/vancouver-gaa/cover.jpg",
+    image: "/projects/vancouver-gaa/cover.png",
     gallery: [
-      "/projects/vancouver-gaa/1.jpg",
-      "/projects/vancouver-gaa/2.jpg",
-      "/projects/vancouver-gaa/3.jpg",
-      "/projects/vancouver-gaa/4.jpg"
+      "/projects/vancouver-gaa/1.png",
+      "/projects/vancouver-gaa/2.png",
+      "/projects/vancouver-gaa/3.png",
+      "/projects/vancouver-gaa/4.png"
     ],
     challenge: "The club needed a modern site to display fixtures and results dynamically, and make club information accessible to players, members, and the public.",
     solution: "We built a WordPress site with a custom plugin for sports results and fixtures, plus a sponsor/service directory, all mobile-optimised.",
@@ -259,12 +259,12 @@ export const portfolioProjects: PortfolioProject[] = [
     completionDate: "May 2023",
     description: "A user-friendly primary school website with Google Photos integration, security updates, and full documentation.",
     longDescription: "Moynalvey NS wanted a safe, professional website to showcase school life and provide key info to parents. Greenberry delivered a tailored solution with built-in support and an ongoing maintenance plan.\n\nWe integrated the school’s existing Google Photos albums to make it easy to share student activity photos without re-uploading. The site is backed by our frequent security updates, DNS record management, and full documentation for staff to manage and edit content with confidence.",
-    image: "/projects/moynalvey-ns/cover.jpg",
+    image: "/projects/moynalvey-ns/cover.png",
     gallery: [
-      "/projects/moynalvey-ns/1.jpg",
-      "/projects/moynalvey-ns/2.jpg",
-      "/projects/moynalvey-ns/3.jpg",
-      "/projects/moynalvey-ns/4.jpg"
+      "/projects/moynalvey-ns/1.png",
+      "/projects/moynalvey-ns/2.png",
+      "/projects/moynalvey-ns/3.png",
+      "/projects/moynalvey-ns/4.png"
     ],
     challenge: "The school needed a secure, reliable, and easy-to-update website that worked well with Google services and provided regular updates.",
     solution: "We built a custom WordPress site with Google Photos integration and a focus on ease-of-use, backed by full support and proactive updates.",
@@ -284,12 +284,12 @@ export const portfolioProjects: PortfolioProject[] = [
     completionDate: "March 2022",
     description: "A simple and secure parish website with an easy editing experience and direct contact features.",
     longDescription: "Ballivor & Kildalkey Parish needed a user-friendly site that was easy to update without technical expertise. Greenberry created a clean, accessible WordPress website with a strong focus on simplicity, security, and reliability.\n\nA key feature is the parish contact form, which allows parishioners to reach out directly with requests or queries. Greenberry also provided security hardening and updates to protect the site from common web threats. With full support available, the parish team can confidently manage the site day-to-day.",
-    image: "/projects/ballivor-parish/cover.jpg",
+    image: "/projects/ballivor-parish/cover.png",
     gallery: [
-      "/projects/ballivor-parish/1.jpg",
-      "/projects/ballivor-parish/2.jpg",
-      "/projects/ballivor-parish/3.jpg",
-      "/projects/ballivor-parish/4.jpg"
+      "/projects/ballivor-parish/1.png",
+      "/projects/ballivor-parish/2.png",
+      "/projects/ballivor-parish/3.png",
+      "/projects/ballivor-parish/4.png"
     ],
     challenge: "The parish needed a secure and simple website that could be updated by non-technical users while protecting parishioner information.",
     solution: "We built a straightforward WordPress site with an easy editing interface and hardened security features, including CAPTCHA and spam filtering.",
@@ -309,12 +309,12 @@ export const portfolioProjects: PortfolioProject[] = [
     completionDate: "2025",
     description: "A mobile-first website for a juvenile GAA club, highlighting youth programmes, events, and club values.",
     longDescription: "Le Chéile GAA Vancouver needed a digital home for their vibrant youth GAA community. The emphasis was on mobile-friendly design, allowing parents and players to access fixtures, registration info, and club news on the go.\n\nGreenberry delivered a sleek, responsive site that showcases the work the club does to teach Gaelic Games to kids in Vancouver. The website includes sections for team schedules, club initiatives, and news, all easily managed by the club’s admin team. With full support, the club can stay focused on sport – not web maintenance.",
-    image: "/projects/lecheile-vancouver/cover.jpg",
+    image: "/projects/lecheile-vancouver/cover.png",
     gallery: [
-      "/projects/lecheile-vancouver/1.jpg",
-      "/projects/lecheile-vancouver/2.jpg",
-      "/projects/lecheile-vancouver/3.jpg",
-      "/projects/lecheile-vancouver/4.jpg"
+      "/projects/lecheile-vancouver/1.png",
+      "/projects/lecheile-vancouver/2.png",
+      "/projects/lecheile-vancouver/3.png",
+      "/projects/lecheile-vancouver/4.png"
     ],
     challenge: "The club needed a clean, responsive website with minimal admin overhead that parents could easily access on mobile.",
     solution: "We built a lightweight, mobile-first WordPress site with simple content management and full hosting and support included.",
@@ -334,12 +334,12 @@ export const portfolioProjects: PortfolioProject[] = [
     completionDate: "2023",
     description: "A fast, professional website for a construction consultancy with custom contact form, SEO, and branded email setup.",
     longDescription: "Cudden Preconstruction needed a polished online presence to showcase their construction consultancy services. Greenberry built a fast-loading, professional site with clear messaging, a custom contact form, and SEO structure to ensure discoverability.\n\nWe also provided a branded business email setup and managed DNS configuration. The site is easy to manage, and Greenberry continues to provide reliable support and updates for peace of mind.",
-    image: "/projects/cudden/cover.jpg",
+    image: "/projects/cudden/cover.png",
     gallery: [
-      "/projects/cudden/1.jpg",
-      "/projects/cudden/2.jpg",
-      "/projects/cudden/3.jpg",
-      "/projects/cudden/4.jpg"
+      "/projects/cudden/1.png",
+      "/projects/cudden/2.png",
+      "/projects/cudden/3.png",
+      "/projects/cudden/4.png"
     ],
     challenge: "The business needed a sharp, professional site with fast turnaround and full technical support, including domain, email, and SEO.",
     solution: "We delivered a streamlined WordPress site with optimised SEO, a custom contact form, and full business email package.",
