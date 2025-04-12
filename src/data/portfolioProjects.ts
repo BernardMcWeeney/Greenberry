@@ -29,7 +29,7 @@ export const portfolioProjects: PortfolioProject[] = [
   {
     id: "duleek-bellewstown-parish",
     title: "Duleek-Bellewstown Parish Website",
-    category: "Non-Profit",
+    category: "Parish",
     client: "Duleek Bellewstown Parish",
     completionDate: "April 2020",
     description: "A brand new website built during COVID to help a parish connect with its community through weekly newsletters and updated mass times.",
@@ -54,7 +54,7 @@ export const portfolioProjects: PortfolioProject[] = [
   {
     id: "bellewstown-golf-club",
     title: "Bellewstown Golf Club Website",
-    category: "Sports & Leisure",
+    category: "Business",
     client: "Bellewstown Golf Club",
     completionDate: "October 2021",
     description: "Website migration and redesign for a busy golf club with 24/7 tee time booking, business email setup, and ongoing technical support.",
@@ -79,7 +79,7 @@ export const portfolioProjects: PortfolioProject[] = [
   {
     id: "stmarys-parish-drogheda",
     title: "St. Mary’s Parish Website Redesign",
-    category: "Non-Profit",
+    category: "Parish",
     client: "St Marys Drogheda",
     completionDate: "January 2024",
     description: "A complete redesign and migration of an outdated parish website to a modern, content-rich WordPress CMS with custom APIs.",
@@ -104,7 +104,7 @@ export const portfolioProjects: PortfolioProject[] = [
   {
     id: "duleek-community-facility",
     title: "Duleek Community Facility",
-    category: "Community & Non-Profit",
+    category: "Community",
     client: "Duleek Community Facility",
     completionDate: "December 2021",
     description: "A fast-launch website with a custom group directory, events calendar, and full email support for a busy community centre.",
@@ -179,7 +179,7 @@ export const portfolioProjects: PortfolioProject[] = [
   {
     id: "issc-vancouver",
     title: "ISSC Vancouver GAA Club",
-    category: "Sports Club",
+    category: "Club",
     client: "ISSC Vancouver",
     completionDate: "Feburary 2025",
     description: "A secure, mobile-friendly GAA club website with full site redesign and ongoing support after a previous hosting hack.",
@@ -204,7 +204,7 @@ export const portfolioProjects: PortfolioProject[] = [
   {
     id: "oldcastle-moylagh-parish",
     title: "Oldcastle & Moylagh Parish Website",
-    category: "Non-Profit",
+    category: "Parish",
     client: "Oldcastle & Moylagh Parish",
     completionDate: "August 2023",
     description: "A modern parish website with online donation facilities, social media integration, and centralised communication hub.",
@@ -229,7 +229,7 @@ export const portfolioProjects: PortfolioProject[] = [
   {
     id: "vancouver-gaa",
     title: "Vancouver GAA Website",
-    category: "Sports Club",
+    category: "Club",
     client: "Vancouver GAA",
     completionDate: "June 2024",
     description: "A fast, modern site for Vancouver GAA with custom sports plugin, directory of services, and full Greenberry support.",
@@ -279,7 +279,7 @@ export const portfolioProjects: PortfolioProject[] = [
   {
     id: "ballivor-kildalkey-parish",
     title: "Ballivor & Kildalkey Parish Website",
-    category: "Non-Profit",
+    category: "Parish",
     client: "Ballivor & Kildalkey Parish",
     completionDate: "March 2022",
     description: "A simple and secure parish website with an easy editing experience and direct contact features.",
@@ -304,7 +304,7 @@ export const portfolioProjects: PortfolioProject[] = [
   {
     id: "vancouver-lecheile",
     title: "Vancouver Le Chéile",
-    category: "Sports Club",
+    category: "Club",
     client: "Vancouver Le Chéile",
     completionDate: "2025",
     description: "A mobile-first website for a juvenile GAA club, highlighting youth programmes, events, and club values.",
@@ -329,7 +329,7 @@ export const portfolioProjects: PortfolioProject[] = [
   {
     id: "cudden-preconstruction",
     title: "Cudden Preconstruction",
-    category: "Business & Professional",
+    category: "Business",
     client: "Cudden Preconstruction",
     completionDate: "2023",
     description: "A fast, professional website for a construction consultancy with custom contact form, SEO, and branded email setup.",

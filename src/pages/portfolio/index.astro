@@ -14,7 +14,6 @@ portfolioProjects.forEach((project) => {
 
 // Convert Set to Array
 const categories = Array.from(categorySet);
-
 ---
 
 <Layout title="Our Portfolio | Greenberry - Web Design for Irish Businesses">
@@ -29,15 +28,25 @@ const categories = Array.from(categorySet);
     paddingY="md"
   />
   
-  <section class="pt-12 pb-6 bg-white dark:bg-gray-900">
+  <section class="pt-8 md:pt-12 pb-6 bg-white dark:bg-gray-900">
     <Container>
       <!-- Category Filter -->
-      <div class="flex flex-wrap justify-center gap-3 mb-8">
-        <button class="category-filter-btn active px-4 py-2 rounded-full bg-greenberry-600 text-white font-medium transition-colors hover:bg-greenberry-700" data-category="all">
+      <div class="flex flex-wrap justify-center gap-3 mb-8" id="category-filters">
+        <button 
+          class="category-filter-btn active px-4 py-2 rounded-full bg-greenberry-600 text-white font-medium transition-colors hover:bg-greenberry-700 focus:outline-none focus:ring-2 focus:ring-greenberry-500 focus:ring-offset-2" 
+          data-category="all"
+          aria-pressed="true"
+          aria-label="Filter by All Projects"
+        >
           All Projects
         </button>
         {categories.map(category => (
-          <button class="category-filter-btn px-4 py-2 rounded-full bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm text-gray-700 dark:text-gray-300 font-medium border border-gray-200/60 dark:border-gray-700/60 transition-colors hover:bg-greenberry-600 hover:text-white hover:border-transparent" data-category={category}>
+          <button 
+            class="category-filter-btn px-4 py-2 rounded-full bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm text-gray-700 dark:text-gray-300 font-medium border border-gray-200/60 dark:border-gray-700/60 transition-colors hover:bg-greenberry-600 hover:text-white hover:border-transparent focus:outline-none focus:ring-2 focus:ring-greenberry-500 focus:ring-offset-2" 
+            data-category={category}
+            aria-pressed="false"
+            aria-label={`Filter by ${category}`}
+          >
             {category}
           </button>
         ))}
@@ -46,20 +55,25 @@ const categories = Array.from(categorySet);
   </section>
   
   <!-- Portfolio Grid -->
-  <section class="bg-white dark:bg-gray-900">
+  <section class="bg-white dark:bg-gray-900 pb-16">
     <Container>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 portfolio-grid">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" id="portfolio-grid">
         {portfolioProjects.map((project) => (
-          <div class="group portfolio-item bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg border border-gray-100 dark:border-gray-700 hover:border-greenberry-500/40 dark:hover:border-greenberry-500/40" data-category={project.category}>
+          <div 
+            class="group portfolio-item bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg border border-gray-100 dark:border-gray-700 hover:border-greenberry-500/40 dark:hover:border-greenberry-500/40 transition-all duration-300" 
+            data-category={project.category}
+          >
             <!-- Project Image with overlay -->
             <div class="relative overflow-hidden aspect-video">
               <img 
                 src={project.image} 
-                alt={project.title} 
-                class="w-full h-full object-cover"
-                loading="eager"
+                alt={`${project.title} project thumbnail`} 
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                width="600"
+                height="338"
+                loading="lazy"
               />
-              <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 flex items-end p-6">
+              <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4 md:p-6">
                 <div>
                   <Badge text={project.category} variant="primary" size="sm" class="mb-2" />
                   <h3 class="text-white text-xl font-bold">{project.title}</h3>
@@ -68,7 +82,7 @@ const categories = Array.from(categorySet);
             </div>
             
             <!-- Project Info -->
-            <div class="p-6">
+            <div class="p-4 md:p-6">
               <div class="flex flex-wrap gap-2 mb-4">
                 {project.tags && project.tags.map(tag => (
                   <span class="text-xs font-medium py-1 px-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
@@ -77,7 +91,7 @@ const categories = Array.from(categorySet);
                 ))}
               </div>
               
-              <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">
+              <h3 class="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-3">
                 {project.title}
               </h3>
               
@@ -87,11 +101,12 @@ const categories = Array.from(categorySet);
               
               <a 
                 href={`/portfolio/${project.id}`} 
-                class="inline-flex items-center text-greenberry-600 hover:text-greenberry-700 dark:text-greenberry-400 dark:hover:text-greenberry-300 font-medium"
+                class="inline-flex items-center text-greenberry-600 hover:text-greenberry-700 dark:text-greenberry-400 dark:hover:text-greenberry-300 font-medium group"
+                aria-label={`View details of ${project.title} project`}
               >
                 View Project
-                <span class="ml-1 text-xs">
-                  <i class="fa-solid fa-arrow-right"></i>
+                <span class="ml-1 text-xs group-hover:translate-x-1 transition-transform duration-300">
+                  <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                 </span>
               </a>
             </div>
@@ -102,21 +117,21 @@ const categories = Array.from(categorySet);
   </section>
   
   <!-- CTA Section -->
-  <section class="py-20 bg-cool-gray-50 dark:bg-gray-800/50 relative overflow-hidden">
+  <section class="py-16 md:py-20 bg-cool-gray-50 dark:bg-gray-800/50 relative overflow-hidden">
     <!-- Decorative elements -->
-    <div class="absolute inset-0">
+    <div class="absolute inset-0" aria-hidden="true">
       <div class="absolute top-1/2 left-1/4 w-64 h-64 bg-greenberry-500/10 rounded-full filter blur-3xl opacity-70"></div>
       <div class="absolute bottom-0 right-1/4 w-64 h-64 bg-greenberry-600/10 rounded-full filter blur-3xl opacity-60"></div>
     </div>
     
     <Container>
-      <div class="max-w-4xl mx-auto bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl shadow-xl p-10 border border-white/40 dark:border-gray-700/40 relative z-10">
+      <div class="max-w-4xl mx-auto bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl shadow-xl p-6 md:p-10 border border-white/40 dark:border-gray-700/40 relative z-10">
         <div class="text-center mb-8">
           <Badge text="START YOUR PROJECT" variant="primary" size="md" class="mb-4" />
-          <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">
             Ready for a Website That Drives Results?
           </h2>
-          <p class="text-xl text-gray-600 dark:text-gray-300">
+          <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300">
             Let's create a custom digital solution for your Irish business.
           </p>
         </div>
@@ -124,14 +139,14 @@ const categories = Array.from(categorySet);
         <div class="flex flex-col sm:flex-row justify-center gap-4">
           <Button href="/contact" size="lg" class="font-semibold shadow-lg shadow-greenberry-500/20">
             Get Your Free Consultation
-            <span class="ml-2"><i class="fa-solid fa-arrow-right"></i></span>
+            <span class="ml-2"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
           </Button>
           
           <a 
             href="/services" 
-            class="px-6 py-3 rounded-lg font-medium border border-greenberry-500/40 bg-white dark:bg-gray-800/30 backdrop-blur-sm text-greenberry-700 dark:text-greenberry-300 hover:bg-white/50 dark:hover:bg-gray-800/50 transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center"
+            class="px-6 py-3 rounded-lg font-medium border border-greenberry-500/40 bg-white dark:bg-gray-800/30 backdrop-blur-sm text-greenberry-700 dark:text-greenberry-300 hover:bg-white/50 dark:hover:bg-gray-800/50 transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-greenberry-500 focus:ring-offset-2"
           >
-            <span class="mr-2"><i class="fa-solid fa-list-check"></i></span>
+            <span class="mr-2"><i class="fa-solid fa-list-check" aria-hidden="true"></i></span>
             Our Services
           </a>
         </div>
@@ -141,32 +156,87 @@ const categories = Array.from(categorySet);
 </Layout>
 
 <script>
-  document.addEventListener('astro:page-load', () => {
+  // Initialize on page load and run again when Astro view transitions occur
+  function initializeFilters() {
     const filterButtons = document.querySelectorAll('.category-filter-btn');
     const portfolioItems = document.querySelectorAll('.portfolio-item');
     
+    if (!filterButtons.length || !portfolioItems.length) return;
+    
     filterButtons.forEach(button => {
       button.addEventListener('click', () => {
-        // Update button styles
+        // Update button styles and ARIA states
         filterButtons.forEach(btn => {
           btn.classList.remove('active', 'bg-greenberry-600', 'text-white');
           btn.classList.add('bg-white/70', 'dark:bg-gray-800/70', 'text-gray-700', 'dark:text-gray-300', 'border', 'border-gray-200/60', 'dark:border-gray-700/60');
+          btn.setAttribute('aria-pressed', 'false');
         });
         
         button.classList.add('active', 'bg-greenberry-600', 'text-white');
         button.classList.remove('bg-white/70', 'dark:bg-gray-800/70', 'text-gray-700', 'dark:text-gray-300', 'border', 'border-gray-200/60', 'dark:border-gray-700/60');
+        button.setAttribute('aria-pressed', 'true');
         
         // Filter items
         const category = button.getAttribute('data-category');
+        
+        // Use CSS to show/hide items for a smoother transition
         portfolioItems.forEach(item => {
           if (category === 'all' || item.getAttribute('data-category') === category) {
-            item.style.display = 'block';
+            item.style.display = '';
+            item.classList.remove('hidden');
+            // Add a small delay for a staggered reveal effect
+            setTimeout(() => {
+              item.style.opacity = '1';
+              item.style.transform = 'translateY(0)';
+            }, 50);
           } else {
-            item.style.display = 'none';
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(20px)';
+            // Hide after transition completes
+            setTimeout(() => {
+              item.classList.add('hidden');
+            }, 300);
           }
         });
+        
+        // Announce filter change for screen readers
+        const portfolioGrid = document.getElementById('portfolio-grid');
+        const visibleCount = [...portfolioItems].filter(item => 
+          category === 'all' || item.getAttribute('data-category') === category
+        ).length;
+        
+        // Create or update live region announcement
+        let liveRegion = document.getElementById('filter-announcement');
+        if (!liveRegion) {
+          liveRegion = document.createElement('div');
+          liveRegion.id = 'filter-announcement';
+          liveRegion.setAttribute('aria-live', 'polite');
+          liveRegion.className = 'sr-only';
+          document.body.appendChild(liveRegion);
+        }
+        
+        liveRegion.textContent = `Showing ${visibleCount} ${category === 'all' ? 'projects' : category + ' projects'}`;
       });
     });
+    
+    // Set initial styles for animation
+    portfolioItems.forEach(item => {
+      item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+      item.style.opacity = '1';
+      item.style.transform = 'translateY(0)';
+    });
+  }
+  
+  // Run on initial page load
+  document.addEventListener('DOMContentLoaded', initializeFilters);
+  
+  // Run when Astro view transitions occur
+  document.addEventListener('astro:page-load', initializeFilters);
+  
+  // Cleanup to prevent memory leaks when Astro transitions away from this page
+  document.addEventListener('astro:before-swap', () => {
+    const liveRegion = document.getElementById('filter-announcement');
+    if (liveRegion) liveRegion.remove();
   });
 </script>
 
@@ -177,5 +247,16 @@ const categories = Array.from(categorySet);
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+  
+  /* Ensure hidden items don't affect layout */
+  .hidden {
+    display: none !important;
+  }
+  
+  /* Improved focus styles for better accessibility */
+  :focus-visible {
+    outline: 2px solid var(--greenberry-600, #2e7d32);
+    outline-offset: 2px;
   }
 </style>
