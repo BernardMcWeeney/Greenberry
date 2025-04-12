@@ -1,92 +1,92 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
-  darkMode: 'class', // Enables dark mode by toggling a "dark" class on the root element
+  darkMode: 'class', // Toggle dark mode with a "dark" class on the root element
   theme: {
     extend: {
       colors: {
-        // Core brand color “greenberry” updated for improved accessibility
+        // Updated brand color “greenberry” with stronger, deeper hues
         greenberry: {
-          50:  '#F3FAF3',
-          100: '#E1F7E1',
-          200: '#C4EDC4',
-          300: '#A6E2A6',
-          400: '#88D888',
-          500: '#5AC55A', // Primary brand color
-          600: '#43A343', // Darker shade for hover states
-          700: '#2C7B2C',
-          800: '#205D20',
-          900: '#163F16',
+          50:  '#e9fbe6',
+          100: '#c8f2c8',
+          200: '#9ae099',
+          300: '#6dcc6d',
+          400: '#42ba42',
+          500: '#2fa22f',  // Primary brand color updated for better contrast
+          600: '#238123',  // Darker accent for hover and strong emphasis
+          700: '#176d16',
+          800: '#0e5f0e',
+          900: '#074107',
         },
-        // Accessible accent colors with increased contrast
+        // Updated accent colors with stronger contrast (inspired by Material Design)
         accent: {
           blue: {
-            50:  '#F0F9FF',
-            100: '#E0F2FE',
-            200: '#B9E6FE',
-            300: '#8CD9FD',
-            400: '#57CBF1',
-            500: '#2AA6E0',
-            600: '#1088C0',
-            700: '#0E77A6',
-            800: '#0B6490',
-            900: '#084D74',
+            50:  '#e3f2fd',
+            100: '#bbdefb',
+            200: '#90caf9',
+            300: '#64b5f6',
+            400: '#42a5f5',
+            500: '#2196f3',
+            600: '#1e88e5',
+            700: '#1976d2',
+            800: '#1565c0',
+            900: '#0d47a1',
           },
           red: {
-            50:  '#FFF5F5',
-            100: '#FFE3E3',
-            200: '#FFC8C8',
-            300: '#FFA8A8',
-            400: '#FF8787',
-            500: '#FF6B6B',
-            600: '#FA5252',
-            700: '#F03E3E',
-            800: '#E03131',
-            900: '#C92A2A',
+            50:  '#ffebee',
+            100: '#ffcdd2',
+            200: '#ef9a9a',
+            300: '#e57373',
+            400: '#ef5350',
+            500: '#f44336',
+            600: '#e53935',
+            700: '#d32f2f',
+            800: '#c62828',
+            900: '#b71c1c',
           },
           orange: {
-            50:  '#FFF8F1',
-            100: '#FFECDE',
-            200: '#FFD8BD',
-            300: '#FFC59C',
-            400: '#FFB37B',
-            500: '#FF9F5A',
-            600: '#FF8C39',
-            700: '#FF7900',
-            800: '#E66F00',
-            900: '#CC6600',
+            50:  '#fff3e0',
+            100: '#ffe0b2',
+            200: '#ffcc80',
+            300: '#ffb74d',
+            400: '#ffa726',
+            500: '#ff9800',
+            600: '#fb8c00',
+            700: '#f57c00',
+            800: '#ef6c00',
+            900: '#e65100',
           },
           purple: {
-            50:  '#F6F5FF',
-            100: '#EDEBFF',
-            200: '#D4CEFF',
-            300: '#B8AFFF',
-            400: '#9D90FF',
-            500: '#8371FF',
-            600: '#6D5FFB',
-            700: '#564EEE',
-            800: '#433EDD',
-            900: '#322DDC',
+            50:  '#f3e5f5',
+            100: '#e1bee7',
+            200: '#ce93d8',
+            300: '#ba68c8',
+            400: '#ab47bc',
+            500: '#9c27b0',
+            600: '#8e24aa',
+            700: '#7b1fa2',
+            800: '#6a1b9a',
+            900: '#4a148c',
           },
         },
-        // Neutral scales updated to offer clear contrast on both light and dark backgrounds
+        // Rich, contrasting neutral scale (inspired by Material grayscale)
         neutral: {
-          50:  '#FFFFFF',
-          100: '#FDFDFD',
-          200: '#F7F7F7',
-          300: '#EFEFEF',
-          400: '#E7E7E7',
-          500: '#CECECE',
-          600: '#A6A6A6',
-          700: '#8D8D8D',
-          800: '#4D4D4D',
-          900: '#2F2F2F',
+          50:  '#ffffff',
+          100: '#f5f5f5',
+          200: '#eeeeee',
+          300: '#e0e0e0',
+          400: '#bdbdbd',
+          500: '#9e9e9e',
+          600: '#757575',
+          700: '#616161',
+          800: '#424242',
+          900: '#212121',
         },
       },
-      // Custom background naming; update these if needed based on contrast testing
+      // Custom background color names for light sections
       backgroundColor: {
-        'light': '#FFFFFF', // For primary light backgrounds
-        'subtle': '#F7F7F7', // For secondary or subtle light sections
+        'light': '#ffffff',  // Primary light background
+        'subtle': '#f5f5f5', // Secondary subtle background
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -101,13 +101,13 @@ export default {
           '50%': { transform: 'translateY(-10px)' },
         },
       },
-      // Box shadows are kept minimal; they complement the new color tones
+      // Box shadows defined for added depth
       boxShadow: {
         card: '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)',
         cardHover: '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)',
-        brand: '0 4px 10px -2px rgba(43, 163, 67, 0.2)',
+        brand: '0 4px 10px -2px rgba(35, 129, 35, 0.2)',
       },
-      // Typography configuration optimized for readability
+      // Typography optimized for readability using the revised neutral colors
       typography: ({ theme }) => ({
         DEFAULT: {
           css: {
