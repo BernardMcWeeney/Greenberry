@@ -8,28 +8,28 @@ const featureCards = [
     description: "We build websites that load in milliseconds, not seconds. Speed is critical for user experience and search engine rankings.",
     icon: "fa-solid fa-bolt",
     color: "yellow",
-    textColor: "text-yellow-500"
+    textColor: "text-accent-orange-500"  // Changed from yellow to orange from your palette
   },
   {
     title: "Mobile-First Design",
     description: "Every website we build is fully responsive and optimized for all devices, from smartphones to desktop computers.",
     icon: "fa-solid fa-mobile-screen",
     color: "blue",
-    textColor: "text-blue-500"
+    textColor: "text-accent-blue-500"  // Updated to accent-blue
   },
   {
     title: "SEO Optimization",
     description: "We implement the latest SEO best practices to ensure your website ranks well and attracts more organic traffic.",
     icon: "fa-solid fa-magnifying-glass-chart",
     color: "green",
-    textColor: "text-green-500"
+    textColor: "text-greenberry-500"  // Updated to greenberry
   },
   {
     title: "Secure & Reliable",
     description: "We implement robust security measures to protect your website and your customers' data from threats.",
     icon: "fa-solid fa-shield-halved",
     color: "red",
-    textColor: "text-red-500"
+    textColor: "text-accent-red-500"  // Updated to accent-red
   }
 ];
 ---
@@ -50,7 +50,7 @@ const featureCards = [
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
       {featureCards.map((card) => (
-        <div class="group card p-8 border border-gray-100 dark:border-gray-700 hover:border-greenberry-600 dark:hover:border-greenberry-600 transition-all duration-300 card-hover">
+        <div class="group card p-8 border border-neutral-100 dark:border-gray-700 hover:border-greenberry-600 dark:hover:border-greenberry-600 transition-all duration-300 card-hover">
           <div class="flex gap-6">
             <div class={`${card.textColor} text-4xl shrink-0 mt-1`}>
               <div class="w-14 h-14 rounded-2xl bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:scale-110 transition-all duration-300">
@@ -58,10 +58,10 @@ const featureCards = [
               </div>
             </div>
             <div>
-              <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-greenberry-600 dark:group-hover:text-greenberry-400 transition-colors">
+              <h3 class="text-xl font-bold text-neutral-900 dark:text-white mb-3 group-hover:text-greenberry-600 dark:group-hover:text-greenberry-400 transition-colors">
                 {card.title}
               </h3>
-              <p class="text-gray-600 dark:text-gray-300">
+              <p class="text-neutral-600 dark:text-gray-300">
                 {card.description}
               </p>
             </div>
@@ -71,7 +71,7 @@ const featureCards = [
     </div>
     
     <!-- Feature highlight box with greenberry green background -->
-    <div class="mt-16 bg-[#17A34A] dark:bg-[#17A34A]/80 rounded-2xl p-10 border border-[#17A34A]/20 dark:border-[#17A34A]/30 relative overflow-hidden group hover:shadow-lg hover:shadow-[#17A34A]/20 transition-all duration-300">
+    <div class="mt-16 bg-greenberry-600 dark:bg-greenberry-600/80 rounded-2xl p-10 border border-greenberry-600/20 dark:border-greenberry-600/30 relative overflow-hidden group hover:shadow-lg hover:shadow-greenberry-600/20 transition-all duration-300">
       <!-- Background decorative elements -->
       <div class="absolute -top-20 -right-20 w-40 h-40 bg-white/10 rounded-full filter blur-3xl opacity-70 group-hover:opacity-90 transition-opacity duration-700"></div>
       <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-white/10 rounded-full filter blur-3xl opacity-60 group-hover:opacity-80 transition-opacity duration-700"></div>
@@ -116,32 +116,3 @@ const featureCards = [
     </div>
   </Container>
 </section>
-
-<style>
-  @keyframes ping-slow {
-    0% {
-      transform: scale(1);
-      opacity: 0.2;
-    }
-    50% {
-      transform: scale(1.5);
-      opacity: 0.1;
-    }
-    100% {
-      transform: scale(1);
-      opacity: 0.2;
-    }
-  }
-  
-  .animate-ping-slow {
-    animation: ping-slow 5s infinite;
-  }
-  
-  .animation-delay-700 {
-    animation-delay: 700ms;
-  }
-  
-  .animation-delay-1500 {
-    animation-delay: 1500ms;
-  }
-</style>

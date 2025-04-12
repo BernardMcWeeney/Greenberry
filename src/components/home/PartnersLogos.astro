@@ -3,15 +3,15 @@ import Container from '../common/Container.astro';
 import Badge from '../ui/Badge.astro';
 
 const partners = [
-  { name: 'Microsoft', icon: 'fa-brands fa-microsoft', color: 'text-blue-500' },
-  { name: 'Google', icon: 'fa-brands fa-google', color: 'text-red-500' },
-  { name: 'Meta', icon: 'fa-brands fa-facebook', color: 'text-blue-600' },
-  { name: 'WordPress', icon: 'fa-brands fa-wordpress', color: 'text-blue-700' },
-  { name: 'Cloudflare', icon: 'fa-brands fa-cloudflare', color: 'text-orange-500' },
-  { name: 'Shopify', icon: 'fa-brands fa-shopify', color: 'text-green-500' },
-  { name: 'React', icon: 'fa-brands fa-react', color: 'text-blue-400' },
-  { name: 'JavaScript', icon: 'fa-brands fa-js', color: 'text-yellow-500' },
-  { name: 'Node.js', icon: 'fa-brands fa-node-js', color: 'text-green-600' }
+  { name: 'Microsoft', icon: 'fa-brands fa-microsoft', color: 'text-badge-blue' },
+  { name: 'Google', icon: 'fa-brands fa-google', color: 'text-badge-red' },
+  { name: 'Meta', icon: 'fa-brands fa-facebook', color: 'text-badge-blue' },
+  { name: 'WordPress', icon: 'fa-brands fa-wordpress', color: 'text-badge-blue' },
+  { name: 'Cloudflare', icon: 'fa-brands fa-cloudflare', color: 'text-badge-orange' },
+  { name: 'Shopify', icon: 'fa-brands fa-shopify', color: 'text-badge-green' },
+  { name: 'React', icon: 'fa-brands fa-react', color: 'text-badge-blue' },
+  { name: 'JavaScript', icon: 'fa-brands fa-js', color: 'text-badge-yellow' },
+  { name: 'Node.js', icon: 'fa-brands fa-node-js', color: 'text-badge-green' }
 ];
 ---
 
@@ -27,10 +27,10 @@ const partners = [
       {partners.map((partner) => (
         <div class="text-center group">
           <div class="flex flex-col items-center">
-            <div class={`text-3xl mb-2 text-gray-400 dark:text-gray-600 group-hover:${partner.color} transition-colors duration-300`}>
+            <div class={`text-3xl mb-2 text-gray-700 dark:text-gray-500 group-hover:${partner.color} transition-colors duration-300`}>
               <i class={partner.icon}></i>
             </div>
-            <span class="text-xs text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors">
+            <span class="text-xs text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors">
               {partner.name}
             </span>
           </div>

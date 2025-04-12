@@ -29,56 +29,64 @@ const totalReviews = 87;
     </div>
     
     <!-- Testimonial slider with navigation -->
-    <div class="testimonial-outer-container relative mx-auto">
+    <div class="testimonial-outer-container relative mx-auto" aria-roledescription="carousel" aria-label="Client testimonials">
       <!-- Navigation Arrows - Absolutely positioned relative to outer container -->
-      <button id="prev-btn" class="absolute left-0 top-1/2 transform -translate-y-1/2 z-20 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md">
-        <i class="fas fa-chevron-left text-gray-500 dark:text-gray-400"></i>
+      <button 
+        id="prev-btn" 
+        class="absolute left-0 top-1/2 transform -translate-y-1/2 z-20 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md"
+        aria-label="Previous testimonial"
+      >
+        <i class="fas fa-chevron-left text-neutral-500 dark:text-gray-400" aria-hidden="true"></i>
       </button>
       
-      <button id="next-btn" class="absolute right-0 top-1/2 transform -translate-y-1/2 z-20 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md">
-        <i class="fas fa-chevron-right text-gray-500 dark:text-gray-400"></i>
+      <button 
+        id="next-btn" 
+        class="absolute right-0 top-1/2 transform -translate-y-1/2 z-20 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md"
+        aria-label="Next testimonial"
+      >
+        <i class="fas fa-chevron-right text-neutral-500 dark:text-gray-400" aria-hidden="true"></i>
       </button>
       
       <!-- Testimonial Slider Container -->
       <div class="testimonial-slider-container relative w-full overflow-hidden">
         <!-- Testimonial Slide Track -->
-        <div id="testimonial-track" class="flex transition-transform duration-500">
-          {testimonials.map((testimonial) => (
-            <div class="testimonial-slide flex-shrink-0 px-3">
-              <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm h-full flex flex-col border border-gray-100 dark:border-gray-700">
+        <div id="testimonial-track" class="flex transition-transform duration-500" aria-live="polite">
+          {testimonials.map((testimonial, index) => (
+            <div class="testimonial-slide flex-shrink-0 px-3" aria-roledescription="slide" aria-label={`Testimonial ${index + 1} of ${testimonials.length}`}>
+              <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm h-full flex flex-col border border-neutral-100 dark:border-gray-700">
                 {/* Rating Stars */}
-                <div class="flex text-yellow-400 mb-4">
+                <div class="flex text-accent-orange-400 mb-4">
                   {[...Array(5)].map((_, i) => (
                     <span class="mr-0.5">
-                      <i class={`fa-${i < testimonial.rating ? 'solid' : 'regular'} fa-star`}></i>
+                      <i class={`fa-${i < testimonial.rating ? 'solid' : 'regular'} fa-star`} aria-hidden="true"></i>
                     </span>
                   ))}
-                  <span class="text-gray-400 dark:text-gray-500 text-xs ml-2 font-medium mt-0.5">Verified Client</span>
+                  <span class="text-neutral-400 dark:text-gray-500 text-xs ml-2 font-medium mt-0.5">Verified Client</span>
                 </div>
                 
                 {/* Quote Content */}
                 <div class="mb-6 flex-grow">
-                  <p class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                  <p class="text-neutral-700 dark:text-gray-300 text-sm leading-relaxed">
                     "{testimonial.content}"
                   </p>
                 </div>
                 
                 {/* Client Info */}
-                <div class="flex items-start mt-auto pt-4 border-t border-gray-100 dark:border-gray-700">
-                  <div class="w-12 h-12 rounded-full overflow-hidden mr-4 bg-gray-100 dark:bg-gray-700 flex-shrink-0">
+                <div class="flex items-start mt-auto pt-4 border-t border-neutral-100 dark:border-gray-700">
+                  <div class="w-12 h-12 rounded-full overflow-hidden mr-4 bg-neutral-100 dark:bg-gray-700 flex-shrink-0">
                     <img 
                       src={testimonial.image_url} 
-                      alt={testimonial.author} 
+                      alt={`Photo of ${testimonial.author}`} 
                       class="w-full h-full object-cover"
                       loading="lazy"
                       decoding="async"
                     />
                   </div>
                   <div>
-                    <h4 class="font-medium text-gray-900 dark:text-white">
+                    <h3 class="font-medium text-neutral-900 dark:text-white text-base">
                       {testimonial.author}
-                    </h4>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                    </h3>
+                    <p class="text-sm text-neutral-500 dark:text-gray-400 mt-0.5">
                       {testimonial.position}
                     </p>
                     <p class="text-sm text-greenberry-600 dark:text-greenberry-500 font-medium mt-0.5">
@@ -91,10 +99,11 @@ const totalReviews = 87;
                         target="_blank" 
                         rel="noopener noreferrer"
                         class="inline-flex items-center mt-2 text-xs text-greenberry-600 dark:text-greenberry-400 hover:text-greenberry-700 dark:hover:text-greenberry-300 website-link"
+                        aria-label={`Visit ${testimonial.organisation} website: ${testimonial.url}`}
                       >
-                        <i class="fas fa-globe text-greenberry-500 mr-1.5 text-xs"></i>
+                        <i class="fas fa-globe text-greenberry-500 mr-1.5 text-xs" aria-hidden="true"></i>
                         <span class="truncate max-w-[180px]">{testimonial.url}</span>
-                        <i class="fas fa-external-link-alt text-xs ml-1 opacity-70"></i>
+                        <i class="fas fa-external-link-alt text-xs ml-1 opacity-70" aria-hidden="true"></i>
                       </a>
                     )}
                   </div>
@@ -106,13 +115,17 @@ const totalReviews = 87;
       </div>
       
       <!-- Dots Navigation -->
-      <div class="dots-container flex justify-center mt-6 space-x-2">
+      <div class="dots-container flex justify-center mt-6 space-x-3" role="tablist" aria-label="Testimonial navigation">
         {testimonials.map((_, index) => (
           <button 
-            class="dot w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-700" 
+            class="dot w-8 h-8 flex items-center justify-center" 
             data-index={index}
             aria-label={`Go to testimonial ${index + 1}`}
-          ></button>
+            role="tab"
+            aria-selected={index === 0 ? "true" : "false"}
+          >
+            <span class="w-2 h-2 rounded-full bg-neutral-300 dark:bg-gray-700"></span>
+          </button>
         ))}
       </div>
     </div>
@@ -198,6 +211,15 @@ const totalReviews = 87;
       
       updateActiveDot();
       
+      // Update ARIA attributes for better screen reader support
+      document.querySelectorAll('.testimonial-slide').forEach((slide, idx) => {
+        if (idx === currentIndex % slideCount) {
+          slide.setAttribute('aria-current', 'true');
+        } else {
+          slide.setAttribute('aria-current', 'false');
+        }
+      });
+      
       if (animate) {
         isTransitioning = true;
         setTimeout(() => {
@@ -221,12 +243,15 @@ const totalReviews = 87;
       const normalizedIndex = ((currentIndex % slideCount) + slideCount) % slideCount;
       
       dots.forEach((dot, i) => {
+        const dotIndicator = dot.querySelector('span');
         if (i === normalizedIndex) {
-          dot.classList.add('bg-greenberry-500', 'dark:bg-greenberry-400');
-          dot.classList.remove('bg-gray-300', 'dark:bg-gray-700');
+          dotIndicator.classList.add('bg-greenberry-500', 'dark:bg-greenberry-400');
+          dotIndicator.classList.remove('bg-neutral-300', 'dark:bg-gray-700');
+          dot.setAttribute('aria-selected', 'true');
         } else {
-          dot.classList.remove('bg-greenberry-500', 'dark:bg-greenberry-400');
-          dot.classList.add('bg-gray-300', 'dark:bg-gray-700');
+          dotIndicator.classList.remove('bg-greenberry-500', 'dark:bg-greenberry-400');
+          dotIndicator.classList.add('bg-neutral-300', 'dark:bg-gray-700');
+          dot.setAttribute('aria-selected', 'false');
         }
       });
     }
@@ -263,12 +288,40 @@ const totalReviews = 87;
         startAutoplay();
       });
       
+      // Add keyboard support
+      prevBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          stopAutoplay();
+          moveToSlide(currentIndex - 1);
+          startAutoplay();
+        }
+      });
+      
+      nextBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          stopAutoplay();
+          moveToSlide(currentIndex + 1);
+          startAutoplay();
+        }
+      });
+      
       // Dot navigation
       dots.forEach((dot, i) => {
         dot.addEventListener('click', () => {
           stopAutoplay();
           moveToSlide(i);
           startAutoplay();
+        });
+        
+        dot.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            stopAutoplay();
+            moveToSlide(i);
+            startAutoplay();
+          }
         });
       });
       
@@ -347,9 +400,19 @@ const totalReviews = 87;
     opacity: 1;
   }
   
-  /* Dot indicators */
+  #prev-btn:focus, #next-btn:focus {
+    outline: 2px solid #22c55e;
+    opacity: 1;
+  }
+  
+  /* Dot indicators - increased touch target size */
   .dot {
     transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .dot:focus {
+    outline: 2px solid #22c55e;
   }
   
   /* Mobile adjustments */

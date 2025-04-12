@@ -10,7 +10,7 @@ const wordpressWebsites = [
     image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
     features: ["Responsive", "SEO Optimized", "Fast Loading"],
     color: "blue",
-    badgeColor: "bg-blue-500"
+    badgeColor: "bg-accent-blue-500"
   },
   {
     title: "E-Commerce Store",
@@ -18,7 +18,7 @@ const wordpressWebsites = [
     image: "https://images.unsplash.com/photo-1593642532400-2682810df593?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
     features: ["WooCommerce", "Payment Gateway", "Inventory Management"],
     color: "green",
-    badgeColor: "bg-green-500"
+    badgeColor: "bg-greenberry-500"
   },
   {
     title: "Blog & Magazine",
@@ -26,7 +26,7 @@ const wordpressWebsites = [
     image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
     features: ["Content Management", "Newsletter", "Social Sharing"],
     color: "yellow",
-    badgeColor: "bg-yellow-500"
+    badgeColor: "bg-accent-orange-500"
   },
   {
     title: "Portfolio Site",
@@ -34,23 +34,23 @@ const wordpressWebsites = [
     image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
     features: ["Gallery", "Project Categories", "Case Studies"],
     color: "red",
-    badgeColor: "bg-red-500"
+    badgeColor: "bg-accent-red-500"
   }
 ];
 
 // Feature badge colors
 const getFeatureBadgeColor = (color) => {
   switch(color) {
-    case "blue": return "bg-blue-100 text-blue-800";
-    case "green": return "bg-green-100 text-green-800";
-    case "yellow": return "bg-yellow-100 text-yellow-800";
-    case "red": return "bg-red-100 text-red-800";
-    default: return "bg-gray-100 text-gray-800";
+    case "blue": return "bg-accent-blue-100 text-accent-blue-800";
+    case "green": return "bg-greenberry-100 text-greenberry-800";
+    case "yellow": return "bg-accent-orange-100 text-accent-orange-800";
+    case "red": return "bg-accent-red-100 text-accent-red-800";
+    default: return "bg-neutral-100 text-neutral-800";
   }
 };
 ---
 
-<section class="section-padding bg-gray-50 dark:bg-gray-800/50 relative overflow-hidden">
+<section class="section-padding bg-neutral-50 dark:bg-gray-800/50 relative overflow-hidden">
   <!-- Background elements -->
   <div class="absolute inset-0 overflow-hidden">
     <div class="absolute top-0 right-0 w-96 h-96 bg-greenberry-500/10 rounded-full filter blur-3xl opacity-70 translate-x-1/3 -translate-y-1/3"></div>

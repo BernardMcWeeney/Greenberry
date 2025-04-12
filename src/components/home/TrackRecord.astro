@@ -7,29 +7,29 @@ const stats = [
     value: "7+",
     label: "Years Experience",
     icon: "fa-solid fa-calendar-check",
-    color: "bg-green-500",
-    textColor: "text-green-500"
+    color: "bg-greenberry-500",
+    textColor: "text-greenberry-500"
   },
   {
     value: "5 Star",
     label: "Client Rating",
     icon: "fa-solid fa-star",
-    color: "bg-blue-500",
-    textColor: "text-blue-500"
+    color: "bg-accent-blue-500",
+    textColor: "text-accent-blue-500"
   },
   {
     value: "150k",
     label: "Monthly Views",
     icon: "fa-solid fa-glasses",
-    color: "bg-yellow-500",
-    textColor: "text-yellow-500"
+    color: "bg-accent-orange-500",
+    textColor: "text-accent-orange-500"
   },
   {
     value: "100%",
     label: "Client Satisfaction",
     icon: "fa-solid fa-heart",
-    color: "bg-red-500",
-    textColor: "text-red-500"
+    color: "bg-accent-red-500",
+    textColor: "text-accent-red-500"
   }
 ];
 ---
@@ -47,14 +47,14 @@ const stats = [
     
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
       {stats.map((stat) => (
-        <div class="card-hover relative bg-white dark:bg-gray-800 p-4 sm:p-6 md:p-8 rounded-2xl border-2 border-gray-100 dark:border-gray-700 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-all duration-300">
-          <div class={`w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full ${stat.color.replace('bg-', 'bg-')}/10 flex items-center justify-center ${stat.textColor} dark:${stat.textColor} text-lg sm:text-xl md:text-2xl mb-3 md:mb-4`}>
+        <div class="card-hover relative bg-white dark:bg-gray-800 p-4 sm:p-6 md:p-8 rounded-2xl border-2 border-neutral-100 dark:border-gray-700 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-all duration-300">
+          <div class={`w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full ${stat.color}/10 flex items-center justify-center ${stat.textColor} dark:${stat.textColor} text-lg sm:text-xl md:text-2xl mb-3 md:mb-4`}>
             <i class={stat.icon}></i>
           </div>
           <p class={`text-2xl sm:text-3xl md:text-4xl font-bold ${stat.textColor} dark:${stat.textColor} mb-1 md:mb-2`}>
             {stat.value}
           </p>
-          <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
+          <p class="text-neutral-600 dark:text-gray-300 text-sm sm:text-base">
             {stat.label}
           </p>
         </div>

@@ -9,17 +9,17 @@ const services = [
     description: "Modern and cutting-edge websites featuring responsive and lightweight designs.",
     icon: "fa-solid fa-globe",
     color: "blue",
-    borderColor: "border-t-blue-500",
-    textColor: "text-blue-500",
+    borderColor: "border-t-accent-blue-500",
+    textColor: "text-accent-blue-500",
     link: "/services#websites"
   },
   {
-    title: "Upgrades & Maintenance",
+    title: "Upgrade Solutions",
     description: "Regular updates and maintenance to ensure your website has the latest software and security.",
     icon: "fa-solid fa-arrows-rotate",
     color: "green",
-    borderColor: "border-t-green-500",
-    textColor: "text-green-500",
+    borderColor: "border-t-greenberry-500",
+    textColor: "text-greenberry-500",
     link: "/services#maintenance"
   },
   {
@@ -27,8 +27,8 @@ const services = [
     description: "Improve your online visibility and help meet your goals with our comprehensive SEO services.",
     icon: "fa-solid fa-magnifying-glass-chart",
     color: "orange",
-    borderColor: "border-t-orange-500",
-    textColor: "text-orange-500",
+    borderColor: "border-t-accent-orange-500",
+    textColor: "text-accent-orange-500",
     link: "/services#seo"
   },
   {
@@ -36,14 +36,14 @@ const services = [
     description: "Streamlined and reliable email solutions that prioritize simplicity & security for your business.",
     icon: "fa-solid fa-envelope",
     color: "red",
-    borderColor: "border-t-red-500",
-    textColor: "text-red-500",
+    borderColor: "border-t-accent-red-500",
+    textColor: "text-accent-red-500",
     link: "/services#email"
   }
 ];
 ---
 
-<section class="section-padding bg-cool-gray-50 dark:bg-gray-800/50 section-bg-decoration">
+<section class="section-padding bg-neutral-50 dark:bg-gray-800/50 section-bg-decoration">
   <Container>
     <div class="max-w-3xl mx-auto text-center mb-16 relative z-10">
       <div class="badge-wrapper">
@@ -64,17 +64,18 @@ const services = [
             <div class={`${service.textColor} text-4xl mb-4`}>
               <i class={service.icon}></i>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">
+            <h3 class="text-xl font-bold text-neutral-900 dark:text-white mb-3">
               {service.title}
             </h3>
-            <p class="text-gray-600 dark:text-gray-300 mb-4">
+            <p class="text-neutral-600 dark:text-gray-300 mb-4">
               {service.description}
             </p>
             <a 
               href={service.link} 
               class="inline-flex items-center text-greenberry-600 hover:text-greenberry-700 dark:text-greenberry-400 dark:hover:text-greenberry-300 font-medium group"
+              aria-label={`Explore ${service.title}`}
             >
-              Learn more
+              Explore {service.title}
               <span class="ml-1 text-xs transition-transform group-hover:translate-x-1 duration-300">
                 <i class="fa-solid fa-arrow-right"></i>
               </span>
