@@ -4,7 +4,7 @@ import PageHeader from '../../components/common/PageHeader.astro';
 import Container from '../../components/common/Container.astro';
 import Button from '../../components/common/Button.astro';
 import Badge from '../../components/ui/Badge.astro';
-import PageCta from '../../components/common/PageCta.astro';
+import Cta from '../../components/home/Cta.astro';
 import ProjectHero from '../../components/portfolio/ProjectHero.astro';
 import ProjectOverview from '../../components/portfolio/ProjectOverview.astro';
 import ProjectSteps from '../../components/portfolio/ProjectSteps.astro';
@@ -102,16 +102,7 @@ const relatedProjects = portfolioProjects
   )}
   
   <!-- Call to Action Section -->
-  <PageCta
-    title="Ready to Build Your Own Website?"
-    description="Let's create a custom digital solution tailored for your Irish business needs."
-    badgeText="START YOUR PROJECT"
-    primaryButtonText="Get a Free Consultation"
-    primaryButtonHref="/contact"
-    secondaryButtonText="Explore Our Services"
-    secondaryButtonHref="/services"
-    backgroundVariant="light"
-  />
+  <Cta/>
   
   <!-- Related Projects Section (if any) -->
   {relatedProjects.length > 0 && (

@@ -35,93 +35,160 @@ const {
       )}
     </div>
     
-    <div class="grid grid-cols-1 md:grid-cols-4 auto-rows-[200px] md:auto-rows-[250px] gap-4">
+    <!-- Static Bento Gallery Grid -->
+    <div class="bento-gallery">
       {images.map((image, index) => (
-        <div class={`group relative rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all ${
-          index === 0 ? "md:col-span-2 md:row-span-2" : 
-          index === 1 ? "md:col-span-2" :
-          index % 5 === 4 ? "md:col-span-2" :
-          "md:col-span-1"
+        <div class={`bento-item ${
+          index === 0 ? "bento-large" : 
+          index === 1 ? "bento-wide" :
+          index % 5 === 4 ? "bento-wide" :
+          "bento-regular"
         }`}>
-          <img 
-            src={image} 
-            alt={`${projectTitle} - Gallery image ${index + 1}`} 
-            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading={index < 2 ? "eager" : "lazy"}
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-            <div class="w-full flex justify-between items-center">
-              <span class="text-white text-sm font-medium">View detail</span>
-              <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                <i class="fa-solid fa-magnifying-glass text-white text-xs"></i>
-              </div>
-            </div>
+          <div class="bento-container">
+            <img 
+              src={image} 
+              alt={`${projectTitle} - Gallery image ${index + 1}`} 
+              class="bento-image"
+              width="800"
+              height="600"
+              loading={index < 2 ? "eager" : "lazy"}
+            />
+            <div class="bento-overlay"></div>
           </div>
         </div>
       ))}
     </div>
     
-    <!-- Floating Scroll Indicator for Mobile -->
-    <div class="mt-6 flex justify-center md:hidden">
-      <div class="flex gap-1">
-        {[...Array(Math.min(5, images.length))].map((_, i) => (
-          <div class={`w-2 h-2 rounded-full ${i === 0 ? "bg-greenberry-500" : "bg-gray-300 dark:bg-gray-600"}`}></div>
-        ))}
-      </div>
+    <!-- Static Scroll Indicator for Mobile -->
+    <div class="scroll-indicator">
+      {[...Array(Math.min(5, images.length))].map((_, i) => (
+        <div class={`indicator-dot ${i === 0 ? "indicator-active" : ""}`}></div>
+      ))}
     </div>
   </Container>
 </section>
 
-<script>
-  // Optional: Add lightbox functionality for gallery images
-  document.addEventListener('DOMContentLoaded', () => {
-    const galleryItems = document.querySelectorAll('.group.relative.rounded-xl');
-    
-    galleryItems.forEach(item => {
-      item.addEventListener('click', () => {
-        // You could implement a lightbox here or link to full-size images
-        const img = item.querySelector('img');
-        if (img) {
-          // For now, we'll just log - you could replace with actual lightbox code
-          console.log('Opening image:', img.src);
-        }
-      });
-    });
-  });
-</script>
-
 <style>
-  /* Add styles for mobile swipe indicator animation */
-  @keyframes pulse {
-    0%, 100% { opacity: 0.7; }
-    50% { opacity: 1; }
+  /* Bento Gallery Grid */
+  .bento-gallery {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 250px;
+    gap: 1rem;
   }
   
-  .bg-greenberry-500 {
-    animation: pulse 2s infinite ease-in-out;
+  /* Bento Item Styles */
+  .bento-item {
+    position: relative;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
   }
   
-  /* For touch devices, add horizontal scroll on mobile */
+  .bento-item:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Bento Container */
+  .bento-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  /* Item Size Variants */
+  .bento-large {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  
+  .bento-wide {
+    grid-column: span 2;
+  }
+  
+  .bento-regular {
+    grid-column: span 1;
+  }
+  
+  /* Image Styling */
+  .bento-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  
+  .bento-container:hover .bento-image {
+    transform: scale(1.05);
+  }
+  
+  /* Overlay Styling */
+  .bento-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(17, 24, 39, 0.6), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .bento-container:hover .bento-overlay {
+    opacity: 1;
+  }
+  
+  /* Mobile Scroll Indicator */
+  .scroll-indicator {
+    display: none;
+    justify-content: center;
+    margin-top: 1.5rem;
+    gap: 0.25rem;
+  }
+  
+  .indicator-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background-color: #D1D5DB;
+  }
+  
+  .indicator-dot.indicator-active {
+    background-color: var(--greenberry-500, #22c55e);
+  }
+  
+  /* Mobile Responsive Styles */
   @media (max-width: 768px) {
-    .grid {
+    .bento-gallery {
       display: flex;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
       padding-bottom: 1rem;
+      gap: 0.75rem;
+      grid-template-columns: unset;
+      grid-auto-rows: unset;
     }
     
-    .grid > div {
+    .bento-item {
       flex: 0 0 90%;
       width: 90%;
+      height: 200px;
       scroll-snap-align: start;
-      margin-right: 0.75rem;
+      grid-column: unset;
+      grid-row: unset;
     }
     
-    .grid > div:first-child {
-      flex: 0 0 90%;
-      width: 90%;
+    .scroll-indicator {
+      display: flex;
+    }
+    
+    /* For better scrolling behavior */
+    .bento-gallery::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .bento-gallery {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
   }
 </style>

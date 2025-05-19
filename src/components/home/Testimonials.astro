@@ -1,12 +1,9 @@
 ---
 import Container from '../common/Container.astro';
 import Badge from '../ui/Badge.astro';
-import { fetchWithAssets } from '../../utils/api';
+import testimonials from '../../data/testimonial.ts';
 
-// Fetch testimonials from the CMS with resolved image URLs
-const testimonials = await fetchWithAssets('testimonials', ['image']);
-
-// Calculate average Google review rating
+// Calculate average review rating if needed (keeping this from the original component)
 const googleRating = 4.9;
 const totalReviews = 87;
 ---
@@ -58,29 +55,38 @@ const totalReviews = 87;
                 <div class="flex text-accent-orange-400 mb-4">
                   {[...Array(5)].map((_, i) => (
                     <span class="mr-0.5">
-                      <i class={`fa-${i < testimonial.rating ? 'solid' : 'regular'} fa-star`} aria-hidden="true"></i>
+                      <i class="fa-solid fa-star" aria-hidden="true"></i>
                     </span>
                   ))}
-                  <span class="text-neutral-400 dark:text-gray-500 text-xs ml-2 font-medium mt-0.5">Verified Client</span>
+                  {testimonial.verified && (
+                    <span class="text-neutral-400 dark:text-gray-500 text-xs ml-2 font-medium mt-0.5">Verified Client</span>
+                  )}
                 </div>
                 
                 {/* Quote Content */}
                 <div class="mb-6 flex-grow">
                   <p class="text-neutral-700 dark:text-gray-300 text-sm leading-relaxed">
-                    "{testimonial.content}"
+                    "{testimonial.quote}"
                   </p>
                 </div>
                 
                 {/* Client Info */}
                 <div class="flex items-start mt-auto pt-4 border-t border-neutral-100 dark:border-gray-700">
                   <div class="w-12 h-12 rounded-full overflow-hidden mr-4 bg-neutral-100 dark:bg-gray-700 flex-shrink-0">
-                    <img 
-                      src={testimonial.image_url} 
-                      alt={`Photo of ${testimonial.author}`} 
-                      class="w-full h-full object-cover"
-                      loading="lazy"
-                      decoding="async"
-                    />
+                    {testimonial.avatar ? (
+                      <img 
+                        src={testimonial.avatar} 
+                        alt={`Photo of ${testimonial.author}`} 
+                        class="w-full h-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                        onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'w-full h-full flex items-center justify-center bg-greenberry-100 dark:bg-greenberry-900 text-greenberry-600 dark:text-greenberry-400\'><i class=\'fa-solid fa-user\' aria-hidden=\'true\'></i></div>';"
+                      />
+                    ) : (
+                      <div class="w-full h-full flex items-center justify-center bg-greenberry-100 dark:bg-greenberry-900 text-greenberry-600 dark:text-greenberry-400">
+                        <i class="fa-solid fa-user" aria-hidden="true"></i>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <h3 class="font-medium text-neutral-900 dark:text-white text-base">
@@ -90,19 +96,19 @@ const totalReviews = 87;
                       {testimonial.position}
                     </p>
                     <p class="text-sm text-greenberry-600 dark:text-greenberry-500 font-medium mt-0.5">
-                      {testimonial.organisation}
+                      {testimonial.company}
                     </p>
                     
-                    {testimonial.url && (
+                    {testimonial.website && (
                       <a 
-                        href={`https://${testimonial.url}`} 
+                        href={`https://${testimonial.website}`} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         class="inline-flex items-center mt-2 text-xs text-greenberry-600 dark:text-greenberry-400 hover:text-greenberry-700 dark:hover:text-greenberry-300 website-link"
-                        aria-label={`Visit ${testimonial.organisation} website: ${testimonial.url}`}
+                        aria-label={`Visit ${testimonial.company} website: ${testimonial.website}`}
                       >
                         <i class="fas fa-globe text-greenberry-500 mr-1.5 text-xs" aria-hidden="true"></i>
-                        <span class="truncate max-w-[180px]">{testimonial.url}</span>
+                        <span class="truncate max-w-[180px]">{testimonial.website}</span>
                         <i class="fas fa-external-link-alt text-xs ml-1 opacity-70" aria-hidden="true"></i>
                       </a>
                     )}
@@ -132,7 +138,7 @@ const totalReviews = 87;
   </Container>
 </section>
 
-<script is:inline>
+<script>
   document.addEventListener('DOMContentLoaded', () => {
     // Get DOM elements
     const track = document.getElementById('testimonial-track');
@@ -343,15 +349,12 @@ const totalReviews = 87;
         document.hidden ? stopAutoplay() : startAutoplay();
       });
       
-      // Fix for Safari image loading
+      // Handle image loading errors
       document.querySelectorAll('.testimonial-slide img').forEach(img => {
-        img.onerror = function() {
-          this.src = 'https://randomuser.me/api/portraits/lego/1.jpg';
-        };
-        
-        if (img.complete && img.naturalHeight === 0) {
-          img.src = 'https://randomuser.me/api/portraits/lego/1.jpg';
-        }
+        img.addEventListener('error', function() {
+          this.style.display = 'none';
+          this.parentNode.innerHTML = '<div class="w-full h-full flex items-center justify-center bg-greenberry-100 dark:bg-greenberry-900 text-greenberry-600 dark:text-greenberry-400"><i class="fa-solid fa-user" aria-hidden="true"></i></div>';
+        });
       });
       
       startAutoplay();

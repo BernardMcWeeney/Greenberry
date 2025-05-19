@@ -33,19 +33,15 @@ const categories = Array.from(categorySet);
       <!-- Category Filter -->
       <div class="flex flex-wrap justify-center gap-3 mb-8" id="category-filters">
         <button 
-          class="category-filter-btn active px-4 py-2 rounded-full bg-greenberry-600 text-white font-medium transition-colors hover:bg-greenberry-700 focus:outline-none focus:ring-2 focus:ring-greenberry-500 focus:ring-offset-2" 
+          class="filter-btn active px-4 py-2 rounded-full bg-greenberry-600 text-white font-medium transition-colors hover:bg-greenberry-700 focus:outline-none focus:ring-2 focus:ring-greenberry-500 focus:ring-offset-2" 
           data-category="all"
-          aria-pressed="true"
-          aria-label="Filter by All Projects"
         >
           All Projects
         </button>
         {categories.map(category => (
           <button 
-            class="category-filter-btn px-4 py-2 rounded-full bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm text-gray-700 dark:text-gray-300 font-medium border border-gray-200/60 dark:border-gray-700/60 transition-colors hover:bg-greenberry-600 hover:text-white hover:border-transparent focus:outline-none focus:ring-2 focus:ring-greenberry-500 focus:ring-offset-2" 
+            class="filter-btn px-4 py-2 rounded-full bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm text-gray-700 dark:text-gray-300 font-medium border border-gray-200/60 dark:border-gray-700/60 transition-colors hover:bg-greenberry-600 hover:text-white hover:border-transparent focus:outline-none focus:ring-2 focus:ring-greenberry-500 focus:ring-offset-2" 
             data-category={category}
-            aria-pressed="false"
-            aria-label={`Filter by ${category}`}
           >
             {category}
           </button>
@@ -68,7 +64,7 @@ const categories = Array.from(categorySet);
               <img 
                 src={project.image} 
                 alt={`${project.title} project thumbnail`} 
-                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                class="w-full h-full object-cover"
                 width="600"
                 height="338"
                 loading="lazy"
@@ -101,11 +97,11 @@ const categories = Array.from(categorySet);
               
               <a 
                 href={`/portfolio/${project.id}`} 
-                class="inline-flex items-center text-greenberry-600 hover:text-greenberry-700 dark:text-greenberry-400 dark:hover:text-greenberry-300 font-medium group"
+                class="inline-flex items-center text-greenberry-600 hover:text-greenberry-700 dark:text-greenberry-400 dark:hover:text-greenberry-300 font-medium"
                 aria-label={`View details of ${project.title} project`}
               >
                 View Project
-                <span class="ml-1 text-xs group-hover:translate-x-1 transition-transform duration-300">
+                <span class="ml-1 text-xs">
                   <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                 </span>
               </a>
@@ -156,87 +152,72 @@ const categories = Array.from(categorySet);
 </Layout>
 
 <script>
-  // Initialize on page load and run again when Astro view transitions occur
-  function initializeFilters() {
-    const filterButtons = document.querySelectorAll('.category-filter-btn');
+  // Function to filter projects
+  function filterProjects(category) {
     const portfolioItems = document.querySelectorAll('.portfolio-item');
     
-    if (!filterButtons.length || !portfolioItems.length) return;
+    portfolioItems.forEach(item => {
+      if (category === 'all' || item.getAttribute('data-category') === category) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+
+  // Function to update filter button styles
+  function updateFilterButtons(activeButton) {
+    const filterButtons = document.querySelectorAll('.filter-btn');
     
+    filterButtons.forEach(btn => {
+      // Reset all buttons to inactive state
+      btn.classList.remove('active', 'bg-greenberry-600', 'text-white');
+      btn.classList.add('bg-white/70', 'dark:bg-gray-800/70', 'text-gray-700', 'dark:text-gray-300', 'border', 'border-gray-200/60', 'dark:border-gray-700/60');
+    });
+    
+    // Set active button
+    activeButton.classList.add('active', 'bg-greenberry-600', 'text-white');
+    activeButton.classList.remove('bg-white/70', 'dark:bg-gray-800/70', 'text-gray-700', 'dark:text-gray-300', 'border', 'border-gray-200/60', 'dark:border-gray-700/60');
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    
+    // Add click listeners to filter buttons
     filterButtons.forEach(button => {
       button.addEventListener('click', () => {
-        // Update button styles and ARIA states
-        filterButtons.forEach(btn => {
-          btn.classList.remove('active', 'bg-greenberry-600', 'text-white');
-          btn.classList.add('bg-white/70', 'dark:bg-gray-800/70', 'text-gray-700', 'dark:text-gray-300', 'border', 'border-gray-200/60', 'dark:border-gray-700/60');
-          btn.setAttribute('aria-pressed', 'false');
-        });
-        
-        button.classList.add('active', 'bg-greenberry-600', 'text-white');
-        button.classList.remove('bg-white/70', 'dark:bg-gray-800/70', 'text-gray-700', 'dark:text-gray-300', 'border', 'border-gray-200/60', 'dark:border-gray-700/60');
-        button.setAttribute('aria-pressed', 'true');
-        
-        // Filter items
         const category = button.getAttribute('data-category');
-        
-        // Use CSS to show/hide items for a smoother transition
-        portfolioItems.forEach(item => {
-          if (category === 'all' || item.getAttribute('data-category') === category) {
-            item.style.display = '';
-            item.classList.remove('hidden');
-            // Add a small delay for a staggered reveal effect
-            setTimeout(() => {
-              item.style.opacity = '1';
-              item.style.transform = 'translateY(0)';
-            }, 50);
-          } else {
-            item.style.opacity = '0';
-            item.style.transform = 'translateY(20px)';
-            // Hide after transition completes
-            setTimeout(() => {
-              item.classList.add('hidden');
-            }, 300);
-          }
-        });
-        
-        // Announce filter change for screen readers
-        const portfolioGrid = document.getElementById('portfolio-grid');
-        const visibleCount = [...portfolioItems].filter(item => 
-          category === 'all' || item.getAttribute('data-category') === category
-        ).length;
-        
-        // Create or update live region announcement
-        let liveRegion = document.getElementById('filter-announcement');
-        if (!liveRegion) {
-          liveRegion = document.createElement('div');
-          liveRegion.id = 'filter-announcement';
-          liveRegion.setAttribute('aria-live', 'polite');
-          liveRegion.className = 'sr-only';
-          document.body.appendChild(liveRegion);
-        }
-        
-        liveRegion.textContent = `Showing ${visibleCount} ${category === 'all' ? 'projects' : category + ' projects'}`;
+        updateFilterButtons(button);
+        filterProjects(category);
+      });
+    });
+  });
+
+  // Handle page navigation with Astro View Transitions
+  document.addEventListener('astro:page-load', () => {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    
+    // Add click listeners to filter buttons
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const category = button.getAttribute('data-category');
+        updateFilterButtons(button);
+        filterProjects(category);
       });
     });
     
-    // Set initial styles for animation
-    portfolioItems.forEach(item => {
-      item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-      item.style.opacity = '1';
-      item.style.transform = 'translateY(0)';
-    });
-  }
-  
-  // Run on initial page load
-  document.addEventListener('DOMContentLoaded', initializeFilters);
-  
-  // Run when Astro view transitions occur
-  document.addEventListener('astro:page-load', initializeFilters);
-  
-  // Cleanup to prevent memory leaks when Astro transitions away from this page
-  document.addEventListener('astro:before-swap', () => {
-    const liveRegion = document.getElementById('filter-announcement');
-    if (liveRegion) liveRegion.remove();
+    // Check if URL has a category parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryParam = urlParams.get('category');
+    
+    if (categoryParam) {
+      const targetButton = document.querySelector(`.filter-btn[data-category="${categoryParam}"]`);
+      if (targetButton) {
+        updateFilterButtons(targetButton);
+        filterProjects(categoryParam);
+      }
+    }
   });
 </script>
 
@@ -247,11 +228,6 @@ const categories = Array.from(categorySet);
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-  }
-  
-  /* Ensure hidden items don't affect layout */
-  .hidden {
-    display: none !important;
   }
   
   /* Improved focus styles for better accessibility */
