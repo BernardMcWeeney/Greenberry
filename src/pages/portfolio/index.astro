@@ -151,62 +151,49 @@ const categories = Array.from(categorySet);
   </section>
 </Layout>
 
-<script>
-  // Function to filter projects
-  function filterProjects(category) {
-    const portfolioItems = document.querySelectorAll('.portfolio-item');
-    
-    portfolioItems.forEach(item => {
-      if (category === 'all' || item.getAttribute('data-category') === category) {
-        item.style.display = '';
-      } else {
-        item.style.display = 'none';
-      }
-    });
-  }
-
-  // Function to update filter button styles
-  function updateFilterButtons(activeButton) {
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    
-    filterButtons.forEach(btn => {
-      // Reset all buttons to inactive state
-      btn.classList.remove('active', 'bg-greenberry-600', 'text-white');
-      btn.classList.add('bg-white/70', 'dark:bg-gray-800/70', 'text-gray-700', 'dark:text-gray-300', 'border', 'border-gray-200/60', 'dark:border-gray-700/60');
-    });
-    
-    // Set active button
-    activeButton.classList.add('active', 'bg-greenberry-600', 'text-white');
-    activeButton.classList.remove('bg-white/70', 'dark:bg-gray-800/70', 'text-gray-700', 'dark:text-gray-300', 'border', 'border-gray-200/60', 'dark:border-gray-700/60');
-  }
-
-  // Initialize on page load
-  document.addEventListener('DOMContentLoaded', () => {
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    
-    // Add click listeners to filter buttons
-    filterButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const category = button.getAttribute('data-category');
-        updateFilterButtons(button);
-        filterProjects(category);
+<script is:inline>
+  // Use is:inline to ensure the script runs immediately when the page loads
+  function initPortfolioFilters() {
+    // Function to filter projects
+    function filterProjects(category) {
+      const portfolioItems = document.querySelectorAll('.portfolio-item');
+      
+      portfolioItems.forEach(item => {
+        if (category === 'all' || item.getAttribute('data-category') === category) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
       });
-    });
-  });
+    }
 
-  // Handle page navigation with Astro View Transitions
-  document.addEventListener('astro:page-load', () => {
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    
-    // Add click listeners to filter buttons
-    filterButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const category = button.getAttribute('data-category');
-        updateFilterButtons(button);
-        filterProjects(category);
+    // Function to update filter button styles
+    function updateFilterButtons(activeButton) {
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      
+      filterButtons.forEach(btn => {
+        // Reset all buttons to inactive state
+        btn.classList.remove('active', 'bg-greenberry-600', 'text-white');
+        btn.classList.add('bg-white/70', 'dark:bg-gray-800/70', 'text-gray-700', 'dark:text-gray-300', 'border', 'border-gray-200/60', 'dark:border-gray-700/60');
       });
-    });
-    
+      
+      // Set active button
+      activeButton.classList.add('active', 'bg-greenberry-600', 'text-white');
+      activeButton.classList.remove('bg-white/70', 'dark:bg-gray-800/70', 'text-gray-700', 'dark:text-gray-300', 'border', 'border-gray-200/60', 'dark:border-gray-700/60');
+    }
+
+    // Add click listeners to filter buttons
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    if (filterButtons.length) {
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const category = button.getAttribute('data-category');
+          updateFilterButtons(button);
+          filterProjects(category);
+        });
+      });
+    }
+
     // Check if URL has a category parameter
     const urlParams = new URLSearchParams(window.location.search);
     const categoryParam = urlParams.get('category');
@@ -218,7 +205,19 @@ const categories = Array.from(categorySet);
         filterProjects(categoryParam);
       }
     }
+  }
+
+  // Make sure this runs both on DOMContentLoaded and on Astro page transitions
+  document.addEventListener('DOMContentLoaded', function() {
+    // If Astro View Transitions are being used, the page load event will handle it
+    // Otherwise, initialize immediately
+    if (!document.querySelector('html').hasAttribute('data-astro-transition')) {
+      initPortfolioFilters();
+    }
   });
+
+  // For Astro View Transitions support
+  document.addEventListener('astro:page-load', initPortfolioFilters);
 </script>
 
 <style>

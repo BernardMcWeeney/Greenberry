@@ -138,8 +138,9 @@ const totalReviews = 87;
   </Container>
 </section>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
+<script is:inline>
+  // Use is:inline to ensure the script runs immediately when the page loads
+  document.addEventListener('astro:page-load', function setupTestimonials() {
     // Get DOM elements
     const track = document.getElementById('testimonial-track');
     const slides = document.querySelectorAll('.testimonial-slide');
@@ -360,7 +361,17 @@ const totalReviews = 87;
       startAutoplay();
     }
     
+    // Initialize the slider
     initSlider();
+  });
+  
+  // Also initialize on regular DOMContentLoaded for initial page load
+  document.addEventListener('DOMContentLoaded', function() {
+    // Check if Astro's view transitions are being used
+    if (!document.querySelector('html').hasAttribute('data-astro-transition')) {
+      const event = new Event('astro:page-load');
+      document.dispatchEvent(event);
+    }
   });
 </script>
 
