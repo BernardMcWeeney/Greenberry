@@ -1,0 +1,59 @@
+---
+import Container from '../common/Container.astro';
+import Badge from '../ui/Badge.astro';
+import Button from '../common/Button.astro';
+import { solutions } from '../../data/solutions';
+
+// Use the solutions data directly from the imported file
+---
+
+<section class="section-padding bg-neutral-50 dark:bg-gray-800/50 section-bg-decoration">
+  <Container>
+    <div class="max-w-3xl mx-auto text-center mb-16 relative z-10">
+      <div class="badge-wrapper">
+        <Badge text="OUR SOLUTIONS" variant="primary" size="md" />
+      </div>
+      <h2 class="heading-primary">
+        Complete Digital Solutions
+      </h2>
+      <p class="section-description">
+        Everything you need to establish and grow your online presence.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+      {solutions.map((solution) => (
+        <div class={`group bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border-t-4 ${solution.borderColor}`}>
+          <div class="p-6">
+            <div class={`${solution.textColor} text-4xl mb-4`}>
+              <i class={solution.icon}></i>
+            </div>
+            <h3 class="text-xl font-bold text-neutral-900 dark:text-white mb-3">
+              {solution.title}
+            </h3>
+            <p class="text-neutral-600 dark:text-gray-300 mb-4">
+              {solution.description}
+            </p>
+            <a 
+              href={solution.link} 
+              class="inline-flex items-center text-greenberry-600 hover:text-greenberry-700 dark:text-greenberry-400 dark:hover:text-greenberry-300 font-medium group"
+              aria-label={`Explore ${solution.title}`}
+            >
+              {solution.ctaText}
+              <span class="ml-1 text-xs transition-transform group-hover:translate-x-1 duration-300">
+                <i class="fa-solid fa-arrow-right"></i>
+              </span>
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+    
+    <div class="text-center mt-16 relative z-10">
+      <Button href="/solutions" variant="primary" size="lg" class="font-medium shadow-md hover:shadow-lg hover:shadow-greenberry-500/20">
+        Explore All Solutions
+        <span class="ml-2"><i class="fa-solid fa-arrow-right"></i></span>
+      </Button>
+    </div>
+  </Container>
+</section>

@@ -10,85 +10,86 @@ import FeatureHighlight from '../../components/services/FeatureHighlight.astro';
 import Testimonials from '../../components/home/Testimonials.astro';
 import PartnersLogos from '../../components/home/PartnersLogos.astro';
 import { SEO } from "astro-seo";
+import { solutions } from '../../data/solutions';
 import { services } from '../../data/services';
 
 // Key features that make Greenberry different
 const keyFeatures = [
   {
-    title: "Lightning Fast Websites",
-    description: "We build websites that load in milliseconds, not seconds. Speed is critical for user experience and search engine rankings.",
-    icon: "fa-solid fa-bolt",
-    color: "yellow",
-    textColor: "text-yellow-500"
+    title: "All-In-One Solutions",
+    description: "Comprehensive packages that combine multiple services for maximum value and convenience.",
+    icon: "fa-solid fa-layer-group",
+    color: "indigo",
+    textColor: "text-indigo-500"
   },
   {
-    title: "Mobile-First Design",
-    description: "Every website we build is fully responsive and optimized for all devices, from smartphones to desktop computers.",
-    icon: "fa-solid fa-mobile-screen",
-    color: "blue",
-    textColor: "text-blue-500"
-  },
-  {
-    title: "SEO Optimization",
-    description: "We implement the latest SEO best practices to ensure your website ranks well and attracts more organic traffic.",
-    icon: "fa-solid fa-magnifying-glass-chart",
+    title: "Tailored For Irish Businesses",
+    description: "Solutions designed specifically for the needs and challenges of Irish organizations.",
+    icon: "fa-solid fa-map-location-dot",
     color: "green",
     textColor: "text-green-500"
   },
   {
-    title: "Secure & Reliable",
-    description: "We implement robust security measures to protect your website and your customers' data from threats.",
-    icon: "fa-solid fa-shield-halved",
-    color: "red",
-    textColor: "text-red-500"
+    title: "Simplified Management",
+    description: "One point of contact for all your digital needs, reducing complexity and saving time.",
+    icon: "fa-solid fa-sliders",
+    color: "blue",
+    textColor: "text-blue-500"
+  },
+  {
+    title: "Predictable Pricing",
+    description: "Clear, subscription-based pricing with no hidden fees or unexpected costs.",
+    icon: "fa-solid fa-wallet",
+    color: "purple",
+    textColor: "text-purple-500"
   }
 ];
 ---
 
-<Layout title="Services | Greenberry - Web Design for Irish Businesses">
+<Layout title="Digital Solutions | Greenberry - Web Design for Irish Businesses">
   <!-- Hero Section using PageHeader component -->
   <PageHeader
-    title="Our Services"
-    description="Comprehensive digital services to help your Irish business thrive online."
+    title="Digital Solutions"
+    description="Comprehensive digital packages to help your Irish business thrive online."
     backgroundVariant="decorated"
     badgeText="WHAT WE OFFER"
-    highlightedText="Services"
+    highlightedText="Solutions"
     paddingY="lg"
   />
 
   <!-- Track Record Section to break up the flow -->
   <PartnersLogos />
   
-  <!-- Services Overview Section -->
+  <!-- Solutions Overview Section -->
   <section class="py-16 bg-cool-gray-50 dark:bg-gray-800/50 section-bg-decoration relative overflow-hidden">
     <Container>
       <div class="max-w-3xl mx-auto text-center mb-16 relative z-10">
         <div class="badge-wrapper">
-          <Badge text="OUR EXPERTISE" variant="primary" size="md" />
+          <Badge text="OUR SOLUTIONS" variant="primary" size="md" />
         </div>
         <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
-          Complete Digital Solutions for Your Business
+          Complete Digital Packages for Your Business
         </h2>
         <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-          From website development to ongoing maintenance and marketing, we provide everything you need to establish and grow your online presence.
+          From comprehensive digital care to specialized packages, we provide everything you need in one convenient solution.
         </p>
       </div>
       
-      <!-- Services Cards Grid - Using the services data -->
+      <!-- Solutions Cards Grid - Using the solutions data -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 relative z-10">
-        {services.map((service) => (
+        {solutions.map((solution) => (
           <ServiceCard 
-            id={service.id}
-            title={service.title}
-            description={service.description}
-            icon={service.icon}
-            color={service.color}
-            textColor={service.textColor}
-            borderColor={service.borderColor}
+            id={solution.id}
+            title={solution.title}
+            description={solution.description}
+            icon={solution.icon}
+            color={solution.color}
+            textColor={solution.textColor}
+            borderColor={solution.borderColor}
             buttonTextColor="text-green-500" 
-            features={service.features}
-            link={service.link}
-            ctaText={service.ctaText}
+            features={solution.features}
+            link={solution.link}
+            ctaText={solution.ctaText}
           />
         ))}
       </div>
@@ -100,13 +101,13 @@ const keyFeatures = [
     <Container>
       <div class="max-w-3xl mx-auto text-center mb-16">
         <div class="badge-wrapper">
-          <Badge text="WHY CHOOSE GREENBERRY" variant="primary" size="md" />
+          <Badge text="WHY CHOOSE OUR SOLUTIONS" variant="primary" size="md" />
         </div>
         <h2 class="heading-primary">
-          Features That Make Us Different
+          Benefits of Our Digital Solutions
         </h2>
         <p class="section-description">
-          We combine cutting-edge technology with beautiful design to create websites that perform.
+          Streamlined packages that combine multiple services for better results and simpler management.
         </p>
       </div>
       
@@ -134,18 +135,20 @@ const keyFeatures = [
     </Container>
   </section>
   
-  <!-- Feature Highlight - Managed Service -->
+  <!-- Feature Highlight - Most Popular Solution -->
   <FeatureHighlight 
-    title="We Handle Everything So You Don't Have To"
-    description="From domain registration to hosting, maintenance, and security updates, we take care of all the technical details so you can focus on running your business."
-    badgeText="100% MANAGED SERVICE"
-    imageSrc="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
-    imageAlt="Managed services illustration"
+    title="Website-as-a-Service (WaaS): Our Most Popular Solution"
+    description="Get everything you need for a successful online presence in one comprehensive monthly subscription: website, domain, email, maintenance, SEO, and support."
+    badgeText="FEATURED SOLUTION"
+    imageSrc="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
+    imageAlt="Website as a Service illustration"
     features={[
-      "24/7 website monitoring",
-      "Regular security updates",
-      "Daily backups",
-      "Performance optimization",
+      "Complete website design & build",
+      "Domain & DNS management",
+      "Professional email setup",
+      "Monthly maintenance & backups",
+      "Local SEO optimization",
+      "Security monitoring",
       "Technical support"
     ]}
   />
@@ -155,8 +158,8 @@ const keyFeatures = [
   
   <!-- CTA Section -->
   <BannerCta
-    title="Ready to grow your business with a website that works?"
-    description="Get in touch today and let's discuss how Greenberry can help your business thrive online. We'll create a custom solution tailored to your specific needs and goals."
+    title="Ready to simplify your digital presence?"
+    description="Get in touch today and let's discuss how Greenberry's digital solutions can streamline your online operations. We'll create a custom solution tailored to your specific needs and goals."
     badgeText="GET STARTED TODAY"
     primaryButtonText="Get Started"
     primaryButtonHref="/contact"

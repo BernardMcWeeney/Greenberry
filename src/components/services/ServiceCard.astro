@@ -1,18 +1,17 @@
 ---
-import Button from '../common/Button.astro';
-
-export interface Props {
+interface Props {
   id: string;
   title: string;
   description: string;
   icon: string;
-  color: string;
-  textColor: string;
-  borderColor: string;
-  buttonTextColor?: string; // New prop for button text color
-  features: string[];
+  color?: string;
+  borderColor?: string;
+  textColor?: string;
+  buttonTextColor?: string;
+  features?: string[] | null;
   link: string;
   ctaText?: string;
+  type?: "service" | "solution";
 }
 
 const {
@@ -20,46 +19,52 @@ const {
   title,
   description,
   icon,
-  color,
-  textColor,
-  borderColor,
-  buttonTextColor = "text-greenberry-500",
-  features,
+  color = "blue",
+  borderColor = `border-t-${color}-500`,
+  textColor = `text-${color}-500`,
+  buttonTextColor = "text-green-500", 
+  features = [],
   link,
-  ctaText = "Learn More"
+  ctaText = "Learn More",
+  type = "service"
 } = Astro.props;
 
-// Construct the full link URL using the CMS value.
-// For example, if link = "websites", then linkUrl becomes "/services/websites"
-const linkUrl = `/services/${link}`;
+// Ensure features is an array before calling slice
+const displayFeatures = Array.isArray(features) ? features.slice(0, 6) : [];
 ---
 
-<div id={id} class={`bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border-t-4 ${borderColor}`}>
+<div class={`group bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border-t-4 ${borderColor}`}>
   <div class="p-6">
     <div class={`${textColor} text-4xl mb-4`}>
       <i class={icon}></i>
     </div>
-    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">
       {title}
     </h3>
     <p class="text-gray-600 dark:text-gray-300 mb-6">
       {description}
     </p>
     
-    <ul class="space-y-2 mb-6">
-      {features.map((feature) => (
-        <li class="flex items-start">
-          <span class="text-greenberry-500 mr-2 mt-1"><i class="fa-solid fa-check"></i></span>
-          <span class="text-gray-700 dark:text-gray-300">{feature}</span>
-        </li>
-      ))}
-    </ul>
+    {displayFeatures.length > 0 && (
+      <div class="mt-4 mb-6 space-y-2">
+        {displayFeatures.map((feature) => (
+          <div class="flex items-start">
+            <span class="text-greenberry-500 mr-2 mt-1"><i class="fa-solid fa-check"></i></span>
+            <span class="text-sm text-gray-600 dark:text-gray-300">{feature}</span>
+          </div>
+        ))}
+      </div>
+    )}
     
-    <div class="mt-6">
-      <Button href={linkUrl} variant="outline" size="md" class={`w-full justify-center font-medium ${buttonTextColor} border-current hover:bg-gray-50 dark:hover:bg-gray-700/50`}>
-        {ctaText}
-        <span class="ml-2"><i class="fa-solid fa-arrow-right"></i></span>
-      </Button>
-    </div>
+    <a 
+      href={link} 
+      class={`inline-flex items-center ${buttonTextColor} hover:text-greenberry-700 dark:hover:text-greenberry-300 font-medium group`}
+      aria-label={ctaText}
+    >
+      {ctaText}
+      <span class="ml-1 text-xs transition-transform group-hover:translate-x-1 duration-300">
+        <i class="fa-solid fa-arrow-right"></i>
+      </span>
+    </a>
   </div>
 </div>

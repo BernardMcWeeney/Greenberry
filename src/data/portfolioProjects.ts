@@ -23,6 +23,7 @@ export interface PortfolioProject {
   results: string;
   testimonial: ProjectTestimonial;
   tags: string[];
+  technologies?: string[]; // Make technologies optional
 }
 
 // Sample portfolio projects data
