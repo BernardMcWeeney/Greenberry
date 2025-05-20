@@ -4,7 +4,8 @@ import Container from '../components/common/Container.astro';
 import Button from '../components/common/Button.astro';
 import Badge from '../components/ui/Badge.astro';
 import PageHeader from '../components/common/PageHeader.astro';
-import { COMPANY, SOCIAL_LINKS } from '../config';
+import { COMPANY, SOCIAL_LINKS } from '../data/config';
+import { SEO } from "astro-seo";
 
 const socialLinks = [
   { icon: "fa-brands fa-facebook", path: SOCIAL_LINKS.facebook, color: "hover:bg-blue-500" },

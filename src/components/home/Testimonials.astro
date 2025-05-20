@@ -88,7 +88,7 @@ const totalReviews = 87;
                       </div>
                     )}
                   </div>
-                  <div>
+                  <div class="overflow-hidden flex-1 min-w-0">
                     <h3 class="font-medium text-neutral-900 dark:text-white text-base">
                       {testimonial.author}
                     </h3>
@@ -104,12 +104,12 @@ const totalReviews = 87;
                         href={`https://${testimonial.website}`} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        class="inline-flex items-center mt-2 text-xs text-greenberry-600 dark:text-greenberry-400 hover:text-greenberry-700 dark:hover:text-greenberry-300 website-link"
+                        class="inline-flex items-center mt-2 text-xs text-greenberry-600 dark:text-greenberry-400 hover:text-greenberry-700 dark:hover:text-greenberry-300 website-link group"
                         aria-label={`Visit ${testimonial.company} website: ${testimonial.website}`}
                       >
-                        <i class="fas fa-globe text-greenberry-500 mr-1.5 text-xs" aria-hidden="true"></i>
-                        <span class="truncate max-w-[180px]">{testimonial.website}</span>
-                        <i class="fas fa-external-link-alt text-xs ml-1 opacity-70" aria-hidden="true"></i>
+                        <i class="fas fa-globe text-greenberry-500 mr-1.5 text-xs flex-shrink-0" aria-hidden="true"></i>
+                        <span class="truncate max-w-full website-url">{testimonial.website}</span>
+                        <i class="fas fa-external-link-alt text-xs ml-1 opacity-70 flex-shrink-0" aria-hidden="true"></i>
                       </a>
                     )}
                   </div>
@@ -429,6 +429,20 @@ const totalReviews = 87;
     outline: 2px solid #22c55e;
   }
   
+  /* Website link styles - to prevent overflow */
+  .website-link {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  
+  .website-url {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  
   /* Mobile adjustments */
   @media (max-width: 640px) {
     .testimonial-outer-container {
@@ -442,15 +456,12 @@ const totalReviews = 87;
     
     /* Better website link handling on mobile */
     .website-link {
+      width: 100%;  /* Take up full width on mobile */
       max-width: 100%;
-      overflow: hidden;
     }
     
-    .website-link span {
-      display: block;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
+    .website-url {
+      max-width: calc(100% - 30px);  /* Account for the icons on either side */
     }
   }
 </style>

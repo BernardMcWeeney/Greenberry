@@ -1,0 +1,151 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Container from '../components/common/Container.astro';
+import PageHeader from '../components/common/PageHeader.astro';
+import Cta from '../components/home/Cta.astro';
+import { COMPANY } from '../data/config';
+
+const lastUpdated = "May 20, 2025";
+---
+
+<Layout title="Terms of Service | Greenberry">
+  <!-- Page Header -->
+  <PageHeader
+    title="Terms of Service"
+    description="Please read these terms carefully before using our services"
+    backgroundVariant="green"
+    paddingY="md"
+  />
+  
+  <!-- Terms Content -->
+  <section class="py-12 bg-white dark:bg-gray-900">
+    <Container>
+      <div class="max-w-3xl mx-auto">
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-8">
+          Last Updated: {lastUpdated}
+        </p>
+        
+        <div class="prose prose-green dark:prose-invert max-w-none">
+          <h2>Introduction</h2>
+          <p>
+            These Terms of Service ("Terms") govern your use of the website and services offered by {COMPANY.name} ("we," "us," or "our"). By accessing or using our services, you agree to be bound by these Terms. If you disagree with any part of the terms, you may not access our services.
+          </p>
+          <br>
+
+          <h2>Services Description</h2>
+          <p>
+            {COMPANY.name} provides web design, development, and related digital services to businesses in Ireland. Our services may include but are not limited to website design, development, maintenance, hosting, SEO, and digital marketing consultancy.
+          </p>
+          <br>
+
+          <h2>Project Timeline and Delivery</h2>
+          <p>
+            We strive to deliver all projects according to the agreed-upon timeline. However, project completion depends on timely client feedback and content provision. Significant delays in client response may result in project rescheduling or timeline adjustments.
+          </p>
+          <br>
+
+          <h2>Payment Terms</h2>
+          <p>
+            Payment terms are as follows:
+          </p>
+          <ul>
+            <li>A non-refundable deposit of 30% is required to commence work on any project</li>
+            <li>For projects exceeding €2,000, the remaining balance is payable in agreed-upon installments</li>
+            <li>Final payment is due upon project completion and before the website goes live</li>
+            <li>Monthly services are billed in advance</li>
+            <li>All invoices are due within 14 days of receipt</li>
+          </ul>
+          <br>
+
+          <h2>Stripe Payment Processing</h2>
+          <p>
+            We use Stripe to process payments securely. By making a payment, you agree to Stripe's Services Agreement available at <a href="https://stripe.com/ie/legal" target="_blank" rel="noopener noreferrer">https://stripe.com/ie/legal</a>.
+          </p>
+          <p>
+            When processing payments through Stripe:
+          </p>
+          <ul>
+            <li>Your payment information is handled securely by Stripe and not stored on our servers</li>
+            <li>Payments may be subject to verification as per Stripe's fraud prevention measures</li>
+            <li>Disputed charges may incur additional fees as per Stripe's policy</li>
+            <li>Currency conversion fees may apply for non-Euro payments</li>
+          </ul>
+          <br>
+
+          <h2>Refund Policy</h2>
+          <p>
+            Our refund policy is as follows:
+          </p>
+          <ul>
+            <li>The initial deposit is non-refundable</li>
+            <li>Once work has begun on a project, payments made are non-refundable</li>
+            <li>For monthly services, cancellations received before the next billing cycle will not be charged for the upcoming month</li>
+            <li>No refunds will be issued for services already rendered</li>
+          </ul>
+          <br>
+
+          <h2>Intellectual Property Rights</h2>
+          <p>
+            Upon full payment, you are granted all rights to the final deliverables, except for:
+          </p>
+          <ul>
+            <li>Third-party elements (such as stock photos, plugins, or themes) which are subject to their respective licenses</li>
+            <li>Our portfolio rights (we reserve the right to display and link to your completed project as part of our portfolio)</li>
+            <li>Our proprietary tools, code libraries, and processes used in creating your project</li>
+          </ul>
+          <br>
+
+          <h2>Website Maintenance and Hosting</h2>
+          <p>
+            For clients with ongoing maintenance and hosting services:
+          </p>
+          <ul>
+            <li>Service continuity depends on timely payment of monthly/annual fees</li>
+            <li>We provide scheduled maintenance during normal business hours</li>
+            <li>Emergency support may incur additional charges outside the scope of standard maintenance</li>
+            <li>We maintain regular backups but are not liable for data loss in case of catastrophic events</li>
+          </ul>
+          <br>
+
+          <h2>Limitation of Liability</h2>
+          <p>
+            {COMPANY.name} shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of our services. Our total liability for all claims shall not exceed the amounts paid by you for the services in question.
+          </p>
+          <br>
+
+          <h2>Termination</h2>
+          <p>
+            We may terminate or suspend your access to our services immediately, without prior notice or liability, for any reason, including breach of these Terms. Upon termination, your right to use the services will cease immediately.
+          </p>
+          <br>
+
+          <h2>Governing Law</h2>
+          <p>
+            These Terms shall be governed and construed in accordance with the laws of Ireland, without regard to its conflict of law provisions.
+          </p>
+          <br>
+
+          <h2>Changes to Terms</h2>
+          <p>
+            We reserve the right to modify or replace these Terms at any time. It is your responsibility to review these Terms periodically for changes. Your continued use of our services following the posting of any changes constitutes acceptance of those changes.
+          </p>
+          <br>
+
+          <h2>Contact Us</h2>
+          <p>
+            If you have any questions about these Terms, please contact us:
+          </p>
+          <ul>
+            <li>Email: {COMPANY.email}</li>
+            <li>Phone: {COMPANY.phone}</li>
+            <li>Address: {COMPANY.address}</li>
+          </ul>
+        </div>
+      </div>
+    </Container>
+  </section>
+  
+  <!-- CTA Section -->
+  <Cta/>
+  
+</Layout>

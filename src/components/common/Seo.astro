@@ -1,51 +1,97 @@
 ---
+import { SEO } from "astro-seo";
+import { SITE, COMPANY, SOCIAL_LINKS } from "../../data/config";
+
 export interface Props {
   title?: string;
   description?: string;
   image?: string;
-  canonicalURL?: URL | string;
+  type?: string;
 }
 
+// Get defaults from your existing config
 const {
-  title,
-  description,
-  image,
-  canonicalURL = new URL(Astro.url.pathname, Astro.site),
+  title = SITE.title,
+  description = SITE.description,
+  image = SITE.ogImage,
+  type = "website"
 } = Astro.props;
 
-// Default meta values
-const siteTitle = title || 'Greenberry - Hassle-Free Websites & IT Solutions in Ireland';
-const siteDescription = description || 'Greenberry provides hassle-free website solutions, fully managed IT services, SEO packages, and email solutions for Irish businesses.';
-const siteImage = new URL(image || '/images/social-card.jpg', Astro.site);
+// Get current URL
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+
+// Simple schema detection based on URL
+const path = Astro.url.pathname.replace(/^\/|\/$/g, '') || 'index';
+
+// Basic schema type detection
+let schemaType = "WebPage";
+if (path === 'index') schemaType = "WebSite";
+if (path === 'about') schemaType = "AboutPage";
+if (path === 'contact') schemaType = "ContactPage";
+if (path === 'services' || path.startsWith('services/')) schemaType = "Service";
+
+// Build schema data manually
+const baseSchema = {
+  "@context": "https://schema.org",
+  "@type": schemaType,
+  "name": title,
+  "description": description,
+  "url": canonical,
+};
+
+// Add organization data for homepage
+let schemaData = baseSchema;
+if (path === 'index') {
+  schemaData = [
+    baseSchema,
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": COMPANY.name,
+      "url": SITE.url,
+      "logo": SITE.ogImage,
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": COMPANY.address.split(',')[0].trim(),
+        "addressCountry": "IE"
+      },
+      "sameAs": [
+        SOCIAL_LINKS.twitter,
+        SOCIAL_LINKS.facebook,
+        SOCIAL_LINKS.instagram,
+        SOCIAL_LINKS.linkedin
+      ]
+    }
+  ];
+}
+
+// Convert schema to JSON
+const schemaJson = JSON.stringify(schemaData);
 ---
 
-<!-- Primary Meta Tags -->
-<title>{siteTitle}</title>
-<meta name="title" content={siteTitle} />
-<meta name="description" content={siteDescription} />
+<!-- SEO Meta Tags via astro-seo -->
+<SEO
+  title={title}
+  description={description}
+  canonical={canonical}
+  openGraph={{
+    basic: {
+      title,
+      type,
+      image,
+      url: canonical,
+    },
+    optional: {
+      siteName: SITE.name,
+      description,
+    }
+  }}
+  twitter={{
+    creator: "@greenberry",
+    site: "@greenberry",
+    card: "summary_large_image",
+  }}
+/>
 
-<!-- Canonical URL -->
-<link rel="canonical" href={canonicalURL} />
-
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
-<meta property="og:url" content={canonicalURL} />
-<meta property="og:title" content={siteTitle} />
-<meta property="og:description" content={siteDescription} />
-<meta property="og:image" content={siteImage} />
-
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={canonicalURL} />
-<meta property="twitter:title" content={siteTitle} />
-<meta property="twitter:description" content={siteDescription} />
-<meta property="twitter:image" content={siteImage} />
-
-<!-- Other Important Meta Tags -->
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-
-<!-- Favicon tags -->
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="icon" type="image/png" href="/favicon.png" />
+<!-- Schema.org structured data -->
+<script type="application/ld+json" set:html={schemaJson} />

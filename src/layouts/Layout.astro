@@ -1,7 +1,7 @@
 ---
 import Header from '../components/common/Header.astro';
 import Footer from '../components/common/Footer.astro';
-import Seo from '../components/common/Seo.astro';
+import SEO from '../components/common/SEO.astro';
 import '../styles/global.css';
 
 export interface Props {
@@ -12,9 +12,9 @@ export interface Props {
 }
 
 const { 
-  title = 'Greenberry - Hassle-Free Websites & IT Solutions in Ireland',
-  description = 'Greenberry provides hassle-free website solutions, fully managed IT services, SEO packages, and email solutions for Irish businesses.',
-  image = '/images/og-image.jpg',
+  title,
+  description,
+  image,
   bodyClass = '',
 } = Astro.props;
 ---
@@ -27,8 +27,10 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    
     <!-- Cloudflare Turnstile -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,11 +39,8 @@ const {
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     
-    <Seo
-      title={title}
-      description={description}
-      image={image}
-    />
+    <!-- Simple SEO Component -->
+    <SEO title={title} description={description} image={image} />
   </head>
   <body class={`bg-white dark:bg-gray-900 min-h-screen flex flex-col ${bodyClass}`}>
     <Header />

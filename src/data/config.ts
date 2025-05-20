@@ -5,7 +5,7 @@ export const SITE = {
     title: 'Greenberry - Hassle-Free Websites & IT Solutions in Ireland',
     description: 'Greenberry provides hassle-free website solutions, fully managed IT services, SEO packages, and email solutions for Irish businesses.',
     url: 'https://greenberry.ie',
-    ogImage: 'https://greenberry.ie/images/social-card.jpg',
+    ogImage: 'https://greenberry.ie/social.png',
     themeColor: '#38a169', // Green color
   };
   
@@ -13,7 +13,7 @@ export const SITE = {
     name: 'Greenberry',
     address: 'Meath, Ireland',
     email: 'office@greenberry.ie',
-    phone: '+353 (0) 1 234 5678',
+    phone: '',
     foundedYear: 2018,
   };
   

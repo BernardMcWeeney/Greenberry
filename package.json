@@ -13,7 +13,8 @@
     "@astrojs/react": "^4.2.7",
     "@astrojs/sitemap": "^3.4.0",
     "@aws-sdk/client-ses": "^3.758.0",
-    "astro": "^5.7.13"
+    "astro": "^5.7.13",
+    "astro-seo": "^0.8.4"
   },
   "devDependencies": {
     "@astrojs/tailwind": "^6.0.2",
