@@ -1,19 +1,17 @@
 ---
+// src/pages/services/[slug].astro
 import Layout from '../../layouts/Layout.astro';
 import Container from '../../components/common/Container.astro';
-import Button from '../../components/common/Button.astro';
+import Button from '../../components/common/Button.astro'; // Assuming you have this
 import Badge from '../../components/ui/Badge.astro';
 import PageHeader from '../../components/common/PageHeader.astro';
-import PageCta from '../../components/common/PageCta.astro';
-import FeatureCard from '../../components/services/FeatureCard.astro';
-import ProcessSteps from '../../components/services/ProcessSteps.astro';
-import ServiceFAQ from '../../components/services/ServiceFAQ.astro';
+import ServiceFAQ from '../../components/services/ServiceFAQ.astro'; // Assuming this component takes { faqs }
+import PageCta from '../../components/common/PageCta.astro'; // Assuming this component
+import Icon from '../../components/common/Icon.astro'; // The Icon component from step 1
+import { SEO } from "astro-seo";
 
-// Import services data
-import { services, getServiceById } from '../../data/services';
-import { processSteps } from '../../data/services';
-import { featureCards } from '../../data/services';
-import { faqs } from '../../data/services';
+import { services, type Service } from '../../data/services'; // Ensure Service type is exported or defined
+import { solutions, getSolutionById, type Solution } from '../../data/solutions'; // To link to parent solutions
 
 export async function getStaticPaths() {
   return services.map(service => ({
@@ -22,172 +20,182 @@ export async function getStaticPaths() {
   }));
 }
 
-const { service } = Astro.props;
-const serviceId = service.id;
+const { service } = Astro.props as { service: Service };
 
-// Determine the appropriate color for the service
-const serviceColor = service.color || "blue";
-const textColorClass = service.textColor || `text-${serviceColor}-500`;
-const bgColorClass = `bg-${serviceColor}-500`;
-const borderColorClass = service.borderColor || `border-${serviceColor}-500`;
+// Prepare data for parent solutions
+const parentSolutionsDetails = service.parentSolutions
+  .map(solutionId => getSolutionById(solutionId))
+  .filter(s => s !== undefined) as Solution[];
 
-// Access process steps safely
-const serviceProcessSteps = processSteps && serviceId in processSteps ? processSteps[serviceId] : null;
-
-// Access feature cards safely
-const serviceFeatureCards = featureCards && serviceId in featureCards ? featureCards[serviceId] : null;
-
-// Access FAQs safely
-const serviceFaqs = faqs && serviceId in faqs ? faqs[serviceId] : null;
+const serviceColor = service.color || "blue"; // Fallback color
+const serviceTextColor = service.textColor || `text-${serviceColor}-600`;
+const serviceBorderColor = service.borderColor || `border-t-${serviceColor}-500`;
+const serviceBgLightColor = `bg-${serviceColor}-50 dark:bg-${serviceColor}-900/30`;
+const serviceAccentDarkColor = `dark:text-${serviceColor}-400`;
 ---
 
-<Layout title={`${service.title} | Greenberry - Web Design for Irish Businesses`}>
-  <!-- Service Hero Header -->
+<Layout title={`${service.title} | Greenberry`}>
+  <SEO
+    title={`${service.title} | Services | Greenberry`}
+    description={service.description}
+    openGraph={{
+      basic: {
+        title: `${service.title} | Greenberry`,
+        type: 'website',
+        image: `/images/services/${service.id}.png`, // Consider having OG images per service
+      },
+    }}
+  />
+
   <PageHeader
     title={service.title}
     description={service.description}
     backgroundVariant="decorated"
-    badgeText="OUR SERVICES"
-    highlightedText={service.title.split(' ')[0]}
+    badgeText="SERVICE DETAILS"
+    highlightedText={service.shortTitle || service.title.split(' ')[0]}
     highlightPosition="start"
     paddingY="lg"
+    badgeVariant={service.color} 
   />
-  
-  <!-- Service Features -->
-  <section class="py-16 bg-white dark:bg-gray-900">
-    <Container>
-      <div class="max-w-3xl mx-auto text-center mb-12">
-        <div class="badge-wrapper">
-          <Badge text="KEY FEATURES" variant={serviceColor} size="md" />
-        </div>
-        <h2 class="heading-primary">
-          Everything You Need
-        </h2>
-        <p class="section-description">
-          Our {service.title.toLowerCase()} are designed to provide you with everything you need for success.
-        </p>
-      </div>
+
+  <Container>
+    <div class="py-12 md:py-16 lg:py-20 space-y-16 lg:space-y-24">
+
+      {service.benefits && service.benefits.length > 0 && (
+        <section class="scroll-mt-24" id="benefits">
+          <div class="max-w-3xl mx-auto text-center mb-12 lg:mb-16">
+            <Badge text="Key Benefits" variant={service.color} size="md" class="mb-4"/>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Advantages of Our {service.shortTitle || service.title}
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300">
+              Discover how our {service.shortTitle || service.title.toLowerCase()} service can empower you.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
+            {service.benefits.map((benefit) => (
+              <div class="flex items-start space-x-4 group">
+                <div class={`mt-1 flex-shrink-0 w-10 h-10 rounded-full ${serviceBgLightColor} ${serviceTextColor} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
+                  <Icon name="fa-solid fa-check-circle" class="text-xl"/>
+                </div>
+                <div>
+                  <p class="text-lg font-medium text-gray-800 dark:text-gray-100 group-hover:text-${service.color}-600 dark:group-hover:text-${service.color}-400 transition-colors">
+                    {benefit}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {service.features && service.features.length > 0 && (
+        <section class="py-12 md:py-16 rounded-xl scroll-mt-24" id="features">
+          <div class="max-w-3xl mx-auto text-center mb-12 lg:mb-16">
+            <Badge text="What's Included" variant={service.color} size="md" class="mb-4"/>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Comprehensive Features
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300">
+              Our {service.shortTitle || service.title.toLowerCase()} comes packed with the following features to ensure your success.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {service.features.map((feature) => (
+              <div class={`p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 ${serviceBorderColor} bg-white dark:bg-gray-800`}>
+                <div class="flex items-center space-x-3 mb-3">
+                  <Icon name={service.icon || 'fa-solid fa-star'} class={`text-2xl ${serviceTextColor} ${serviceAccentDarkColor}`}/>
+                  <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                    {feature.split(':')[0]} {/* Assuming features might be "Title: Description" */}
+                  </h3>
+                </div>
+                {feature.includes(':') && (
+                   <p class="text-gray-600 dark:text-gray-300 text-sm">{feature.substring(feature.indexOf(':') + 1).trim()}</p>
+                )}
+                {!feature.includes(':') && (
+                    <p class="text-gray-600 dark:text-gray-300 text-sm">Detailed explanation or benefit of this feature.</p> 
+                    // Fallback or default description if feature is just a string
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
       
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {service.features.map((feature, index) => (
-          <div class="feature-card">
-            <h3 class="text-lg font-semibold mb-2">{feature}</h3>
+      {parentSolutionsDetails.length > 0 && (
+        <section class="scroll-mt-24" id="solutions">
+          <div class="max-w-3xl mx-auto text-center mb-12 lg:mb-16">
+            <Badge text="Part of a Bigger Picture" variant={service.color} size="md" class="mb-4"/>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Included In Our Solutions
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300">
+              This service is a key component of the following comprehensive solutions we offer:
+            </p>
           </div>
-        ))}
-      </div>
-    </Container>
-  </section>
-  
-  <!-- Feature Cards Section (if featureCards data exists for this service) -->
-  {serviceFeatureCards && (
-    <section class="py-16 bg-gray-50 dark:bg-gray-800/50">
-      <Container>
-        <div class="max-w-3xl mx-auto text-center mb-12">
-          <div class="badge-wrapper">
-            <Badge text="DETAILED FEATURES" variant={serviceColor} size="md" />
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {parentSolutionsDetails.map((solution) => (
+              <a href={solution.link} class={`block p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border-t-4 ${solution.borderColor || 'border-t-gray-500'} bg-white dark:bg-gray-800 group hover:scale-105`}>
+                <div class="flex items-center space-x-3 mb-3">
+                  <Icon name={solution.icon || 'fa-solid fa-box-open'} class={`text-3xl ${solution.textColor || 'text-gray-600'} dark:text-gray-400`}/>
+                  <h3 class="text-xl font-semibold text-gray-800 dark:text-white group-hover:${solution.textColor || 'text-gray-700'} dark:group-hover:${solution.textColor || 'text-gray-300'} transition-colors">
+                    {solution.title}
+                  </h3>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">{solution.description.substring(0,100)}...</p>
+                <span class={`font-semibold ${solution.textColor || 'text-gray-600'} dark:text-gray-400 group-hover:underline`}>
+                  Explore Solution &rarr;
+                </span>
+              </a>
+            ))}
           </div>
-          <h2 class="heading-primary">
-            Comprehensive Features
-          </h2>
-          <p class="section-description">
-            Discover all the benefits our {service.title.toLowerCase()} offer.
-          </p>
-        </div>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {serviceFeatureCards.map((feature) => (
-            <FeatureCard
-              title={feature.title}
-              description={feature.description}
-              icon={feature.icon}
-              color={feature.color}
-            />
-          ))}
-        </div>
-      </Container>
-    </section>
-  )}
-  
-  <!-- Our Process -->
-  {serviceProcessSteps && (
-    <section class="py-16 bg-white dark:bg-gray-900">
-      <Container>
-        <div class="max-w-3xl mx-auto text-center mb-12">
-          <div class="badge-wrapper">
-            <Badge text="OUR PROCESS" variant={serviceColor} size="md" />
+        </section>
+      )}
+
+      {service.faqs && service.faqs.length > 0 && (
+        <section class="scroll-mt-24" id="faq">
+          <div class="max-w-3xl mx-auto text-center mb-12 lg:mb-16">
+            <Badge text="Got Questions?" variant={service.color} size="md" class="mb-4"/>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300">
+              Find answers to common questions about our {service.shortTitle || service.title.toLowerCase()} service.
+            </p>
           </div>
-          <h2 class="heading-primary">
-            How We Work
-          </h2>
-          <p class="section-description">
-            Our structured approach ensures consistent, high-quality results for every project.
-          </p>
-        </div>
-        
-        <ProcessSteps steps={serviceProcessSteps} color={serviceColor} />
-      </Container>
-    </section>
-  )}
-  
-  <!-- FAQs -->
-  {serviceFaqs && (
-    <section class="py-16 bg-gray-50 dark:bg-gray-800/50">
-      <Container>
-        <div class="max-w-3xl mx-auto text-center mb-12">
-          <div class="badge-wrapper">
-            <Badge text="FAQ" variant={serviceColor} size="md" />
+          <div class="max-w-3xl mx-auto">
+            <ServiceFAQ faqs={service.faqs} />
           </div>
-          <h2 class="heading-primary">
-            Common Questions
-          </h2>
-          <p class="section-description">
-            Get answers to frequently asked questions about our {service.title.toLowerCase()}.
-          </p>
-        </div>
-        
-        <ServiceFAQ faqs={serviceFaqs} />
-      </Container>
-    </section>
-  )}
-  
-  <!-- CTA Section -->
+        </section>
+      )}
+    </div>
+  </Container>
+
   <PageCta
-    title={`Ready to get started with our ${service.title.toLowerCase()}?`}
-    description="Get in touch today for a free consultation and let's discuss how we can help your business grow online."
+    title={`Ready to Elevate Your Business with ${service.shortTitle || service.title}?`}
+    description={`Let's discuss how our ${service.title.toLowerCase()} can be tailored to your specific needs. Reach out today for a personalized consultation.`}
     badgeText="GET STARTED"
-    primaryButtonText={service.ctaText || "Learn More"}
-    primaryButtonHref="/contact"
-    secondaryButtonText="See Our Portfolio"
-    secondaryButtonHref="/portfolio"
-    footnote="No commitment required. We'll respond within 24 hours."
+    primaryButtonText={service.ctaText || "Contact Us"}
+    primaryButtonHref="/contact" // Or make this dynamic: service.link
+    secondaryButtonText="View All Services"
+    secondaryButtonHref="/services"
+    footnote="No commitment required. We're here to help."
+    backgroundColor={service.color}
   />
 </Layout>
 
 <style>
-  .feature-card {
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+  /* Smooth scroll for in-page navigation if you add any */
+  html {
+    scroll-behavior: smooth;
   }
 
-  .feature-card:hover {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
+  /* Add any additional page-specific styles here */
+  /* Example: Enhance hover on feature cards */
+  .group .fa-check-circle {
+    transition: transform 0.3s ease-in-out;
   }
-
-  .dark .feature-card {
-    background-color: rgb(31, 41, 55);
-    color: white;
-  }
-
-  /* Animation delays */
-  .animation-delay-700 {
-    animation-delay: 700ms;
-  }
-  
-  .animation-delay-1500 {
-    animation-delay: 1500ms;
+  .group:hover .fa-check-circle {
+    transform: scale(1.1);
   }
 </style>

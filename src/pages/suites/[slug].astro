@@ -1,0 +1,178 @@
+---
+// src/pages/suites/[slug].astro
+import Layout from '../../layouts/Layout.astro';
+import Container from '../../components/common/Container.astro';
+import PageHeader from '../../components/common/PageHeader.astro';
+import Badge from '../../components/ui/Badge.astro';
+import Icon from '../../components/common/Icon.astro';
+import SolutionCard from '../../components/solutions/SolutionCard.astro'; // Step 3
+import TestimonialCard from '../../components/common/TestimonialCard.astro'; // Step 4
+import ServiceFAQ from '../../components/services/ServiceFAQ.astro';
+import PageCta from '../../components/common/PageCta.astro';
+import { SEO } from 'astro-seo';
+
+import { suites, type Suite } from '../../data/suites';
+import { solutions, type Solution } from '../../data/solutions'; // To fetch included solution details
+
+export async function getStaticPaths() {
+  return suites.map(suite => ({
+    params: { slug: suite.id },
+    props: { suiteData: suite }, // Renamed to avoid conflict with 'suite' variable name if used inside
+  }));
+}
+
+interface Props {
+  suiteData: Suite;
+}
+
+const { suiteData: suite } = Astro.props; // Use 'suite' internally
+
+// Get details of included solutions
+const includedSolutionDetails = suite.includedSolutions
+  .map(solutionId => solutions.find(s => s.id === solutionId))
+  .filter(s => s !== undefined) as Solution[];
+
+// Theming variables
+const suiteColor = suite.color || "gray";
+const suiteTextColor = suite.textColor || `text-${suiteColor}-600`;
+const suiteBorderColor = suite.borderColor || `border-t-${suiteColor}-500`;
+const suiteBgLightColor = `bg-${suiteColor}-50 dark:bg-${suiteColor}-900/30`;
+const darkSuiteTextColor = `dark:text-${suiteColor}-400`;
+---
+
+<Layout title={`${suite.title} | Greenberry Digital Suites`}>
+  <SEO
+    title={`${suite.title} - Tailored for ${suite.targetSector} | Greenberry`}
+    description={suite.description}
+    openGraph={{
+      basic: {
+        title: `${suite.title} | Greenberry`,
+        type: 'website',
+        image: `/images/og/suites/${suite.id}.png`, // Replace with relevant OG image
+      },
+    }}
+  />
+
+  <PageHeader
+    title={suite.title}
+    description={suite.description}
+    badgeText={`FOR ${suite.targetSector.toUpperCase()}`}
+    highlightedText={suite.title.split(' ')[0]}
+    paddingY="lg"
+    backgroundVariant="decorated"
+    icon={suite.icon}
+    badgeVariant={suite.color}
+    titleIcon={suite.icon}
+    titleIconColor={suite.textColor}
+  />
+
+  <div class="py-12 md:py-16 lg:py-20 space-y-16 lg:space-y-24">
+
+    {includedSolutionDetails.length > 0 && (
+      <section id="included-solutions">
+        <Container>
+          <div class="max-w-3xl mx-auto text-center mb-12 lg:mb-16">
+            <Badge text="Core Solutions Included" variant={suite.color} size="md" class="mb-4" />
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              What's Inside the {suite.title}
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300">
+              This suite bundles the following powerful solutions, working together seamlessly for your {suite.targetSector}.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {includedSolutionDetails.map((solution) => (
+              <SolutionCard {...solution} />
+            ))}
+          </div>
+        </Container>
+      </section>
+    )}
+
+    <section id="suite-details" class={`py-16 lg:py-24 ${suiteBgLightColor}`}>
+      <Container>
+        <div class="grid lg:grid-cols-5 gap-12 lg:gap-16 items-start">
+          <div class="lg:col-span-3">
+            <div class="mb-10">
+              <Badge text="Suite Features" variant={suite.color} size="sm" class="mb-3"/>
+              <h3 class="text-2xl md:text-3xl font-semibold text-gray-800 dark:text-white mb-6">
+                Key Functionality
+              </h3>
+              <ul class="space-y-3">
+                {suite.features.map(feature => (
+                  <li class="flex items-start">
+                    <Icon name="fa-solid fa-star" class={`mr-3 mt-1 text-lg ${suiteTextColor} ${darkSuiteTextColor}`} />
+                    <span class="text-gray-700 dark:text-gray-300">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div class="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border-l-4 ${suite.borderColor || `border-l-${suite.color}-500`}">
+             <Badge text={`${suite.targetSector} Extras`} variant={suite.color} size="sm" class="mb-3"/>
+            <h3 class={`text-xl font-bold ${suiteTextColor} ${darkSuiteTextColor} mb-4`}>
+              Tailored for You
+            </h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Exclusive benefits and integrations for the {suite.targetSector.toLowerCase()} sector:
+            </p>
+            <ul class="space-y-3">
+              {suite.sectorExtras.map(extra => (
+                <li class="flex items-start">
+                  <Icon name="fa-solid fa-check-double" class={`mr-3 mt-1 text-lg ${suiteTextColor} ${darkSuiteTextColor}`} />
+                  <span class="text-gray-700 dark:text-gray-300 text-sm">{extra}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </Container>
+    </section>
+
+    {suite.testimonial && (
+      <section id="testimonial">
+        <Container>
+          <div class="max-w-3xl mx-auto">
+            <TestimonialCard
+              quote={suite.testimonial.quote}
+              author={suite.testimonial.author}
+              position={suite.testimonial.position}
+              company={suite.testimonial.company}
+              color={suite.color}
+            />
+          </div>
+        </Container>
+      </section>
+    )}
+
+    {suite.faqs && suite.faqs.length > 0 && (
+      <section id="faqs" class={`py-16 lg:py-24 ${suiteBgLightColor}`}>
+        <Container>
+          <div class="max-w-3xl mx-auto text-center mb-12 lg:mb-16">
+            <Badge text="Your Questions Answered" variant={suite.color} size="md" class="mb-4"/>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Suite FAQs
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300">
+              Common questions about the {suite.title}.
+            </p>
+          </div>
+          <div class="max-w-3xl mx-auto">
+            <ServiceFAQ faqs={suite.faqs} />
+          </div>
+        </Container>
+      </section>
+    )}
+  </div>
+
+  <PageCta
+    title={`Interested in the ${suite.title}?`}
+    description={`Let's tailor this suite to perfectly match your ${suite.targetSector.toLowerCase()}'s specific requirements. Get in touch for a personalized consultation.`}
+    badgeText="GET STARTED"
+    primaryButtonText={suite.ctaText}
+    primaryButtonHref="/contact"
+    secondaryButtonText="View All Suites"
+    secondaryButtonHref="/suites"
+    backgroundColor={suite.color}
+  />
+</Layout>

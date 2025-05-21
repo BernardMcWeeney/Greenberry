@@ -1,0 +1,57 @@
+---
+// src/components/suites/SuiteCard.astro
+import Icon from '../common/Icon.astro';
+import Badge from '../ui/Badge.astro';
+import Button from '../common/Button.astro'; // Assuming you have a Button component
+import type { Suite } from '../../data/suites';
+
+export interface Props extends Suite {}
+
+const {
+  id,
+  title,
+  description,
+  icon,
+  color = "gray",
+  borderColor = `border-t-${color}-500`,
+  textColor = `text-${color}-600`,
+  link,
+  targetSector,
+  ctaText = "Learn More"
+} = Astro.props;
+
+const darkTextColor = `dark:text-${color}-400`;
+const darkBorderColor = `dark:border-t-${color}-700`;
+---
+<a href={link} class="group block">
+  <article class={`h-full flex flex-col bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-xl overflow-hidden border-t-4 ${borderColor} dark:${darkBorderColor}`}>
+    <div class="p-6 flex-grow">
+      <div class="flex items-center mb-4">
+        <div class={`p-3 rounded-full bg-${color}-100 dark:bg-${color}-900/50 mr-4`}>
+          <Icon name={icon} class={`text-3xl ${textColor} ${darkTextColor}`} />
+        </div>
+        <div>
+          <h3 class={`text-xl font-bold ${textColor} ${darkTextColor} group-hover:underline`}>{title}</h3>
+          {targetSector && <Badge text={targetSector} variant={color} size="sm" class="mt-1 opacity-90" />}
+        </div>
+      </div>
+      <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-3">
+        {description}
+      </p>
+    </div>
+    <div class="p-6 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-700/50">
+      <span class={`font-semibold ${textColor} ${darkTextColor} text-sm group-hover:underline`}>
+        {ctaText} &rarr;
+      </span>
+    </div>
+  </article>
+</a>
+
+<style>
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+</style>

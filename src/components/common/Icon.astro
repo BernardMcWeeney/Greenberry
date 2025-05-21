@@ -1,0 +1,10 @@
+---
+// src/components/common/Icon.astro
+export interface Props {
+  name: string; // e.g., "fa-solid fa-star"
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+---
+<i class:list={[name, className]}></i>

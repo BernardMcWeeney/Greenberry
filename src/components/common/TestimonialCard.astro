@@ -1,0 +1,24 @@
+---
+// src/components/common/TestimonialCard.astro
+import Icon from './Icon.astro';
+
+export interface Props {
+  quote: string;
+  author: string;
+  position: string;
+  company: string;
+  color?: string; // For theming accents
+}
+
+const { quote, author, position, company, color = "gray" } = Astro.props;
+const textColorClass = `text-${color}-600 dark:text-${color}-400`;
+const borderColorClass = `border-${color}-500 dark:border-${color}-700`;
+---
+<div class={`bg-white dark:bg-gray-800 p-8 rounded-xl shadow-xl border-l-4 ${borderColorClass}`}>
+  <Icon name="fa-solid fa-quote-left" class={`text-3xl ${textColorClass} opacity-75 mb-4`} />
+  <p class="text-lg italic text-gray-700 dark:text-gray-300 mb-6">"{quote}"</p>
+  <div class="text-right">
+    <p class={`font-bold text-md ${textColorClass}`}>{author}</p>
+    <p class="text-sm text-gray-500 dark:text-gray-400">{position}, {company}</p>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+---
+// src/components/solutions/SolutionCard.astro
+import Icon from '../common/Icon.astro';
+import Badge from '../ui/Badge.astro';
+import type { Solution } from '../../data/solutions'; // Assuming Solution type is exported
+
+export interface Props extends Solution {}
+
+const {
+  id,
+  title,
+  description,
+  icon,
+  color = "gray",
+  borderColor = `border-t-${color}-500`,
+  textColor = `text-${color}-600`,
+  link,
+  features, // Solutions have features
+  ctaText = "Explore Solution"
+} = Astro.props;
+
+const darkTextColor = `dark:text-${color}-400`;
+const displayFeatures = Array.isArray(features) ? features.slice(0, 3) : []; // Show a few features
+---
+<a href={link} class="group block">
+  <article class={`h-full flex flex-col bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-shadow duration-300 rounded-lg overflow-hidden border-t-4 ${borderColor} dark:border-t-${color}-700`}>
+    <div class="p-6">
+      <div class="flex items-center mb-3">
+        <Icon name={icon} class={`text-2xl ${textColor} ${darkTextColor} mr-3`} />
+        <h3 class={`text-lg font-semibold ${textColor} ${darkTextColor} group-hover:underline`}>{title}</h3>
+      </div>
+      <p class="text-gray-500 dark:text-gray-400 text-sm mb-4 line-clamp-2">{description}</p>
+      {displayFeatures.length > 0 && (
+        <ul class="space-y-1 text-xs text-gray-600 dark:text-gray-300 mb-4">
+          {displayFeatures.map((feature) => (
+            <li class="flex items-start">
+              <Icon name="fa-solid fa-check" class={`text-xs ${textColor} ${darkTextColor} mr-2 mt-1 flex-shrink-0`} />
+              <span>{feature}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+    <div class="mt-auto p-4 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-100 dark:border-gray-600/50">
+      <span class={`font-medium ${textColor} ${darkTextColor} text-sm group-hover:underline`}>
+        {ctaText} &rarr;
+      </span>
+    </div>
+  </article>
+</a>
+<style>.line-clamp-2 { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }</style>
