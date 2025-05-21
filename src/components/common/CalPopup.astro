@@ -21,53 +21,18 @@
   </button>
 </div>
 
-<!-- Cal element-click embed code begins -->
 <script type="text/javascript">
-  document.addEventListener('DOMContentLoaded', function() {
-    (function (C, A, L) { 
-      let p = function (a, ar) { a.q.push(ar); }; 
-      let d = C.document; 
-      C.Cal = C.Cal || function () { 
-        let cal = C.Cal; 
-        let ar = arguments; 
-        if (!cal.loaded) { 
-          cal.ns = {}; 
-          cal.q = cal.q || []; 
-          d.head.appendChild(d.createElement("script")).src = A; 
-          cal.loaded = true; 
-        } 
-        if (ar[0] === L) { 
-          const api = function () { p(api, arguments); }; 
-          const namespace = ar[1]; 
-          api.q = api.q || []; 
-          if(typeof namespace === "string"){
-            cal.ns[namespace] = cal.ns[namespace] || api;
-            p(cal.ns[namespace], ar);
-            p(cal, ["initNamespace", namespace]);
-          } else p(cal, ar); 
-          return;
-        } 
-        p(cal, ar); 
-      }; 
-    })(window, "https://app.cal.com/embed/embed.js", "init");
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+Cal("init", "30min", {origin:"https://cal.com"});
 
-    // Initialize Cal
-    window.Cal("init", "30min", {origin:"https://cal.com"});
-    
-    // Configure UI
-    window.Cal.ns["30min"]("ui", {
-      "cssVarsPerTheme": {
-        "light": {"cal-brand": "#16A349"},
-        "dark": {"cal-brand": "#16A349"}
-      },
-      "hideEventTypeDetails": false,
-      "layout": "column_view"
-    });
-  });
-</script>
-<!-- Cal element-click embed code ends -->
+  // Important: Please add the following attributes to the element that should trigger the calendar to open upon clicking.
+  // `data-cal-link="greenberry/30min"`
+  // data-cal-namespace="30min"
+  // `data-cal-config='{"layout":"month_view"}'`
 
-<style>
+  Cal.ns["30min"]("ui", {"cssVarsPerTheme":{"light":{"cal-brand":"#16A349"},"dark":{"cal-brand":"#16A349"}},"hideEventTypeDetails":false,"layout":"month_view"});
+  </script>
+  <style>
   .cal-floating-button-container {
     position: fixed;
     bottom: 24px;
@@ -91,6 +56,8 @@
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    /* Ensure button text is always visible by default */
+    white-space: nowrap; /* Prevents text from wrapping */
   }
 
   .cal-floating-button:hover {
@@ -109,7 +76,7 @@
     align-items: center;
   }
 
-  /* Responsive adjustments */
+  /* Responsive adjustments for smaller screens */
   @media (max-width: 768px) {
     .cal-floating-button-container {
       bottom: 16px;
@@ -117,25 +84,22 @@
     }
 
     .cal-floating-button {
-      padding: 10px 16px;
-      font-size: 14px;
+      padding: 10px 16px; /* Slightly smaller padding for mobile */
+      font-size: 14px; /* Slightly smaller font size for mobile */
+      /* Remove or comment out the styles that hide text and make the button circular */
+      width: auto; /* Reset width */
+      height: auto; /* Reset height */
+      border-radius: 50px; /* Keep the rounded pill shape */
+      justify-content: center; /* Keep content centered */
     }
     
     .button-text {
-      display: none;
-    }
-    
-    .cal-floating-button {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      padding: 0;
-      justify-content: center;
+      display: inline; /* Ensure text is visible on mobile */
     }
     
     .calendar-icon svg {
-      width: 24px;
-      height: 24px;
+      width: 20px; /* Keep icon size consistent or adjust as needed */
+      height: 20px;
     }
   }
 
