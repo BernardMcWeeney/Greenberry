@@ -1,86 +1,17 @@
 ---
 // CalPopup.astro
-interface Props {
-  buttonText?: string;
-  position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
-}
-
-const {
-  buttonText = "Schedule a Call",
-  position = "bottom-right"
-} = Astro.props;
-
-// Position class mapping
-const positionClasses = {
-  'bottom-right': 'bottom-6 right-6',
-  'bottom-left': 'bottom-6 left-6',
-  'top-right': 'top-6 right-6',
-  'top-left': 'top-6 left-6'
-};
-
-const positionClass = positionClasses[position];
 ---
 
-<button 
-  id="cal-popup-button" 
-  class={`fixed ${positionClass} z-50 flex items-center justify-center gap-2 rounded-full bg-[#16A349] text-white shadow-lg transition-all duration-300 ease-in-out hover:bg-[#118A3B] active:scale-95
-    sm:px-4 sm:py-3 sm:text-sm
-    md:px-5 md:py-3 md:text-base
-    lg:px-6 lg:py-4 lg:text-lg`}
-  data-cal-link="greenberry/30min"
-  data-cal-namespace="30min"
-  data-cal-config='{"layout":"month_view"}'
-  aria-label={buttonText}
->
-  <!-- Calendar Icon -->
-  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-4 sm:w-4 md:h-5 md:w-5 lg:h-6 lg:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-  </svg>
-  <span class="hidden sm:inline">{buttonText}</span>
-</button>
+<div id="cal-popup-container" class="cal-popup">
+  <!-- Cal.com will inject the floating button here -->
+</div>
 
-<script>
-  // Wait for the document to be fully loaded
-  document.addEventListener('DOMContentLoaded', () => {
-    // Create and initialize Cal.com embedding
-    (function (C, A, L) { 
-      let p = function (a, ar) { a.q.push(ar); }; 
-      let d = C.document; 
-      C.Cal = C.Cal || function () { 
-        let cal = C.Cal; 
-        let ar = arguments; 
-        if (!cal.loaded) { 
-          cal.ns = {}; 
-          cal.q = cal.q || []; 
-          d.head.appendChild(d.createElement("script")).src = A; 
-          cal.loaded = true; 
-        } 
-        if (ar[0] === L) { 
-          const api = function () { p(api, arguments); }; 
-          const namespace = ar[1]; 
-          api.q = api.q || []; 
-          if(typeof namespace === "string"){
-            cal.ns[namespace] = cal.ns[namespace] || api;
-            p(cal.ns[namespace], ar);
-            p(cal, ["initNamespace", namespace]);
-          } else p(cal, ar); 
-          return;
-        } 
-        p(cal, ar); 
-      }; 
-    })(window, "https://app.cal.com/embed/embed.js", "init");
-    
-    // Initialize Cal with the 30min namespace
-    Cal("init", "30min", {origin:"https://cal.com"});
-    
-    // Configure UI settings
-    Cal.ns["30min"]("ui", {
-      "cssVarsPerTheme":{
-        "light":{"cal-brand":"#16A349"},
-        "dark":{"cal-brand":"#16A349"}
-      },
-      "hideEventTypeDetails":false,
-      "layout":"month_view"
-    });
-  });
-</script>
+<!-- Cal floating-popup embed code begins -->
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+Cal("init", "30min", {origin:"https://cal.com"});
+
+  Cal.ns["30min"]("floatingButton", {"calLink":"greenberry/30min","config":{"layout":"column_view"},"buttonText":"Schedule a Call","buttonColor":"#16A349"}); 
+  Cal.ns["30min"]("ui", {"cssVarsPerTheme":{"light":{"cal-brand":"#16A349"},"dark":{"cal-brand":"#16A349"}},"hideEventTypeDetails":false,"layout":"column_view"});
+  </script>
+  <!-- Cal floating-popup embed code ends -->
