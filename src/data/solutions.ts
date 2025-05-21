@@ -86,7 +86,7 @@ export const solutions: Solution[] = [
       "Device onboarding & support",
       "Ad-hoc technical assistance"
     ],
-    link: "/solutions/it-support",
+    link: "/solutions/it-support-solution",
     ctaText: "Get IT Support"
   },
   {
