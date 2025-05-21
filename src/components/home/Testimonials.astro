@@ -6,10 +6,12 @@ import testimonials from '../../data/testimonial.ts';
 // Calculate average review rating if needed (keeping this from the original component)
 const googleRating = 4.9;
 const totalReviews = 87;
+
+// Define the character limit
+const CHARACTER_LIMIT = 250;
 ---
 
 <section class="section-padding bg-white dark:bg-gray-900 relative overflow-hidden pb-12 sm:pb-16">
-  <!-- Background elements for depth -->
   <div class="absolute inset-0 overflow-hidden">
     <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-greenberry-500/10 rounded-full filter blur-3xl opacity-50"></div>
     <div class="absolute bottom-0 left-0 w-1/3 h-1/3 bg-greenberry-400/10 rounded-full filter blur-3xl opacity-40"></div>
@@ -25,9 +27,7 @@ const totalReviews = 87;
       </h2>
     </div>
     
-    <!-- Testimonial slider with navigation -->
     <div class="testimonial-outer-container relative mx-auto" aria-roledescription="carousel" aria-label="Client testimonials">
-      <!-- Navigation Arrows - Absolutely positioned relative to outer container -->
       <button 
         id="prev-btn" 
         class="absolute left-0 top-1/2 transform -translate-y-1/2 z-20 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md"
@@ -44,9 +44,7 @@ const totalReviews = 87;
         <i class="fas fa-chevron-right text-neutral-500 dark:text-gray-400" aria-hidden="true"></i>
       </button>
       
-      <!-- Testimonial Slider Container -->
       <div class="testimonial-slider-container relative w-full overflow-hidden">
-        <!-- Testimonial Slide Track -->
         <div id="testimonial-track" class="flex transition-transform duration-500" aria-live="polite">
           {testimonials.map((testimonial, index) => (
             <div class="testimonial-slide flex-shrink-0 px-3" aria-roledescription="slide" aria-label={`Testimonial ${index + 1} of ${testimonials.length}`}>
@@ -66,7 +64,9 @@ const totalReviews = 87;
                 {/* Quote Content */}
                 <div class="mb-6 flex-grow">
                   <p class="text-neutral-700 dark:text-gray-300 text-sm leading-relaxed">
-                    "{testimonial.quote}"
+                    "{testimonial.quote.length > CHARACTER_LIMIT 
+                      ? testimonial.quote.substring(0, CHARACTER_LIMIT) + '...' 
+                      : testimonial.quote}"
                   </p>
                 </div>
                 
@@ -120,7 +120,6 @@ const totalReviews = 87;
         </div>
       </div>
       
-      <!-- Dots Navigation -->
       <div class="dots-container flex justify-center mt-6 space-x-3" role="tablist" aria-label="Testimonial navigation">
         {testimonials.map((_, index) => (
           <button 
