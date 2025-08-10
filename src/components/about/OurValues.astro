@@ -53,7 +53,7 @@ const colors = [
       {values.map((value, index) => {
         const colorSet = colors[index % colors.length];
         return (
-          <div class={`group bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border-t-4 ${colorSet.borderColor}`}>
+          <div class={`group bg-white dark:bg-gray-800 rounded-lg shadow-xs hover:shadow-md transition-all duration-300 overflow-hidden border-t-4 ${colorSet.borderColor}`}>
             <div class="p-6">
               <div class={`${colorSet.textColor} text-4xl mb-4`}>
                 <i class={value.icon}></i>

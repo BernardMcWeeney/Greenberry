@@ -23,7 +23,7 @@ const darkTextColor = `dark:text-${color}-400`;
 const displayFeatures = Array.isArray(features) ? features.slice(0, 3) : []; // Show a few features
 ---
 <a href={link} class="group block">
-  <article class={`h-full flex flex-col bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-shadow duration-300 rounded-lg overflow-hidden border-t-4 ${borderColor} dark:border-t-${color}-700`}>
+  <article class={`h-full flex flex-col bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-shadow-sm duration-300 rounded-lg overflow-hidden border-t-4 ${borderColor} dark:border-t-${color}-700`}>
     <div class="p-6">
       <div class="flex items-center mb-3">
         <Icon name={icon} class={`text-2xl ${textColor} ${darkTextColor} mr-3`} />

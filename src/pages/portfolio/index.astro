@@ -34,14 +34,14 @@ const categories = Array.from(categorySet);
       <!-- Category Filter -->
       <div class="flex flex-wrap justify-center gap-3 mb-8" id="category-filters">
         <button 
-          class="filter-btn active px-4 py-2 rounded-full bg-greenberry-600 text-white font-medium transition-colors hover:bg-greenberry-700 focus:outline-none focus:ring-2 focus:ring-greenberry-500 focus:ring-offset-2" 
+          class="filter-btn active px-4 py-2 rounded-full bg-greenberry-600 text-white font-medium transition-colors hover:bg-greenberry-700 focus:outline-hidden focus:ring-3-2 focus:ring-3-greenberry-500 focus:ring-3-offset-2" 
           data-category="all"
         >
           All Projects
         </button>
         {categories.map(category => (
           <button 
-            class="filter-btn px-4 py-2 rounded-full bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm text-gray-700 dark:text-gray-300 font-medium border border-gray-200/60 dark:border-gray-700/60 transition-colors hover:bg-greenberry-600 hover:text-white hover:border-transparent focus:outline-none focus:ring-2 focus:ring-greenberry-500 focus:ring-offset-2" 
+            class="filter-btn px-4 py-2 rounded-full bg-white/70 dark:bg-gray-800/70 backdrop-blur-xs text-gray-700 dark:text-gray-300 font-medium border border-gray-200/60 dark:border-gray-700/60 transition-colors hover:bg-greenberry-600 hover:text-white hover:border-transparent focus:outline-hidden focus:ring-3-2 focus:ring-3-greenberry-500 focus:ring-3-offset-2" 
             data-category={category}
           >
             {category}
@@ -141,7 +141,7 @@ const categories = Array.from(categorySet);
           
           <a 
             href="/services" 
-            class="px-6 py-3 rounded-lg font-medium border border-greenberry-500/40 bg-white dark:bg-gray-800/30 backdrop-blur-sm text-greenberry-700 dark:text-greenberry-300 hover:bg-white/50 dark:hover:bg-gray-800/50 transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-greenberry-500 focus:ring-offset-2"
+            class="px-6 py-3 rounded-lg font-medium border border-greenberry-500/40 bg-white dark:bg-gray-800/30 backdrop-blur-xs text-greenberry-700 dark:text-greenberry-300 hover:bg-white/50 dark:hover:bg-gray-800/50 transition-all duration-300 shadow-xs hover:shadow-sm flex items-center justify-center focus:outline-hidden focus:ring-3-2 focus:ring-3-greenberry-500 focus:ring-3-offset-2"
           >
             <span class="mr-2"><i class="fa-solid fa-list-check" aria-hidden="true"></i></span>
             Our Services

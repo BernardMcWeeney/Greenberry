@@ -13,13 +13,11 @@
     "@astrojs/react": "^4.2.7",
     "@astrojs/sitemap": "^3.4.0",
     "@aws-sdk/client-ses": "^3.758.0",
+    "@tailwindcss/vite": "^4.1.11",
     "astro": "^5.7.13",
-    "astro-seo": "^0.8.4"
+    "astro-seo": "^0.8.4",
+    "tailwindcss": "^4.1.11"
   },
   "devDependencies": {
-    "@astrojs/tailwind": "^6.0.2",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.5.3",
-    "tailwindcss": "^3.4.17"
   }
 }

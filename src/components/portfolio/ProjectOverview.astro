@@ -53,7 +53,7 @@ const paragraphs = description ? description.split('\n\n') : [];
           </h3>
           <div class="flex flex-wrap gap-2 md:gap-3">
             {technologies.map(tech => (
-              <div class="bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-sm font-medium px-3 py-1.5 md:px-4 md:py-2 rounded-md border border-gray-200 dark:border-gray-600 shadow-sm flex items-center">
+              <div class="bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-sm font-medium px-3 py-1.5 md:px-4 md:py-2 rounded-md border border-gray-200 dark:border-gray-600 shadow-xs flex items-center">
                 {/* Add tech icons based on common technologies */}
                 {tech.toLowerCase().includes('react') && 
                   <i class="fa-brands fa-react text-blue-500 mr-2" aria-hidden="true"></i>

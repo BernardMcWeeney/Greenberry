@@ -29,6 +29,25 @@ const {
     <meta name="generator" content={Astro.generator} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     
+    <!-- Initialize theme BEFORE page renders to prevent flash -->
+    <script is:inline>
+      // This runs immediately to prevent flash of wrong theme
+      (function() {
+        // Default to light mode
+        const theme = localStorage.getItem('theme');
+        
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else if (theme === 'light') {
+          document.documentElement.classList.remove('dark');
+        } else {
+          // No preference set - default to LIGHT mode
+          document.documentElement.classList.remove('dark');
+          localStorage.setItem('theme', 'light');
+        }
+      })();
+    </script>
+    
     <!-- Cloudflare Turnstile -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     
@@ -54,13 +73,32 @@ const {
     <Footer />
 
     <script>
-      // Check for preferred dark mode
-      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
+      // Enhanced dark mode handling with proper event listeners
+      function initializeDarkMode() {
+        const savedTheme = localStorage.getItem('theme');
+        
+        // Apply saved theme or default to light
+        if (savedTheme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          // Default to light mode
+          document.documentElement.classList.remove('dark');
+          if (!savedTheme) {
+            localStorage.setItem('theme', 'light');
+          }
+        }
       }
-
+      
+      // Initialize on page load
+      initializeDarkMode();
+      
+      // Listen for storage changes (when theme is changed in another tab)
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'theme') {
+          initializeDarkMode();
+        }
+      });
+      
       // Add smooth scroll behavior for anchor links
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
@@ -79,7 +117,7 @@ const {
     </script>
 
     <style is:global>
-      /* Fix horizontal and vertical scrolling issues */
+      /* Fix horizontal scrolling issues */
       html {
         overflow-x: hidden;
         width: 100%;
@@ -92,9 +130,19 @@ const {
         overflow-y: auto;
       }
       
-      /* Ensure all elements respect their parent width */
-      * {
+      /* Only apply max-width to images and media, not all elements */
+      img, video, svg, iframe, embed, object {
         max-width: 100%;
+        height: auto;
+      }
+      
+      /* Smooth transition for theme changes */
+      html.dark-mode-transition,
+      html.dark-mode-transition *,
+      html.dark-mode-transition *:before,
+      html.dark-mode-transition *:after {
+        transition: background-color 300ms ease, border-color 300ms ease, color 300ms ease !important;
+        transition-delay: 0 !important;
       }
     </style>
   </body>

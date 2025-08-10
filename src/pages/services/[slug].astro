@@ -102,7 +102,7 @@ const serviceAccentDarkColor = `dark:text-${serviceColor}-400`;
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {service.features.map((feature) => (
-              <div class={`p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 ${serviceBorderColor} bg-white dark:bg-gray-800`}>
+              <div class={`p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow-sm duration-300 border-t-4 ${serviceBorderColor} bg-white dark:bg-gray-800`}>
                 <div class="flex items-center space-x-3 mb-3">
                   <Icon name={service.icon || 'fa-solid fa-star'} class={`text-2xl ${serviceTextColor} ${serviceAccentDarkColor}`}/>
                   <h3 class="text-lg font-semibold text-gray-800 dark:text-white">

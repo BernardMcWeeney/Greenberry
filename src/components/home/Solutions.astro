@@ -21,9 +21,9 @@ import { solutions } from '../../data/solutions';
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 relative z-10">
       {solutions.map((solution) => (
-        <div class={`group bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border-t-4 ${solution.borderColor}`}>
+        <div class={`group bg-white dark:bg-gray-800 rounded-lg shadow-xs hover:shadow-md transition-all duration-300 overflow-hidden border-t-4 ${solution.borderColor}`}>
           <div class="p-6">
             <div class={`${solution.textColor} text-4xl mb-4`}>
               <i class={solution.icon}></i>

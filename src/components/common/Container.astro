@@ -1,7 +1,13 @@
 ---
-// Container for consistent site spacing
+export interface Props {
+  class?: string;
+  id?: string;
+}
+
+const { class: className = '', id } = Astro.props;
 ---
 
-<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 box-border">
+<!-- Container applies the .container class which handles max-width and centering -->
+<div class={`container ${className}`} id={id}>
   <slot />
 </div>

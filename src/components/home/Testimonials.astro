@@ -48,7 +48,7 @@ const CHARACTER_LIMIT = 250;
         <div id="testimonial-track" class="flex transition-transform duration-500" aria-live="polite">
           {testimonials.map((testimonial, index) => (
             <div class="testimonial-slide flex-shrink-0 px-3" aria-roledescription="slide" aria-label={`Testimonial ${index + 1} of ${testimonials.length}`}>
-              <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm h-full flex flex-col border border-neutral-100 dark:border-gray-700">
+              <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-xs h-full flex flex-col border border-neutral-100 dark:border-gray-700">
                 {/* Rating Stars */}
                 <div class="flex text-accent-orange-400 mb-4">
                   {[...Array(5)].map((_, i) => (
@@ -389,13 +389,6 @@ const CHARACTER_LIMIT = 250;
     width: 100%;
     overflow: hidden;
     padding: 0;
-  }
-  
-  /* Allow cards to be wider on mobile */
-  @media (max-width: 640px) {
-    .testimonial-slide {
-      width: 90vw !important;
-    }
   }
   
   /* Navigation buttons */
