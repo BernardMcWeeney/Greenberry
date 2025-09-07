@@ -15,5 +15,9 @@ export default defineConfig({
       tailwindcss(),
     ],
   },
+  build: {
+    inlineStylesheets: 'auto', // inlines small page CSS into HTML to avoid blocking
+    cssMinify: 'lightningcss'
+  },
   site: 'https://greenberry.ie',
 });

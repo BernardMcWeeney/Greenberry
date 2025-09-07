@@ -25,113 +25,77 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    
-    <!-- Initialize theme BEFORE page renders to prevent flash -->
-    <script is:inline>
-      // This runs immediately to prevent flash of wrong theme
-      (function() {
-        // Default to light mode
-        const theme = localStorage.getItem('theme');
-        
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark');
-        } else if (theme === 'light') {
-          document.documentElement.classList.remove('dark');
-        } else {
-          // No preference set - default to LIGHT mode
-          document.documentElement.classList.remove('dark');
-          localStorage.setItem('theme', 'light');
-        }
-      })();
-    </script>
-    
+
     <!-- Cloudflare Turnstile -->
     <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-    
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    
+
+    <!-- Self-hosted Inter (preload actual font file) -->
+    <link rel="preload" href="/fonts/Inter-Variable.woff2" as="font" type="font/woff2" crossorigin>
+
+    <!-- Non-blocking Font Awesome (if you keep FA) -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link
+      rel="preload"
+      as="style"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      onload="this.onload=null;this.rel='stylesheet'"
+      crossorigin
+    >
+    <noscript>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin>
+    </noscript>
+
     <!-- Simple SEO Component -->
     <SEO title={title} description={description} image={image} />
   </head>
   <body class={`bg-white dark:bg-gray-900 min-h-screen flex flex-col ${bodyClass}`}>
     <Header />
-    
+
     <main class="flex-grow pt-[73px]">
       <slot />
     </main>
     <CalPopup />
-    
+
     <Footer />
 
     <script>
       // Enhanced dark mode handling with proper event listeners
       function initializeDarkMode() {
         const savedTheme = localStorage.getItem('theme');
-        
-        // Apply saved theme or default to light
         if (savedTheme === 'dark') {
           document.documentElement.classList.add('dark');
         } else {
-          // Default to light mode
           document.documentElement.classList.remove('dark');
-          if (!savedTheme) {
-            localStorage.setItem('theme', 'light');
-          }
+          if (!savedTheme) localStorage.setItem('theme', 'light');
         }
       }
-      
-      // Initialize on page load
       initializeDarkMode();
-      
-      // Listen for storage changes (when theme is changed in another tab)
       window.addEventListener('storage', (e) => {
-        if (e.key === 'theme') {
-          initializeDarkMode();
-        }
+        if (e.key === 'theme') initializeDarkMode();
       });
-      
-      // Add smooth scroll behavior for anchor links
-      document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(link => {
+
+      // Smooth scroll for hash links
+      document.querySelectorAll('a[href^="#"]').forEach((link) => {
         link.addEventListener('click', (e) => {
           e.preventDefault();
-          const target = e.currentTarget as HTMLAnchorElement;
-          const id = target.getAttribute('href');
+          const id = link.getAttribute('href');
           if (!id) return;
           document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
         });
       });
-
     </script>
 
     <style is:global>
       /* Fix horizontal scrolling issues */
-      html {
-        overflow-x: hidden;
-        width: 100%;
-      }
-      
-      body {
-        overflow-x: hidden;
-        width: 100%;
-        position: relative;
-        overflow-y: auto;
-      }
-      
-      /* Only apply max-width to images and media, not all elements */
-      img, video, svg, iframe, embed, object {
-        max-width: 100%;
-        height: auto;
-      }
-      
+      html { overflow-x: hidden; width: 100%; }
+      body { overflow-x: hidden; width: 100%; position: relative; overflow-y: auto; }
+
+      img, video, svg, iframe, embed, object { max-width: 100%; height: auto; }
+
       /* Smooth transition for theme changes */
       html.dark-mode-transition,
       html.dark-mode-transition *,
