@@ -1,4 +1,5 @@
 ---
+// src/components/home/Testimonials.astro
 import Container from '../common/Container.astro';
 import Badge from '../ui/Badge.astro';
 import testimonials from '../../data/testimonial.ts';
@@ -135,240 +136,220 @@ const CHARACTER_LIMIT = 250;
 </section>
 
 <script is:inline>
-  // Use is:inline to ensure the script runs immediately when the page loads
-  document.addEventListener('astro:page-load', function setupTestimonials() {
-    // Get DOM elements
+  // Replace only the slider JS with a more careful read-then-write flow.
+  (function () {
     const track = document.getElementById('testimonial-track');
-    const slides = document.querySelectorAll('.testimonial-slide');
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
-    const dots = document.querySelectorAll('.dot');
+    const dots = Array.from(document.querySelectorAll('.dot'));
     const sliderContainer = document.querySelector('.testimonial-slider-container');
-    
-    if (!track || slides.length === 0) return;
-    
-    // Variables
+
+    if (!track || !sliderContainer) return;
+
+    // Config
+    const TRANSITION_MS = 500;
+    const AUTOPLAY = true;
+    const INTERVAL = 4000;
+
+    // Get original slides (live NodeList snapshot)
+    const originalSlides = Array.from(track.querySelectorAll('.testimonial-slide'));
+    const originalCount = originalSlides.length;
+    if (originalCount === 0) return;
+
+    // State
+    let slidesToShow = 1;
+    let slideWidth = 0;
+    let totalSlides = 0; // track.children.length after cloning
     let currentIndex = 0;
-    let slideWidth;
-    let slidesToShow;
-    let autoplayTimeout;
     let isTransitioning = false;
-    const slideCount = slides.length;
-    
-    // Setup for true infinite loop
-    function setupInfiniteLoop() {
-      // Clone all slides
-      const originalSlides = Array.from(slides);
-      originalSlides.forEach(slide => {
-        const clone = slide.cloneNode(true);
-        track.appendChild(clone);
-      });
-      
-      // Position at first slide
-      moveToSlide(0, false);
+    let autoplayTimer = null;
+
+    // Clone originals into a fragment and append once (no intermediate layouts)
+    function appendClones() {
+      if (track.dataset.cloned === 'true') return;
+      const frag = document.createDocumentFragment();
+      originalSlides.forEach(s => frag.appendChild(s.cloneNode(true)));
+      track.appendChild(frag);
+      track.dataset.cloned = 'true';
     }
-    
-    // Calculate slide dimensions
+
+    // Compute slidesToShow from viewport (cheap read)
+    function computeSlidesToShow() {
+      const w = window.innerWidth;
+      if (w >= 1024) return 3;
+      if (w >= 640) return 2;
+      return 1;
+    }
+
+    // Calculate dims: READ containerWidth ONCE, then batch all writes in rAF.
     function calculateDimensions() {
+      // Temporarily disable transition to avoid visible jumps during layout change
       track.style.transition = 'none';
-      
-      // Determine slides to show based on screen width
-      if (window.innerWidth >= 1024) {
-        slidesToShow = 3; // Desktop
-      } else if (window.innerWidth >= 640) {
-        slidesToShow = 2; // Tablet
-      } else {
-        slidesToShow = 1; // Mobile
-      }
-      
-      // Calculate available width (container width minus padding)
+
+      slidesToShow = computeSlidesToShow();
+
+      // Single layout read (container width)
       const containerWidth = sliderContainer.clientWidth;
-      slideWidth = containerWidth / slidesToShow;
-      
-      // Set widths for all slides
-      document.querySelectorAll('.testimonial-slide').forEach(slide => {
-        slide.style.width = `${slideWidth}px`;
+      slideWidth = Math.floor(containerWidth / slidesToShow); // keep ints for crispness
+
+      // total slides (original + clones)
+      totalSlides = track.children.length;
+
+      // Batch all writes in one rAF to avoid read/write interleaving
+      requestAnimationFrame(() => {
+        // Set each slide width
+        Array.from(track.querySelectorAll('.testimonial-slide')).forEach(slide => {
+          slide.style.width = `${slideWidth}px`;
+        });
+
+        // Set track width in px
+        track.style.width = `${slideWidth * totalSlides}px`;
+
+        // Keep consistent transform style
+        track.style.transition = `transform ${TRANSITION_MS}ms ease`;
+
+        // Move to current index (no animate)
+        moveToSlide(currentIndex, false);
       });
-      
-      // Set track width
-      track.style.width = `${slideWidth * track.children.length}px`;
-      
-      // Maintain position
-      moveToSlide(currentIndex, false);
-      
-      setTimeout(() => {
-        track.style.transition = 'transform 500ms ease';
-      }, 50);
     }
-    
-    // Move to specific slide
+
+    // Move to slide in pixel world (preserves original layout exactly)
     function moveToSlide(index, animate = true) {
       if (isTransitioning) return;
-      
-      track.style.transition = animate ? 'transform 500ms ease' : 'none';
-      
-      const position = -index * slideWidth;
-      track.style.transform = `translateX(${position}px)`;
-      
+
+      track.style.transition = animate ? `transform ${TRANSITION_MS}ms ease` : 'none';
+
+      const positionPx = -index * slideWidth;
+      track.style.transform = `translateX(${positionPx}px)`;
+
       currentIndex = index;
-      
       updateActiveDot();
-      
-      // Update ARIA attributes for better screen reader support
-      document.querySelectorAll('.testimonial-slide').forEach((slide, idx) => {
-        if (idx === currentIndex % slideCount) {
+
+      // ARIA updates (which don't cause layout reads that matter)
+      Array.from(track.querySelectorAll('.testimonial-slide')).forEach((slide, idx) => {
+        if (idx === ((currentIndex % originalCount) + originalCount) % originalCount) {
           slide.setAttribute('aria-current', 'true');
         } else {
           slide.setAttribute('aria-current', 'false');
         }
       });
-      
+
       if (animate) {
         isTransitioning = true;
         setTimeout(() => {
           isTransitioning = false;
-          
-          // If at the end, loop back to the start (instantly, no animation)
-          if (currentIndex >= slideCount) {
-            moveToSlide(0, false);
+          // If we've animated into clones, snap back without animation
+          if (currentIndex >= originalCount) {
+            currentIndex = 0;
+            track.style.transition = 'none';
+            track.style.transform = `translateX(${0}px)`;
+            // restore transition on next frame
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                track.style.transition = `transform ${TRANSITION_MS}ms ease`;
+              });
+            });
+          } else if (currentIndex < 0) {
+            currentIndex = originalCount - 1;
+            track.style.transition = 'none';
+            track.style.transform = `translateX(${ -currentIndex * slideWidth }px)`;
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                track.style.transition = `transform ${TRANSITION_MS}ms ease`;
+              });
+            });
           }
-          // If before the beginning, loop to the end (instantly, no animation)
-          else if (currentIndex < 0) {
-            moveToSlide(slideCount - 1, false);
-          }
-        }, 500);
+        }, TRANSITION_MS);
       }
     }
-    
-    // Update active dot
+
     function updateActiveDot() {
-      // Normalize the index for the dot (based on visible slide)
-      const normalizedIndex = ((currentIndex % slideCount) + slideCount) % slideCount;
-      
+      const normalized = ((currentIndex % originalCount) + originalCount) % originalCount;
       dots.forEach((dot, i) => {
-        const dotIndicator = dot.querySelector('span');
-        if (i === normalizedIndex) {
-          dotIndicator.classList.add('bg-greenberry-500', 'dark:bg-greenberry-400');
-          dotIndicator.classList.remove('bg-neutral-300', 'dark:bg-neutral-700');
+        const indicator = dot.querySelector('span');
+        if (!indicator) return;
+        if (i === normalized) {
+          indicator.classList.add('bg-greenberry-500', 'dark:bg-greenberry-400');
+          indicator.classList.remove('bg-neutral-300', 'dark:bg-neutral-700');
           dot.setAttribute('aria-selected', 'true');
         } else {
-          dotIndicator.classList.remove('bg-greenberry-500', 'dark:bg-greenberry-400');
-          dotIndicator.classList.add('bg-neutral-300', 'dark:bg-neutral-700');
+          indicator.classList.remove('bg-greenberry-500', 'dark:bg-greenberry-400');
+          indicator.classList.add('bg-neutral-300', 'dark:bg-neutral-700');
           dot.setAttribute('aria-selected', 'false');
         }
       });
     }
-    
-    // Autoplay functions
+
+    // Autoplay controls
     function startAutoplay() {
+      if (!AUTOPLAY) return;
       stopAutoplay();
-      autoplayTimeout = setTimeout(() => {
+      autoplayTimer = setTimeout(() => {
         moveToSlide(currentIndex + 1);
         startAutoplay();
-      }, 4000);
+      }, INTERVAL);
     }
-    
     function stopAutoplay() {
-      if (autoplayTimeout) clearTimeout(autoplayTimeout);
+      if (autoplayTimer) {
+        clearTimeout(autoplayTimer);
+        autoplayTimer = null;
+      }
     }
-    
-    // Initialize slider
-    function initSlider() {
-      setupInfiniteLoop();
-      calculateDimensions();
-      updateActiveDot();
-      
-      // Event listeners
-      nextBtn.addEventListener('click', () => {
-        stopAutoplay();
-        moveToSlide(currentIndex + 1);
-        startAutoplay();
-      });
-      
-      prevBtn.addEventListener('click', () => {
-        stopAutoplay();
-        moveToSlide(currentIndex - 1);
-        startAutoplay();
-      });
-      
-      // Add keyboard support
-      prevBtn.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          stopAutoplay();
-          moveToSlide(currentIndex - 1);
-          startAutoplay();
-        }
-      });
-      
-      nextBtn.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          stopAutoplay();
-          moveToSlide(currentIndex + 1);
-          startAutoplay();
-        }
-      });
-      
-      // Dot navigation
+
+    // Wiring events (idempotent)
+    function wireEvents() {
+      if (nextBtn) nextBtn.addEventListener('click', () => { stopAutoplay(); moveToSlide(currentIndex + 1); startAutoplay(); });
+      if (prevBtn) prevBtn.addEventListener('click', () => { stopAutoplay(); moveToSlide(currentIndex - 1); startAutoplay(); });
+
+      if (prevBtn) prevBtn.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); prevBtn.click(); } });
+      if (nextBtn) nextBtn.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); nextBtn.click(); } });
+
       dots.forEach((dot, i) => {
-        dot.addEventListener('click', () => {
-          stopAutoplay();
-          moveToSlide(i);
-          startAutoplay();
-        });
-        
-        dot.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            stopAutoplay();
-            moveToSlide(i);
-            startAutoplay();
-          }
-        });
+        dot.addEventListener('click', () => { stopAutoplay(); moveToSlide(i); startAutoplay(); });
+        dot.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dot.click(); } });
       });
-      
-      // Pause/resume on interaction
+
+      // Pause/resume on hover/touch
       track.addEventListener('mouseenter', stopAutoplay);
-      track.addEventListener('touchstart', stopAutoplay, { passive: true });
       track.addEventListener('mouseleave', startAutoplay);
+      track.addEventListener('touchstart', stopAutoplay, { passive: true });
       track.addEventListener('touchend', startAutoplay);
-      
-      // Handle window resize
+
+      // Debounced resize: recalc if breakpoint or container changed
       let resizeTimer;
       window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(calculateDimensions, 200);
+        resizeTimer = setTimeout(() => {
+          // Recompute sizes (we only read window.innerWidth and container once)
+          calculateDimensions();
+        }, 150);
       });
-      
-      // Handle visibility change
+
+      // Visibility change
       document.addEventListener('visibilitychange', () => {
         document.hidden ? stopAutoplay() : startAutoplay();
       });
-      
-      // Handle image loading errors
-      document.querySelectorAll('.testimonial-slide img').forEach(img => {
+
+      // Image fallback handling
+      Array.from(track.querySelectorAll('.testimonial-slide img')).forEach(img => {
         img.addEventListener('error', function() {
           this.style.display = 'none';
-          this.parentNode.innerHTML = '<div class="w-full h-full flex items-center justify-center bg-greenberry-100 dark:bg-greenberry-900 text-greenberry-600 dark:text-greenberry-400"><i class="fa-solid fa-user" aria-hidden="true"></i></div>';
+          try {
+            this.parentNode.innerHTML = '<div class="w-full h-full flex items-center justify-center bg-greenberry-100 dark:bg-greenberry-900 text-greenberry-600 dark:text-greenberry-400"><i class="fa-solid fa-user" aria-hidden="true"></i></div>';
+          } catch (e) { /* ignore */ }
         });
       });
-      
-      startAutoplay();
     }
-    
-    // Initialize the slider
-    initSlider();
-  });
-  
-  // Also initialize on regular DOMContentLoaded for initial page load
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check if Astro's view transitions are being used
-    if (!document.querySelector('html').hasAttribute('data-astro-transition')) {
-      const event = new Event('astro:page-load');
-      document.dispatchEvent(event);
-    }
-  });
+
+    // Init flow
+    appendClones();          // clone into fragment (no mid-layout)
+    calculateDimensions();   // read container once, write widths in rAF
+    wireEvents();
+    updateActiveDot();
+    startAutoplay();
+
+    // expose for debugging if you want: window._gbTestimonials = { moveToSlide, calculateDimensions };
+  })();
 </script>
 
 <style>
