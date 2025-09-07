@@ -1,0 +1,90 @@
+---
+import Container from '../common/Container.astro';
+import { suites } from '../../data/suites';
+import type { Suite } from '../../data/suites';
+
+const theme = {
+  greenberry: { text: 'text-greenberry-600', iconBg: 'bg-greenberry-50', divider: 'border-greenberry-100' },
+  purple:     { text: 'text-purple-600',     iconBg: 'bg-purple-50',     divider: 'border-purple-100' },
+  blue:       { text: 'text-blue-600',       iconBg: 'bg-blue-50',       divider: 'border-blue-100' },
+  amber:      { text: 'text-amber-600',      iconBg: 'bg-amber-50',      divider: 'border-amber-100' },
+} as const;
+
+const suiteHref = (s: Suite) => s.link?.startsWith('/') ? s.link : `/${s.link}`;
+---
+
+<section id="suite" class="py-12 lg:py-16 bg-white dark:bg-neutral-900">
+  <Container>
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white">Suite-Specific Pricing</h2>
+        <p class="text-neutral-600 dark:text-neutral-300 mt-2">
+          Each suite includes sector-specific features. Setup fees vary by suite.
+        </p>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-separate border-spacing-0">
+          <thead>
+            <tr class="text-sm text-neutral-600 dark:text-neutral-300">
+              <th class="py-3 px-4 font-semibold">suite Suite</th>
+              <th class="py-3 px-4 font-semibold">Setup Fee</th>
+              <th class="py-3 px-4 font-semibold">Launch</th>
+              <th class="py-3 px-4 font-semibold">Grow</th>
+              <th class="py-3 px-4 font-semibold">Pro</th>
+              <th class="py-3 px-4"></th>
+            </tr>
+          </thead>
+          <tbody class="text-neutral-800 dark:text-neutral-100">
+            {suites.map((s, idx) => {
+              const t = theme[s.color] ?? theme.greenberry;
+              const isLast = idx === suites.length - 1;
+              return (
+                <tr class="align-middle">
+                  <td class={`py-4 px-4 ${!isLast ? 'border-b border-neutral-200 dark:border-neutral-700' : ''}`}>
+                    <div class="flex items-center gap-3">
+                      <span class={`inline-flex h-10 w-10 items-center justify-center rounded-full ${t.iconBg}`}>
+                        <i class={`${s.icon} ${t.text}`}></i>
+                      </span>
+                      <div>
+                        <div class="font-semibold">{s.name}</div>
+                        <div class="text-sm text-neutral-500 dark:text-neutral-400">{s.targetSector}</div>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td class={`py-4 px-4 ${!isLast ? 'border-b border-neutral-200 dark:border-neutral-700' : ''}`}>
+                    €{s.setupFee.toLocaleString()}
+                  </td>
+
+                  <td class={`py-4 px-4 ${!isLast ? 'border-b border-neutral-200 dark:border-neutral-700' : ''}`}>
+                    €{s.monthlyPlans.launch}/mo
+                  </td>
+                  <td class={`py-4 px-4 ${!isLast ? 'border-b border-neutral-200 dark:border-neutral-700' : ''}`}>
+                    €{s.monthlyPlans.grow}/mo
+                  </td>
+                  <td class={`py-4 px-4 ${!isLast ? 'border-b border-neutral-200 dark:border-neutral-700' : ''}`}>
+                    €{s.monthlyPlans.pro}/mo
+                  </td>
+
+                  <td class={`py-4 px-4 ${!isLast ? 'border-b border-neutral-200 dark:border-neutral-700' : ''}`}>
+                    <a href={suiteHref(s)} class={`inline-flex items-center font-medium ${t.text}`}>
+                      Learn More <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-6">
+        <div class="rounded-xl bg-neutral-50 dark:bg-neutral-800/60 border border-neutral-200 dark:border-neutral-700 p-4 text-center text-sm text-neutral-700 dark:text-neutral-300">
+          <strong>21-Day Launch Guarantee:</strong> Go live in 21 days or get 10% off your setup fee. All plans include domain management,
+          SSL, backups, CDN/WAF, email routing, and performance optimisation.
+        </div>
+      </div>
+    </div>
+  </Container>
+</section>

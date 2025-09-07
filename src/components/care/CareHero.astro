@@ -1,0 +1,56 @@
+---
+import Container from '../common/Container.astro';
+import Button from '../common/Button.astro';
+import Badge from '../ui/Badge.astro';
+---
+
+<section class="py-20 lg:py-28 bg-neutral-50 dark:bg-neutral-800/50 relative overflow-hidden">
+    <div class="absolute inset-0">
+        <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-greenberry-500/20 rounded-full filter blur-3xl opacity-70 -translate-y-1/2 translate-x-1/3"></div>
+        <div class="absolute bottom-0 left-0 w-1/3 h-1/3 bg-greenberry-500/20 rounded-full filter blur-3xl opacity-60 translate-y-1/2 -translate-x-1/3"></div>
+    </div>
+  <Container>
+    <div class="max-w-4xl mx-auto text-center relative z-10">
+      <Badge text="WEBSITE CARE PLANS" variant="primary" size="md" />
+
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-900 dark:text-white mt-6 mb-6">
+        Professional Care for Your
+        <span class="relative inline-block text-greenberry-600 dark:text-greenberry-400 pb-[0.2em]">
+            Existing Website
+            <span class="absolute left-0 right-0 bottom-0 h-[0.1em] bg-greenberry-500/40 rounded-full"></span>
+        </span>
+      </h1>
+
+      <p class="text-xl text-neutral-600 dark:text-neutral-300 mb-8 max-w-3xl mx-auto">
+        Expert maintenance for WordPress sites we didn't build. Keep your site secure,
+        updated, and performing at its best with our managed care plans.
+      </p>
+
+      <div class="bg-white dark:bg-neutral-800 rounded-lg p-6 shadow-md max-w-2xl mx-auto mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+          <div>
+            <p class="text-3xl font-bold text-greenberry-600 dark:text-greenberry-400">24/7</p>
+            <p class="text-sm text-neutral-600 dark:text-neutral-300">Monitoring</p>
+          </div>
+          <div>
+            <p class="text-3xl font-bold text-greenberry-600 dark:text-greenberry-400">99.9%</p>
+            <p class="text-sm text-neutral-600 dark:text-neutral-300">Uptime</p>
+          </div>
+          <div>
+            <p class="text-3xl font-bold text-greenberry-600 dark:text-greenberry-400">Daily</p>
+            <p class="text-sm text-neutral-600 dark:text-neutral-300">Backups</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button href="#care-plans" variant="primary" size="lg">
+          View Care Plans <span class="ml-2">↓</span>
+        </Button>
+        <Button href="/contact" variant="outline" size="lg">
+          Get Started Today
+        </Button>
+      </div>
+    </div>
+  </Container>
+</section>

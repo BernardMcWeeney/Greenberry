@@ -4,6 +4,7 @@ import Container from '../../components/common/Container.astro';
 import Button from '../../components/common/Button.astro';
 import Badge from '../../components/ui/Badge.astro';
 import PageHeader from '../../components/common/PageHeader.astro';
+import Cta from '../../components/home/Cta.astro';
 import { portfolioProjects } from '../../data/portfolioProjects';
 import { SEO } from "astro-seo";
 
@@ -114,42 +115,7 @@ const categories = Array.from(categorySet);
   </section>
   
   <!-- CTA Section -->
-  <section class="py-16 md:py-20 bg-cool-gray-50 dark:bg-gray-800/50 relative overflow-hidden">
-    <!-- Decorative elements -->
-    <div class="absolute inset-0" aria-hidden="true">
-      <div class="absolute top-1/2 left-1/4 w-64 h-64 bg-greenberry-500/10 rounded-full filter blur-3xl opacity-70"></div>
-      <div class="absolute bottom-0 right-1/4 w-64 h-64 bg-greenberry-600/10 rounded-full filter blur-3xl opacity-60"></div>
-    </div>
-    
-    <Container>
-      <div class="max-w-4xl mx-auto bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl shadow-xl p-6 md:p-10 border border-white/40 dark:border-gray-700/40 relative z-10">
-        <div class="text-center mb-8">
-          <Badge text="START YOUR PROJECT" variant="primary" size="md" class="mb-4" />
-          <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            Ready for a Website That Drives Results?
-          </h2>
-          <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300">
-            Let's create a custom digital solution for your Irish business.
-          </p>
-        </div>
-        
-        <div class="flex flex-col sm:flex-row justify-center gap-4">
-          <Button href="/contact" size="lg" class="font-semibold shadow-lg shadow-greenberry-500/20">
-            Get Your Free Consultation
-            <span class="ml-2"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
-          </Button>
-          
-          <a 
-            href="/services" 
-            class="px-6 py-3 rounded-lg font-medium border border-greenberry-500/40 bg-white dark:bg-gray-800/30 backdrop-blur-xs text-greenberry-700 dark:text-greenberry-300 hover:bg-white/50 dark:hover:bg-gray-800/50 transition-all duration-300 shadow-xs hover:shadow-sm flex items-center justify-center focus:outline-hidden focus:ring-3-2 focus:ring-3-greenberry-500 focus:ring-3-offset-2"
-          >
-            <span class="mr-2"><i class="fa-solid fa-list-check" aria-hidden="true"></i></span>
-            Our Services
-          </a>
-        </div>
-      </div>
-    </Container>
-  </section>
+  <Cta />
 </Layout>
 
 <script is:inline>

@@ -1,0 +1,25 @@
+---
+import Container from '../common/Container.astro';
+import Button from '../common/Button.astro';
+---
+
+<section class="py-16 lg:py-24 bg-greenberry-600 dark:bg-greenberry-700">
+  <Container>
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Ready to Get Started?</h2>
+      <p class="text-xl text-greenberry-100 mb-8">Join Irish organisations running faster, safer sites with Greenberry.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button href="/contact" variant="secondary" size="lg" class="bg-white text-greenberry-600 hover:bg-greenberry-50">
+          Get Your Quote
+        </Button>
+        <button
+          type="button"
+          data-cal-link="greenberry/15min"
+          class="px-8 py-3 rounded-lg font-semibold border-2 border-white text-white hover:bg-white hover:text-greenberry-600 transition-all duration-300"
+        >
+          Book a 15-Minute Call
+        </button>
+      </div>
+    </div>
+  </Container>
+</section>

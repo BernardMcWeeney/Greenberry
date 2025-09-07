@@ -1,17 +1,50 @@
 ---
 import Badge from '../ui/Badge.astro';
 import Container from './Container.astro';
+import Button from '../common/Button.astro';
+
+export interface Metric {
+  value: string;
+  label: string;
+}
 
 export interface Props {
   title: string;
   description?: string;
+
+  // Badge
   badgeText?: string;
-  badgeVariant?: 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'purple' | 'blue' | 'green' | 'yellow' | 'red';
+  badgeVariant?:
+    | 'default' | 'primary' | 'success' | 'warning'
+    | 'danger'  | 'info'    | 'purple'  | 'blue'
+    | 'green'   | 'yellow'  | 'red';
+
+  // Highlight underline
   highlightedText?: string;
-  highlightPosition?: 'start' | 'middle' | 'end'; // Where the highlighted text appears in the title
-  backgroundVariant?: 'green' | 'gray' | 'cool-gray' | 'decorated';
+  highlightPosition?: 'start' | 'middle' | 'end';
+  highlightTextClass?: string;   // e.g., 'text-greenberry-600'
+  highlightUnderlineClass?: string; // e.g., 'bg-greenberry-500/40'
+
+  // Background & layout
+  backgroundVariant?: 'neutral' | 'decorated'; // simplified
   centered?: boolean;
-  paddingY?: 'sm' | 'md' | 'lg';
+  paddingY?: 'sm' | 'md' | 'lg' | 'xl';
+
+  // SoftClouds
+  showSoftClouds?: boolean;
+  softCloudsTheme?: 'greenberry' | 'blue' | 'purple' | 'amber';
+  softCloudsStrength?: 'subtle' | 'normal' | 'bold';
+
+  // CTA helpers (or use <slot name="actions">)
+  primaryCtaHref?: string;
+  primaryCtaLabel?: string;
+  primaryCtaVariant?: 'primary' | 'outline' | 'secondary';
+  secondaryCtaHref?: string;
+  secondaryCtaLabel?: string;
+  secondaryCtaVariant?: 'primary' | 'outline' | 'secondary';
+
+  // Optional metrics card beneath lead text
+  metrics?: Metric[]; // up to 3–4 suggested
 }
 
 const {
@@ -21,83 +54,141 @@ const {
   badgeVariant = 'primary',
   highlightedText,
   highlightPosition = 'end',
-  backgroundVariant = 'green',
+  highlightTextClass = 'text-greenberry-600',
+  highlightUnderlineClass = 'bg-greenberry-500/40',
+
+  backgroundVariant = 'neutral',
   centered = true,
-  paddingY = 'md',
+  paddingY = 'xl',
+
+  showSoftClouds = true,
+  softCloudsTheme = 'greenberry',
+  softCloudsStrength = 'bold',
+
+  primaryCtaHref,
+  primaryCtaLabel,
+  primaryCtaVariant = 'primary',
+  secondaryCtaHref,
+  secondaryCtaLabel,
+  secondaryCtaVariant = 'outline',
+
+  metrics = [],
 } = Astro.props;
 
-// Background variants
-const backgrounds = {
-  green: 'bg-green-50 dark:bg-gray-800',
-  gray: 'bg-gray-50 dark:bg-gray-800/50',
-  'cool-gray': 'bg-cool-gray-50 dark:bg-gray-800/50',
-  decorated: 'bg-green-50 dark:bg-gray-800 section-bg-decoration',
-};
-
-// Padding variants
+// Spacing to match your new heroes
 const paddingClasses = {
   sm: 'py-12',
   md: 'py-16',
   lg: 'py-20',
+  xl: 'py-20 lg:py-28',
 };
 
-// Helper function to handle title with highlighted part
-const renderTitle = () => {
-  if (!highlightedText) {
-    return title;
-  }
+// Light/off-white hero background (no grey component surfaces)
+const backgrounds = {
+  neutral: 'bg-neutral-50 dark:bg-neutral-800/50',
+  decorated: 'bg-neutral-50 dark:bg-neutral-800/50', // same base; decoration handled below
+};
 
+const containerClass = centered ? 'max-w-4xl mx-auto text-center' : 'max-w-5xl mx-auto';
+
+// Build the highlighted title HTML safely-ish for one highlight token
+const wrapHighlight = (text: string) =>
+  `<span class="relative inline-block ${highlightTextClass}">
+     ${text}
+     <span class="absolute -bottom-1 left-0 w-full h-1.5 ${highlightUnderlineClass} rounded-full"></span>
+   </span>`;
+
+function buildTitleHtml(): string {
+  if (!highlightedText) return title;
+
+  const safeTitle = title; // assume clean; we control the highlight token
   if (highlightPosition === 'start') {
-    return `<span class="relative inline-block text-greenberry-600">${highlightedText}
-            <span class="absolute -bottom-1 left-0 w-full h-1.5 bg-greenberry-500/40 rounded-full"></span></span> ${title.replace(highlightedText, '')}`;
-  } else if (highlightPosition === 'end') {
-    return `${title.replace(highlightedText, '')} <span class="relative inline-block text-greenberry-600">${highlightedText}
-            <span class="absolute -bottom-1 left-0 w-full h-1.5 bg-greenberry-500/40 rounded-full"></span></span>`;
-  } else {
-    // Middle position - we'll need to split the title
-    const parts = title.split(highlightedText);
-    return `${parts[0]} <span class="relative inline-block text-greenberry-600">${highlightedText}
-            <span class="absolute -bottom-1 left-0 w-full h-1.5 bg-greenberry-500/40 rounded-full"></span></span> ${parts[1]}`;
+    // Starts with highlightedText conceptually
+    return `${wrapHighlight(highlightedText)} ${safeTitle.replace(highlightedText, '').trim()}`;
   }
-};
 
-const titleHtml = renderTitle();
-const containerClass = centered ? 'max-w-3xl mx-auto text-center' : '';
+  if (highlightPosition === 'middle') {
+    const idx = safeTitle.indexOf(highlightedText);
+    if (idx === -1) return safeTitle; // fallback if token not found
+    const before = safeTitle.slice(0, idx);
+    const after = safeTitle.slice(idx + highlightedText.length);
+    return `${before}${wrapHighlight(highlightedText)}${after}`;
+  }
+
+  // end (default)
+  if (safeTitle.endsWith(highlightedText)) {
+    const before = safeTitle.slice(0, -highlightedText.length).trimEnd();
+    return `${before} ${wrapHighlight(highlightedText)}`;
+  }
+  // token not at end—append highlighted token visually
+  return `${safeTitle} ${wrapHighlight(highlightedText)}`;
+}
+
+const titleHtml = buildTitleHtml();
 ---
 
 <section class={`${paddingClasses[paddingY]} ${backgrounds[backgroundVariant]} relative overflow-hidden`}>
-  <!-- Decorative elements for background styling -->
-  {backgroundVariant === 'cool-gray' && (
-    <div class="absolute inset-0">
-      <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-greenberry-500/10 rounded-full filter blur-3xl opacity-70 -translate-y-1/2 translate-x-1/3"></div>
-      <div class="absolute bottom-0 left-0 w-1/3 h-1/3 bg-greenberry-500/10 rounded-full filter blur-3xl opacity-60 translate-y-1/2 -translate-x-1/3"></div>
+  <div class="absolute inset-0">
+        <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-greenberry-500/20 rounded-full filter blur-3xl opacity-70 -translate-y-1/2 translate-x-1/3"></div>
+        <div class="absolute bottom-0 left-0 w-1/3 h-1/3 bg-greenberry-500/20 rounded-full filter blur-3xl opacity-60 translate-y-1/2 -translate-x-1/3"></div>
+  </div>
+
+  <!-- Optional extra decoration layer when variant is "decorated" -->
+  {backgroundVariant === 'decorated' && (
+    <div class="pointer-events-none absolute inset-0">
+      <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-greenberry-500/10 blur-3xl rounded-full -translate-y-1/2 translate-x-1/3"></div>
+      <div class="absolute bottom-0 left-0 w-1/3 h-1/3 bg-greenberry-500/10 blur-3xl rounded-full translate-y-1/2 -translate-x-1/3"></div>
     </div>
   )}
-  
+
   <Container>
     <div class={`relative z-10 ${containerClass}`}>
       {badgeText && (
-        <div class="badge-wrapper mb-4">
-          <Badge 
-            text={badgeText} 
-            variant={badgeVariant} 
-            size="md" 
-            class={backgroundVariant === 'cool-gray' ? "bg-white/40 dark:bg-gray-800/40 backdrop-blur-md shadow-xs border border-white/20 dark:border-gray-700/20" : ""}
-          />
+        <div class="mb-4">
+          <Badge text={badgeText} variant={badgeVariant} size="md" />
         </div>
       )}
-      
-      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-6" set:html={titleHtml} />
-      
+
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-900 dark:text-white leading-tight mb-6" set:html={titleHtml} />
+
       {description && (
-        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-          <slot name="description">
-            {description}
-          </slot>
+        <p class="text-xl text-neutral-600 dark:text-neutral-300 mb-8 max-w-3xl mx-auto">
+          <slot name="description">{description}</slot>
         </p>
       )}
-      
-      <slot />
+
+      {metrics.length > 0 && (
+        <div class="bg-white dark:bg-neutral-800 rounded-lg p-6 shadow-md max-w-2xl mx-auto mb-8">
+          <div class={`grid ${metrics.length === 4 ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-1 sm:grid-cols-3'} gap-4 text-center`}>
+            {metrics.map((m) => (
+              <div>
+                <p class="text-3xl font-bold text-greenberry-600 dark:text-greenberry-400">{m.value}</p>
+                <p class="text-sm text-neutral-600 dark:text-neutral-300">{m.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Actions: either provided via props or a custom slot -->
+      { (primaryCtaHref && primaryCtaLabel) || (secondaryCtaHref && secondaryCtaLabel) ? (
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          {primaryCtaHref && primaryCtaLabel && (
+            <Button href={primaryCtaHref} variant={primaryCtaVariant} size="lg">
+              {primaryCtaLabel}
+            </Button>
+          )}
+          {secondaryCtaHref && secondaryCtaLabel && (
+            <Button href={secondaryCtaHref} variant={secondaryCtaVariant} size="lg">
+              {secondaryCtaLabel}
+            </Button>
+          )}
+        </div>
+      ) : (
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <slot name="actions" />
+        </div>
+      )}
     </div>
   </Container>
 </section>

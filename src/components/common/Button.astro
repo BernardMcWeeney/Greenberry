@@ -22,7 +22,8 @@ const variants = {
   secondary: 'bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 shadow-xs hover:shadow-sm dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-100 dark:border-gray-700',
   outline: 'bg-transparent hover:bg-greenberry-50 text-greenberry-600 border-2 border-greenberry-600 hover:border-greenberry-700 dark:text-greenberry-400 dark:border-greenberry-500 dark:hover:bg-gray-800',
   ghost: 'bg-transparent hover:bg-gray-100 text-gray-700 border-transparent dark:text-gray-300 dark:hover:bg-gray-800',
-  glass: 'backdrop-blur-md bg-white/20 dark:bg-gray-800/20 text-gray-800 dark:text-white border border-white/20 dark:border-gray-700/20 hover:bg-white/30 dark:hover:bg-gray-800/30 shadow-xs hover:shadow'
+  glass: 'backdrop-blur-md bg-white/20 dark:bg-gray-800/20 text-gray-800 dark:text-white border border-white/20 dark:border-gray-700/20 hover:bg-white/30 dark:hover:bg-gray-800/30 shadow-xs hover:shadow',
+  custom: '' // <-- no preset colors
 };
 
 const sizes = {
@@ -32,13 +33,12 @@ const sizes = {
   lg: 'px-6 py-3 text-base',
 };
 
-// Base classes
 const baseClasses = [
-  'rounded-md font-medium border-2 inline-flex items-center justify-center transition-all duration-300 focus:outline-hidden focus:ring-3-2 focus:ring-3-offset-2 focus:ring-3-greenberry-500 relative overflow-hidden group',
-  variants[variant],
+  'rounded-md font-medium inline-flex items-center justify-center transition-all duration-300 focus:outline-hidden relative overflow-hidden group',
   sizes[size],
   block ? 'w-full' : '',
-  className,
+  variants[variant],   // keep before user class
+  className,           // user classes last
 ];
 ---
 

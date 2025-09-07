@@ -49,26 +49,35 @@ const featureCards = [
     </div>
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-      {featureCards.map((card) => (
-        <div class="group card p-8 border border-neutral-100 dark:border-gray-700 hover:border-greenberry-600 dark:hover:border-greenberry-600 transition-all duration-300 card-hover">
-          <div class="flex gap-6">
-            <div class={`${card.textColor} text-4xl shrink-0 mt-1`}>
-              <div class="w-14 h-14 rounded-2xl bg-white dark:bg-gray-700 flex items-center justify-center shadow-xs group-hover:shadow-md group-hover:scale-110 transition-all duration-300">
-                <i class={card.icon}></i>
+        {featureCards.map((card) => (
+          <div
+            class="group card p-8 rounded-2xl
+                  bg-white dark:bg-neutral-800
+                  border border-neutral-200 dark:border-neutral-700
+                  shadow-sm
+                  transition-all duration-200
+                  hover:-translate-y-0.5 hover:shadow-lg
+                  hover:border-neutral-300 dark:hover:border-neutral-600"
+          >
+            <div class="flex gap-6">
+              <div class={`${card.textColor} text-4xl shrink-0 mt-1`}>
+                <div class="w-14 h-14 rounded-2xl bg-white dark:bg-gray-700 flex items-center justify-center shadow-xs group-hover:shadow-md group-hover:scale-110 transition-all duration-300">
+                  <i class={card.icon}></i>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-neutral-900 dark:text-white mb-3 group-hover:text-greenberry-600 dark:group-hover:text-greenberry-400 transition-colors">
+                  {card.title}
+                </h3>
+                <p class="text-neutral-600 dark:text-gray-300">
+                  {card.description}
+                </p>
               </div>
             </div>
-            <div>
-              <h3 class="text-xl font-bold text-neutral-900 dark:text-white mb-3 group-hover:text-greenberry-600 dark:group-hover:text-greenberry-400 transition-colors">
-                {card.title}
-              </h3>
-              <p class="text-neutral-600 dark:text-gray-300">
-                {card.description}
-              </p>
-            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+
     
     <!-- Feature highlight box with greenberry green background -->
     <div class="mt-16 bg-greenberry-600 dark:bg-greenberry-600/80 rounded-2xl p-10 border border-greenberry-600/20 dark:border-greenberry-600/30 relative overflow-hidden group hover:shadow-lg hover:shadow-greenberry-600/20 transition-all duration-300">

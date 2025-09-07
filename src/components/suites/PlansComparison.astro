@@ -1,0 +1,323 @@
+---
+import Container from '../common/Container.astro';
+import Button from '../common/Button.astro';
+import type { Suite, PricingPlan } from '../../data/suites';
+import { pricingPlans } from '../../data/suites';
+
+interface Props {
+  suite: Suite;
+  showStripeTable?: boolean;
+  showSetupCallout?: boolean;
+  showSetupPill?: boolean;
+  yearlyDiscountPct?: number;
+}
+
+const {
+  suite,
+  showStripeTable = true,
+  showSetupCallout = true,
+  showSetupPill = true,
+  yearlyDiscountPct = 0
+} = Astro.props;
+
+const colorClasses = {
+  greenberry: {
+    check: 'text-greenberry-500',
+    ring: 'ring-greenberry-500/20',
+    border: 'border-greenberry-500',
+    bg: 'bg-greenberry-600',
+    bgHover: 'hover:bg-greenberry-700',
+    text: 'text-greenberry-700 dark:text-greenberry-300',
+    solidBtn: 'bg-greenberry-600 hover:bg-greenberry-700 text-white',
+    shadow: 'shadow-greenberry-500/20',
+    mutedBtn:
+      'border border-greenberry-500/40 bg-white dark:bg-neutral-800/30 backdrop-blur-xs ' +
+      'text-greenberry-700 dark:text-greenberry-300 hover:bg-white/50 dark:hover:bg-neutral-800/50 ' +
+      'transition-all duration-300 shadow-xs hover:shadow-sm',
+    focusRing:
+      'focus-visible:ring-2 ring-offset-2 ring-offset-white dark:ring-offset-neutral-900 focus-visible:ring-greenberry-500'
+  },
+  blue: {
+    check: 'text-blue-500',
+    ring: 'ring-blue-500/20',
+    border: 'border-blue-500',
+    bg: 'bg-blue-600',
+    bgHover: 'hover:bg-blue-700',
+    text: 'text-blue-700 dark:text-blue-300',
+    solidBtn: 'bg-blue-600 hover:bg-blue-700 text-white',
+    shadow: 'shadow-blue-500/20',
+    mutedBtn:
+      'border border-blue-500/40 bg-white dark:bg-neutral-800/30 backdrop-blur-xs ' +
+      'text-blue-700 dark:text-blue-300 hover:bg-white/50 dark:hover:bg-neutral-800/50 ' +
+      'transition-all duration-300 shadow-xs hover:shadow-sm',
+    focusRing:
+      'focus-visible:ring-2 ring-offset-2 ring-offset-white dark:ring-offset-neutral-900 focus-visible:ring-blue-500'
+  },
+  purple: {
+    check: 'text-purple-500',
+    ring: 'ring-purple-500/20',
+    border: 'border-purple-500',
+    bg: 'bg-purple-600',
+    bgHover: 'hover:bg-purple-700',
+    text: 'text-purple-700 dark:text-purple-300',
+    solidBtn: 'bg-purple-600 hover:bg-purple-700 text-white',
+    shadow: 'shadow-purple-500/20',
+    mutedBtn:
+      'border border-purple-500/40 bg-white dark:bg-neutral-800/30 backdrop-blur-xs ' +
+      'text-purple-700 dark:text-purple-300 hover:bg-white/50 dark:hover:bg-neutral-800/50 ' +
+      'transition-all duration-300 shadow-xs hover:shadow-sm',
+    focusRing:
+      'focus-visible:ring-2 ring-offset-2 ring-offset-white dark:ring-offset-neutral-900 focus-visible:ring-purple-500'
+  },
+  amber: {
+    check: 'text-amber-500',
+    ring: 'ring-amber-500/20',
+    border: 'border-amber-500',
+    bg: 'bg-amber-600',
+    bgHover: 'hover:bg-amber-700',
+    text: 'text-amber-700 dark:text-amber-300',
+    solidBtn: 'bg-amber-600 hover:bg-amber-700 text-white',
+    shadow: 'shadow-amber-500/20',
+    mutedBtn:
+      'border border-amber-500/40 bg-white dark:bg-neutral-800/30 backdrop-blur-xs ' +
+      'text-amber-700 dark:text-amber-300 hover:bg-white/50 dark:hover:bg-neutral-800/50 ' +
+      'transition-all duration-300 shadow-xs hover:shadow-sm',
+    focusRing:
+      'focus-visible:ring-2 ring-offset-2 ring-offset-white dark:ring-offset-neutral-900 focus-visible:ring-amber-500'
+  }
+} as const;
+
+const theme = colorClasses[suite.color] ?? colorClasses.greenberry;
+
+const planCopy: Record<'Launch'|'Grow'|'Pro', { description: string; cta: string; popular?: boolean }> = {
+  Launch: { description: 'Perfect for getting started', cta: 'Choose Launch' },
+  Grow:   { description: 'For growing organisations',    cta: 'Choose Grow', popular: true },
+  Pro:    { description: 'Maximum features & support',   cta: 'Choose Pro' }
+};
+
+const names = ['Launch','Grow','Pro'] as const;
+const plans = names.map((n) => {
+  const base = pricingPlans.find(p => p.name === n) as PricingPlan;
+  const monthly =
+    n === 'Launch' ? suite.monthlyPlans.launch :
+    n === 'Grow'   ? suite.monthlyPlans.grow   :
+                     suite.monthlyPlans.pro;
+
+  const yearly = Math.round(monthly * 12 * (1 - yearlyDiscountPct));
+
+  return {
+    name: n,
+    monthly,
+    yearly,
+    responseTime: base.responseTime,
+    features: base.features,
+    additionalFeatures: base.additionalFeatures ?? [],
+    ...planCopy[n]
+  };
+});
+
+const globalInclusions = [
+  { icon: 'fa-solid fa-globe',         label: 'Domain & DNS' },
+  { icon: 'fa-solid fa-lock',          label: 'SSL Certificate' },
+  { icon: 'fa-solid fa-database',      label: 'Daily Backups (off-site)' },
+  { icon: 'fa-solid fa-shield-halved', label: 'CDN & WAF' },
+  { icon: 'fa-solid fa-rocket',        label: 'Caching (Varnish + Redis)' },
+  { icon: 'fa-solid fa-gauge-high',    label: 'Performance' },
+  { icon: 'fa-solid fa-chart-line',    label: 'Analytics' }
+];
+---
+
+<!-- tighter top/bottom padding -->
+<section id="plans" class="py-10 lg:py-14 bg-white dark:bg-neutral-900">
+  <Container>
+
+    <!-- compact controls stack (setup callout + billing toggle) -->
+    <div class="max-w-3xl mx-auto flex flex-col items-center gap-3 mb-6">
+      {showSetupCallout && (
+        <p class="inline-flex items-center gap-2 text-xs sm:text-sm px-3 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800/60 text-neutral-700 dark:text-neutral-300">
+          <i class="fa-solid fa-screwdriver-wrench text-neutral-500"></i>
+          One-time setup fee:
+          <span class="font-semibold text-neutral-900 dark:text-white">€{suite.setupFee.toLocaleString()}</span>
+          (applies to all plans)
+        </p>
+      )}
+
+      <div class="inline-flex p-1 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800"
+           role="tablist"
+           aria-label="Billing period">
+        <button
+          type="button"
+          data-billing="monthly"
+          aria-pressed="true"
+          class="billing-btn active w-28 px-3 py-1.5 rounded-lg text-sm font-medium text-neutral-900 dark:text-white bg-white dark:bg-neutral-900 shadow border border-neutral-200 dark:border-neutral-700 focus:outline-none"
+        >
+          Monthly
+        </button>
+        <button
+          type="button"
+          data-billing="yearly"
+          aria-pressed="false"
+          class="billing-btn w-28 px-3 py-1.5 rounded-lg text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white focus:outline-none"
+        >
+          Yearly{yearlyDiscountPct > 0 ? ` (save ${Math.round(yearlyDiscountPct * 100)}%)` : ''}
+        </button>
+      </div>
+    </div>
+
+    <!-- cards -->
+    <div id="plans-root" class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto" data-billing="monthly">
+      {plans.map((plan) => (
+        <div
+          class={`relative bg-white dark:bg-neutral-800 rounded-xl shadow-lg overflow-hidden
+            ${plan.popular
+              ? `border-2 ${theme.border} ring-2 ${theme.ring} ${theme.shadow}`
+              : 'border border-neutral-200 dark:border-neutral-700'}
+          `}
+        >
+          {plan.popular && (
+            <div class={`absolute top-0 right-0 text-white text-xs font-semibold px-3 py-1 rounded-bl-lg ${theme.bg}`}>
+              MOST POPULAR
+            </div>
+          )}
+
+          <div class="p-6">
+            <h3 class="text-2xl font-bold text-neutral-900 dark:text-white mb-1">{plan.name}</h3>
+            <p class="text-neutral-600 dark:text-neutral-400 mb-4">{plan.description}</p>
+
+            <div class="mb-1 flex items-baseline gap-2">
+              <span class="price-monthly text-4xl font-bold text-neutral-900 dark:text-white">€{plan.monthly.toLocaleString()}</span>
+              <span class="price-yearly hidden text-4xl font-bold text-neutral-900 dark:text-white">€{plan.yearly.toLocaleString()}</span>
+
+              <span class="label-monthly text-neutral-600 dark:text-neutral-400">/month</span>
+              <span class="label-yearly hidden text-neutral-600 dark:text-neutral-400">/year</span>
+            </div>
+
+            {showSetupPill && (
+              <div class="mb-5">
+                <span class={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${theme.bg} text-white`}>
+                  <i class="fa-solid fa-hammer"></i>
+                  €{suite.setupFee.toLocaleString()} setup (once)
+                </span>
+              </div>
+            )}
+
+            {plan.popular ? (
+              <Button
+                href={`/contact?suite=${suite.id}&plan=${plan.name.toLowerCase()}`}
+                size="md"
+                variant="custom"
+                class={`w-full mb-5 font-semibold ${theme.solidBtn} ${theme.focusRing} ${theme.shadow} js-cta`}
+                data-plan={plan.name.toLowerCase()}
+                data-suite={suite.id}
+                data-billing-aware
+              >
+                {plan.cta}
+              </Button>
+            ) : (
+              <Button
+                href={`/contact?suite=${suite.id}&plan=${plan.name.toLowerCase()}`}
+                size="md"
+                variant="custom"
+                class={`w-full mb-5 font-medium ${theme.mutedBtn} ${theme.focusRing} js-cta`}
+                data-plan={plan.name.toLowerCase()}
+                data-suite={suite.id}
+                data-billing-aware
+              >
+                {plan.cta}
+              </Button>
+            )}
+
+            <div class="space-y-3">
+              <p class="text-sm font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide">Core Features</p>
+              {plan.features.map((feature) => (
+                <div class="flex items-start">
+                  <span class={`${theme.check} mr-2 mt-0.5 flex-shrink-0`}>
+                    <i class="fa-solid fa-check text-sm"></i>
+                  </span>
+                  <span class="text-sm text-neutral-600 dark:text-neutral-300">{feature}</span>
+                </div>
+              ))}
+
+              {plan.additionalFeatures.length > 0 && (
+                <>
+                  <p class="pt-3 text-sm font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide">Additionally</p>
+                  {plan.additionalFeatures.map((feature) => (
+                    <div class="flex items-start">
+                      <span class={`${theme.check} mr-2 mt-0.5 flex-shrink-0`}>
+                        <i class="fa-solid fa-check text-sm"></i>
+                      </span>
+                      <span class="text-sm text-neutral-600 dark:text-neutral-300">{feature}</span>
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Global inclusions -->
+    <div class="mt-8 bg-neutral-50 dark:bg-neutral-800/50 rounded-xl p-6">
+      <p class="text-center text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-4">INCLUDED IN EVERY PLAN</p>
+      <div class="flex flex-wrap justify-center gap-6">
+        {globalInclusions.map((item) => (
+          <div class="flex items-center text-sm text-neutral-600 dark:text-neutral-300">
+            <i class={`${item.icon} mr-2 ${theme.check}`}></i>
+            {item.label}
+          </div>
+        ))}
+      </div>
+    </div>
+  </Container>
+
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const root = document.getElementById('plans-root');
+      const buttons = Array.from(document.querySelectorAll('.billing-btn'));
+
+      function setBilling(mode) {
+        if (!root) return;
+        root.setAttribute('data-billing', mode);
+
+        document.querySelectorAll('.price-monthly').forEach(el => el.classList.toggle('hidden', mode === 'yearly'));
+        document.querySelectorAll('.price-yearly').forEach(el => el.classList.toggle('hidden', mode === 'monthly'));
+        document.querySelectorAll('.label-monthly').forEach(el => el.classList.toggle('hidden', mode === 'yearly'));
+        document.querySelectorAll('.label-yearly').forEach(el => el.classList.toggle('hidden', mode === 'monthly'));
+
+        buttons.forEach(btn => {
+          const isActive = btn.getAttribute('data-billing') === mode;
+          btn.setAttribute('aria-pressed', String(isActive));
+          if (isActive) {
+            btn.classList.add('active','bg-white','dark:bg-neutral-900','shadow','border','border-neutral-200','dark:border-neutral-700','text-neutral-900','dark:text-white');
+            btn.classList.remove('text-neutral-600','dark:text-neutral-300');
+          } else {
+            btn.classList.remove('active','bg-white','dark:bg-neutral-900','shadow','border','border-neutral-200','dark:border-neutral-700','text-neutral-900','dark:text-white');
+            btn.classList.add('text-neutral-600','dark:text-neutral-300');
+          }
+        });
+      }
+
+      document.querySelectorAll('[data-billing-aware]').forEach((el) => {
+        el.addEventListener('click', (e) => {
+          const mode = root?.getAttribute('data-billing') || 'monthly';
+          const a = e.currentTarget;
+          let href = (a instanceof HTMLAnchorElement) ? a.href : (a.getAttribute?.('href') || '');
+          if (!href) href = '/contact';
+          const url = new URL(href, window.location.origin);
+          url.searchParams.set('billing', mode);
+          const plan = a.getAttribute('data-plan');
+          const suite = a.getAttribute('data-suite');
+          if (plan && !url.searchParams.get('plan')) url.searchParams.set('plan', plan);
+          if (suite && !url.searchParams.get('suite')) url.searchParams.set('suite', suite);
+
+          e.preventDefault();
+          window.location.href = url.toString();
+        });
+      });
+
+      setBilling('monthly');
+      buttons.forEach(btn => btn.addEventListener('click', () => setBilling(btn.getAttribute('data-billing') || 'monthly')));
+    });
+  </script>
+</section>

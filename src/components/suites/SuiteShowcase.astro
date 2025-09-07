@@ -1,0 +1,199 @@
+---
+// Suite-specific showcase + single testimonial card
+
+import Container from '../common/Container.astro';
+import type { Suite } from '../../data/suites';
+import testimonials from '../../data/testimonial';
+
+interface Props {
+  suite: Suite;
+  testimonialId?: string | number; // optional override
+}
+const { suite, testimonialId } = Astro.props;
+
+// ===== Suite colour tokens =====
+const colorClasses = {
+  greenberry: {
+    badge: 'bg-greenberry-100 dark:bg-greenberry-900/50 text-greenberry-800 dark:text-greenberry-300',
+    accent: 'text-greenberry-600 dark:text-greenberry-400',
+    check: 'text-greenberry-500'
+  },
+  blue: {
+    badge: 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300',
+    accent: 'text-blue-600 dark:text-blue-400',
+    check: 'text-blue-500'
+  },
+  purple: {
+    badge: 'bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300',
+    accent: 'text-purple-600 dark:text-purple-400',
+    check: 'text-purple-500'
+  },
+  amber: {
+    badge: 'bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300',
+    accent: 'text-amber-600 dark:text-amber-400',
+    check: 'text-amber-500'
+  }
+} as const;
+
+const c = colorClasses[suite.color] ?? colorClasses.greenberry;
+
+// Helpers
+function shorten(text: string, n = 180) {
+  const t = text?.trim() ?? '';
+  return t.length > n ? t.slice(0, n - 1) + '…' : t;
+}
+function quoteFromId(id?: string | number) {
+  if (id === undefined || id === null) return null;
+  const t = testimonials.find(x => String(x.id) === String(id));
+  return t?.quote ? shorten(t.quote, 220) : null;
+}
+
+// Case study focus (first one)
+const cs = suite.caseStudies?.[0];
+const csQuote = quoteFromId(cs?.testimonialId);
+
+// Chosen testimonial ID:
+// 1) explicit prop, 2) case-study testimonialId, 3) suite-level testimonial(s)
+const suiteLevelId = Array.isArray((suite as any).testimonials)
+  ? (suite as any).testimonials[0]
+  : (suite as any).testimonials;
+
+const chosenTestimonialId =
+  testimonialId ?? cs?.testimonialId ?? suiteLevelId;
+---
+
+<section class="py-16 lg:py-24 bg-neutral-50 dark:bg-neutral-800/50">
+  <Container>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+      <!-- Left: Suite case study / outcomes -->
+      <div>
+        <span class={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${c.badge}`}>
+          {cs ? 'CASE STUDY' : `WHY ${suite.name.toUpperCase()}`}
+        </span>
+
+        <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mt-4 mb-6">
+          {cs ? `Results with ${suite.name}: ${cs.title}` : `Expert Care for ${suite.targetSector}`}
+        </h2>
+
+        {cs ? (
+          <>
+            {cs.excerpt && <p class="text-neutral-700 dark:text-neutral-200 mb-5">{cs.excerpt}</p>}
+
+            {cs.metrics && cs.metrics.length > 0 && (
+              <div class="mb-5 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {cs.metrics.slice(0, 3).map((m) => (
+                  <div class="bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg p-3 text-center">
+                    <p class={`text-base font-bold ${c.accent}`}>{m.value}</p>
+                    <p class="text-xs text-neutral-600 dark:text-neutral-300">{m.label}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {suite.outcomes?.length > 0 && (
+              <div class="space-y-4">
+                {suite.outcomes.slice(0, 4).map((o) => (
+                  <div class="flex items-start">
+                    <span class={`mr-3 mt-1 ${c.check}`}>
+                      <i class="fa-solid fa-check-circle"></i>
+                    </span>
+                    <p class="text-neutral-800 dark:text-neutral-200">{o}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {cs.tags && cs.tags.length > 0 && (
+              <div class="flex flex-wrap gap-2 mt-5">
+                {cs.tags.slice(0, 6).map((t) => (
+                  <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {csQuote && (
+              <blockquote class={`mt-6 pl-4 border-l-2 ${c.accent} text-neutral-700 dark:text-neutral-200 italic`}>
+                “{csQuote}”
+              </blockquote>
+            )}
+          </>
+        ) : (
+          <>
+            <p class="text-neutral-700 dark:text-neutral-200 mb-5">
+              Built-for-purpose, fully managed websites with hosting, security, performance, and
+              real outcomes for {suite.targetSector.toLowerCase()}.
+            </p>
+
+            <div class="space-y-4">
+              {suite.outcomes.slice(0, 4).map((o) => (
+                <div class="flex items-start">
+                  <span class={`mr-3 mt-1 ${c.check}`}>
+                    <i class="fa-solid fa-check-circle"></i>
+                  </span>
+                  <p class="text-neutral-800 dark:text-neutral-200">{o}</p>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+
+      <!-- Right: single testimonial card (only if an id resolves) -->
+      {
+        (() => {
+          if (chosenTestimonialId === undefined || chosenTestimonialId === null) return null;
+          const t = testimonials.find(x => String(x.id) === String(chosenTestimonialId));
+          if (!t) return null;
+          return (
+            <div class="rounded-2xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 shadow-sm p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-neutral-900 dark:text-white">
+                  {`What Our ${suite.targetSector} Clients Say`}
+                </h3>
+              </div>
+
+              <div class="flex text-accent-orange-400 mb-3">
+                {Array.from({ length: 5 }).map(() => (
+                  <i class="fa-solid fa-star mr-0.5" aria-hidden="true"></i>
+                ))}
+                {t.verified && (
+                  <span class="text-neutral-400 dark:text-neutral-500 text-xs ml-2 font-medium">Verified Client</span>
+                )}
+              </div>
+
+              <p class="text-neutral-700 dark:text-neutral-300 italic leading-relaxed mb-5">
+                "{t.quote.length > 220 ? t.quote.slice(0, 220) + '…' : t.quote}"
+              </p>
+
+              <div class="mt-auto pt-4 border-t border-neutral-200 dark:border-neutral-700 flex items-start">
+                <div class="w-10 h-10 rounded-full overflow-hidden mr-3 bg-neutral-100 dark:bg-neutral-700 flex-shrink-0">
+                  {t.avatar ? (
+                    <img
+                      src={t.avatar}
+                      alt={`Photo of ${t.author}`}
+                      class="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                      onerror="this.style.display='none'; this.parentNode.innerHTML='<div class=&quot;w-full h-full flex items-center justify-center bg-neutral-100 dark:bg-neutral-700 text-neutral-500&quot;><i class=&quot;fa-solid fa-user&quot; aria-hidden=&quot;true&quot;></i></div>';"
+                    />
+                  ) : (
+                    <div class="w-full h-full flex items-center justify-center bg-neutral-100 dark:bg-neutral-700 text-neutral-500">
+                      <i class="fa-solid fa-user" aria-hidden="true"></i>
+                    </div>
+                  )}
+                </div>
+                <div class="min-w-0">
+                  <div class="text-sm font-semibold text-neutral-900 dark:text-white">{t.author}</div>
+                  {t.position && <div class="text-xs text-neutral-500 dark:text-neutral-400">{t.position}</div>}
+                  {t.company && <div class="text-xs text-greenberry-600 dark:text-greenberry-500 font-medium">{t.company}</div>}
+                </div>
+              </div>
+            </div>
+          );
+        })()
+      }
+    </div>
+  </Container>
+</section>

@@ -1,0 +1,55 @@
+---
+import Container from '../common/Container.astro';
+import PlansComparison from '../suites/PlansComparison.astro';
+import { suites } from '../../data/suites';
+import type { Suite } from '../../data/suites';
+
+// Compute “from” pricing for the universal comparison section
+const minSetupFee = Math.min(...suites.map(s => s.setupFee));
+const minMonthly = {
+  launch: Math.min(...suites.map(s => s.monthlyPlans.launch)),
+  grow:   Math.min(...suites.map(s => s.monthlyPlans.grow)),
+  pro:    Math.min(...suites.map(s => s.monthlyPlans.pro)),
+};
+
+// Generic suite used only for comparison (no setup callouts)
+const genericSuite: Suite = {
+  id: 'plans',
+  name: 'Plans',
+  title: 'Greenberry Plans',
+  link: '/plans',
+  targetSector: 'All',
+  description: 'Universal plans focused on hosting, security, performance, SEO, backups and proactive maintenance.',
+  heroHeading: 'Managed websites, clear pricing',
+  heroSubheading: 'Pick a plan that fits today and scales with you.',
+  icon: 'fa-solid fa-layer-group',
+  color: 'greenberry',
+  setupFee: minSetupFee,
+  monthlyPlans: {
+    launch: minMonthly.launch,
+    grow:   minMonthly.grow,
+    pro:    minMonthly.pro
+  },
+  outcomes: [],
+  coreFeatures: [],
+  specialisedFeatures: [],
+  testimonials: [],
+  caseStudies: [],
+  metaTitle: 'Website Packages & Pricing (Ireland) | Launch · Grow · Pro',
+  metaDescription: 'Design, hosting, security, SEO, and updates in one subscription. From €30/mo + setup. Clear scope, clear SLAs, no surprises.',
+  primaryKeyword: 'website packages ireland',
+  stripeTableId: undefined
+};
+---
+
+<section id="compare" class="py-12 lg:py-16 bg-white dark:bg-neutral-900 scroll-mt-24">
+  <Container>
+    <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white">Compare What You Get</h2>
+        <p class="text-neutral-600 dark:text-neutral-300 mt-2">
+            Infrastructure, hosting, security, SEO, performance and support — consistent across suites.
+        </p>
+    </div>
+    <PlansComparison suite={genericSuite} showSetupCallout={false} showSetupPill={false} />
+  </Container>
+</section>

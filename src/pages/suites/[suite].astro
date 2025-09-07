@@ -1,0 +1,146 @@
+---
+// src/pages/suites/[suite].astro
+import Layout from '../../layouts/Layout.astro';
+import SuiteHero from '../../components/suites/SuiteHero.astro';
+import SuiteHighlights from '../../components/suites/SuiteHighlights.astro';
+import SuiteShowcase from '../../components/suites/SuiteShowcase.astro';
+import PlansComparison from '../../components/suites/PlansComparison.astro';
+import Container from '../../components/common/Container.astro';
+import { suites } from '../../data/suites';
+
+// Generate static paths for all suites
+export function getStaticPaths() {
+  return suites.map((suite) => ({
+    params: { suite: suite.id },
+    props: { suite }
+  }));
+}
+
+const { suite } = Astro.props;
+
+// Colour tokens for generic blocks
+const colorClasses = {
+  greenberry: {
+    icon: 'text-greenberry-500',
+    badge: 'bg-greenberry-100 dark:bg-greenberry-900/50 text-greenberry-800 dark:text-greenberry-300',
+    accent: 'text-greenberry-600 dark:text-greenberry-400',
+    button: 'bg-greenberry-600',
+    check: 'text-greenberry-500',
+    star: 'text-greenberry-500'
+  },
+  blue: {
+    icon: 'text-blue-500',
+    badge: 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300',
+    accent: 'text-blue-600 dark:text-blue-400',
+    button: 'bg-blue-600',
+    check: 'text-blue-500',
+    star: 'text-blue-500'
+  },
+  purple: {
+    icon: 'text-purple-500',
+    badge: 'bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300',
+    accent: 'text-purple-600 dark:text-purple-400',
+    button: 'bg-purple-600',
+    check: 'text-purple-500',
+    star: 'text-purple-500'
+  },
+  amber: {
+    icon: 'text-amber-500',
+    badge: 'bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300',
+    accent: 'text-amber-600 dark:text-amber-400',
+    button: 'bg-amber-600',
+    check: 'text-amber-500',
+    star: 'text-amber-500'
+  }
+};
+const colors = colorClasses[suite.color] ?? colorClasses.greenberry;
+
+// Universal blocks
+const blocks = [
+  { title: 'Hosting & Infrastructure', icon: 'fa-solid fa-server', items: ['LiteSpeed Enterprise servers','NVMe SSD storage','Cloudflare CDN & WAF','99.9% uptime guarantee'] },
+  { title: 'Security', icon: 'fa-solid fa-shield-halved', items: ['SSL certificates included','Managed firewall & brute-force protection','Malware scanning & patching','DDoS protection'] },
+  { title: 'Backups & Recovery', icon: 'fa-solid fa-database', items: ['Daily automated backups','Off-site storage','Verified restore process','Backup health monitoring'] },
+  { title: 'SEO', icon: 'fa-solid fa-magnifying-glass', items: ['On-page SEO optimisation','Local SEO schema','XML sitemaps','Clean URL structure & metadata'] },
+  { title: 'Support & Updates', icon: 'fa-solid fa-headset', items: ['Irish-based support','Regular content updates','Software maintenance','Priority escalation path'] },
+  { title: 'Performance', icon: 'fa-solid fa-gauge-high', items: ['Core Web Vitals optimisation','Image optimisation','Lazy loading','Redis caching'] },
+];
+---
+
+<Layout title={suite.metaTitle} description={suite.metaDescription}>
+  <SuiteHero suite={suite} />
+  <SuiteHighlights suite={suite} />
+
+  <!-- Universal infra/SEO/support/perf -->
+  <section class="py-16 lg:py-24 bg-white dark:bg-neutral-900">
+    <Container>
+      <div class="max-w-3xl mx-auto text-center mb-12">
+        <div class="mb-6">
+          <span class={`inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold ${colors.badge} shadow-sm`}>
+            <i class={`${suite.icon} mr-2`}></i>
+            FEATURES & CAPABILITIES
+          </span>
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mt-4 mb-4">
+          Everything You Need to Succeed
+        </h2>
+        <p class="text-lg text-neutral-600 dark:text-neutral-300">
+          Our {suite.name} solution includes robust infrastructure, security, backups, SEO, performance, and support & updates.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        {blocks.map((b) => (
+          <div class="rounded-2xl p-6 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:border-neutral-300 dark:hover:border-neutral-600">
+            <div class={`${colors.icon} text-3xl mb-4`}><i class={b.icon}></i></div>
+            <h3 class="text-xl font-bold text-neutral-900 dark:text-white mb-3">{b.title}</h3>
+            <ul class="space-y-2">
+              {b.items.map((item) => (
+                <li class="flex items-start">
+                  <i class={`fa-solid fa-check ${colors.check} mr-2 mt-1 text-sm`}></i>
+                  <span class="text-neutral-600 dark:text-neutral-300">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </Container>
+  </section>
+
+  <div class="max-w-4xl mx-auto text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white">Compare What You Get</h2>
+    <p class="text-neutral-600 dark:text-neutral-300 mt-2">
+      Infrastructure, hosting, security, SEO, performance and support — consistent across suites.
+    </p>
+  </div>
+
+  <PlansComparison suite={suite} />
+
+  <!-- Showcase pulls the testimonial internally using the suite’s id(s) -->
+  <SuiteShowcase suite={suite} />
+
+  <section class={`${colors.button} text-white py-16 lg:py-24`}>
+    <Container>
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+          Ready to transform your {suite.targetSector} online?
+        </h2>
+        <p class="text-xl text-white/90 mb-8">
+          Launch with {suite.name}. Go live in 21 days or get 10% off.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="#plans" class="inline-flex items-center justify-center px-8 py-3 rounded-lg font-semibold bg-white text-neutral-900">
+            View Plans & Pricing
+          </a>
+          <button
+            type="button"
+            data-cal-link="greenberry/15min"
+            class="px-8 py-3 rounded-lg font-semibold border-2 border-white text-white"
+          >
+            Book a Free Consultation
+          </button>
+        </div>
+      </div>
+    </Container>
+  </section>
+</Layout

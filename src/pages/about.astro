@@ -9,27 +9,6 @@ import OurValues from '../components/about/OurValues.astro';
 import { COMPANY } from '../data/config';
 import { SEO } from "astro-seo";
 
-const teamMembers = [
-  {
-    name: "John Smith",
-    position: "Founder & Lead Developer",
-    bio: "With over 10 years of experience in web development, John founded Greenberry to help Irish businesses establish effective online presences.",
-    image: "https://randomuser.me/api/portraits/men/32.jpg"
-  },
-  {
-    name: "Sarah O'Connor",
-    position: "Design Lead",
-    bio: "Sarah brings creative vision and user experience expertise to every project, ensuring websites are both beautiful and functional.",
-    image: "https://randomuser.me/api/portraits/women/44.jpg"
-  },
-  {
-    name: "Michael Murphy",
-    position: "SEO Specialist",
-    bio: "Michael helps clients improve their search visibility and drive organic traffic with data-driven SEO strategies.",
-    image: "https://randomuser.me/api/portraits/men/67.jpg"
-  }
-];
-
 const values = [
   {
     title: "Customer-First Approach",
@@ -60,7 +39,7 @@ const values = [
     title="About Greenberry"
     description="We're an Irish web development agency specializing in creating beautiful, functional websites that help businesses grow."
     backgroundVariant="decorated"
-    #badgeText="ABOUT US"
+    badgeText="ABOUT US"
     highlightedText="Greenberry"
     paddingY="lg"
   />
@@ -103,6 +82,48 @@ const values = [
   <!-- Our Values -->
   <OurValues values={values} />
   
+  <!-- Support-First Paragraph Section (replace your current 'FIVE STARS' block with this) -->
+  <section class="py-20 bg-white dark:bg-neutral-900">
+    <Container>
+      <div class="max-w-3xl mx-auto text-center">
+        <Badge text="RENOWNED SUPPORT" variant="primary" size="md" />
+
+        <h2 class="mt-4 text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white">
+          Five-star care. No upsell. Just help.
+        </h2>
+
+        <p class="mt-5 text-lg leading-relaxed text-neutral-700 dark:text-neutral-300">
+          If you need a website, you need excellent support. Greenberry is built around
+          proactive care and plain-English guidance — the kind that solves problems fast,
+          protects your budget, and keeps your site working for you day after day.
+        </p>
+
+        <p class="mt-4 text-lg leading-relaxed text-neutral-700 dark:text-neutral-300">
+          We’ll never sell you something you don’t need. Our job is to help you reach your
+          goals with the smallest, smartest solution that does the job well. When there’s a
+          better way, we’ll tell you. When it’s overkill, we’ll say so.
+        </p>
+
+        <p class="mt-4 text-lg leading-relaxed text-neutral-700 dark:text-neutral-300">
+          That’s why clients stay. They get responsive, human support that goes above and
+          beyond — updates done, issues fixed, improvements suggested, and real progress made
+          month after month.
+        </p>
+
+        <p class="mt-6 text-base text-neutral-600 dark:text-neutral-400">
+          <span aria-hidden="true" class="mr-2">★★★★★</span>
+          Five-star feedback for responsiveness, clarity, and going the extra mile.
+        </p>
+
+        <div class="mt-8">
+          <Button href="/contact" variant="primary" size="lg">
+            Talk to the support-first team
+          </Button>
+        </div>
+      </div>
+    </Container>
+  </section>
+
   
   
   <!-- CTA Section with PageCta component -->

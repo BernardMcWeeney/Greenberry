@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PlansHero from '../components/plans/PlansHero.astro';
+import SuitePricingTable from '../components/plans/SuitePricingTable.astro';
+import ComparePlans from '../components/plans/ComparePlans.astro';
+import PlansPageCTA from '../components/plans/PlansPageCTA.astro';
+
+const metaTitle = "Website Packages & Pricing (Ireland) | Launch · Grow · Pro";
+const metaDescription = "Design, hosting, security, SEO, and updates in one subscription. From €30/mo + setup. Clear scope, clear SLAs, no surprises.";
+---
+
+<Layout title={metaTitle} description={metaDescription}>
+  <PlansHero />
+  <SuitePricingTable />
+  <ComparePlans />
+  <PlansPageCTA />
+</Layout>

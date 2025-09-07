@@ -1,0 +1,100 @@
+---
+import Container from '../common/Container.astro';
+import Badge from '../ui/Badge.astro';
+---
+
+<section class="py-16 lg:py-24 bg-white dark:bg-neutral-900">
+  <Container>
+    <div class="max-w-3xl mx-auto text-center mb-12">
+      <Badge text="COMPREHENSIVE CARE" variant="primary" size="md" />
+      <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mt-4 mb-4">
+        What Our Care Plans Include
+      </h2>
+      <p class="text-lg text-neutral-600 dark:text-neutral-300">
+        Professional maintenance that goes beyond basic updates
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+      <div
+        class="rounded-2xl p-6
+               bg-white dark:bg-neutral-800
+               border border-neutral-200 dark:border-neutral-700
+               shadow-sm
+               transition-all duration-200
+               hover:-translate-y-0.5 hover:shadow-lg
+               hover:border-neutral-300 dark:hover:border-neutral-600
+               focus-within:-translate-y-0.5 focus-within:shadow-lg
+               focus-within:border-neutral-300 dark:focus-within:border-neutral-600"
+      >
+        <div class="text-greenberry-500 text-3xl mb-4">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h3 class="text-xl font-bold text-neutral-900 dark:text-white mb-2">Security Hardening</h3>
+        <p class="text-neutral-600 dark:text-neutral-300">
+          Regular security updates, malware scanning, and firewall protection to keep threats at bay.
+        </p>
+      </div>
+
+      <div
+        class="rounded-2xl p-6
+               bg-white dark:bg-neutral-800
+               border border-neutral-200 dark:border-neutral-700
+               shadow-sm
+               transition-all duration-200
+               hover:-translate-y-0.5 hover:shadow-lg
+               hover:border-neutral-300 dark:hover:border-neutral-600
+               focus-within:-translate-y-0.5 focus-within:shadow-lg
+               focus-within:border-neutral-300 dark:focus-within:border-neutral-600"
+      >
+        <div class="text-accent-blue-500 text-3xl mb-4">
+          <i class="fa-solid fa-gauge-high"></i>
+        </div>
+        <h3 class="text-xl font-bold text-neutral-900 dark:text-white mb-2">Performance Optimization</h3>
+        <p class="text-neutral-600 dark:text-neutral-300">
+          Speed optimization, database cleaning, and CDN configuration for lightning-fast loading.
+        </p>
+      </div>
+
+      <div
+        class="rounded-2xl p-6
+               bg-white dark:bg-neutral-800
+               border border-neutral-200 dark:border-neutral-700
+               shadow-sm
+               transition-all duration-200
+               hover:-translate-y-0.5 hover:shadow-lg
+               hover:border-neutral-300 dark:hover:border-neutral-600
+               focus-within:-translate-y-0.5 focus-within:shadow-lg
+               focus-within:border-neutral-300 dark:focus-within:border-neutral-600"
+      >
+        <div class="text-purple-500 text-3xl mb-4">
+          <i class="fa-solid fa-database"></i>
+        </div>
+        <h3 class="text-xl font-bold text-neutral-900 dark:text-white mb-2">Reliable Backups</h3>
+        <p class="text-neutral-600 dark:text-neutral-300">
+          Automated daily backups with easy restoration. Your data is always safe and recoverable.
+        </p>
+      </div>
+
+      <div
+        class="rounded-2xl p-6
+               bg-white dark:bg-neutral-800
+               border border-neutral-200 dark:border-neutral-700
+               shadow-sm
+               transition-all duration-200
+               hover:-translate-y-0.5 hover:shadow-lg
+               hover:border-neutral-300 dark:hover:border-neutral-600
+               focus-within:-translate-y-0.5 focus-within:shadow-lg
+               focus-within:border-neutral-300 dark:focus-within:border-neutral-600"
+      >
+        <div class="text-accent-orange-500 text-3xl mb-4">
+          <i class="fa-solid fa-headset"></i>
+        </div>
+        <h3 class="text-xl font-bold text-neutral-900 dark:text-white mb-2">Expert Support</h3>
+        <p class="text-neutral-600 dark:text-neutral-300">
+          Irish-based support team ready to help with issues, updates, and improvements.
+        </p>
+      </div>
+    </div>
+  </Container>
+</section>

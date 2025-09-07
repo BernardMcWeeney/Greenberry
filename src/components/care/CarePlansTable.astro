@@ -1,0 +1,263 @@
+---
+// src/components/care/CarePlansTable.astro
+import Container from '../common/Container.astro';
+import Button from '../common/Button.astro';
+import Badge from '../ui/Badge.astro';
+import { carePlans } from '../../data/care';
+
+interface Props {
+  showStripeTable?: boolean;
+  stripeTableId?: string; // optional: only used if you actually embed Stripe here
+}
+
+const { showStripeTable = false, stripeTableId } = Astro.props;
+
+// ===== Theme tokens (align with PlansComparison) =====
+const colorClasses = {
+  greenberry: {
+    check: 'text-greenberry-500',
+    ring: 'ring-greenberry-500/20',
+    border: 'border-greenberry-500',
+    bg: 'bg-greenberry-600',
+    bgHover: 'hover:bg-greenberry-700',
+    text: 'text-greenberry-700 dark:text-greenberry-300',
+    solidBtn: 'bg-greenberry-600 hover:bg-greenberry-700 text-white',
+    shadow: 'shadow-greenberry-500/20',
+    mutedBtn:
+      'border border-greenberry-500/40 bg-white dark:bg-neutral-800/30 backdrop-blur-xs ' +
+      'text-greenberry-700 dark:text-greenberry-300 hover:bg-white/50 dark:hover:bg-neutral-800/50 ' +
+      'transition-all duration-300 shadow-xs hover:shadow-sm',
+    focusRing:
+      'focus-visible:ring-2 ring-offset-2 ring-offset-white dark:ring-offset-neutral-900 focus-visible:ring-greenberry-500'
+  }
+} as const;
+
+const theme = colorClasses.greenberry;
+
+// ===== Yearly pricing behaviour (set a discount if you want, e.g. 0.10 for 10%) =====
+const YEARLY_DISCOUNT = 0;
+
+// Build computed plans with a slug and computed yearly price from monthly
+const plans = carePlans.map((p, idx) => {
+  const yearlyRaw = p.monthlyPrice * 12 * (1 - YEARLY_DISCOUNT);
+  const yearly = Math.round(yearlyRaw);
+  return {
+    ...p,
+    slug: p.name.toLowerCase().replace(/\s+/g, '-'),
+    yearlyComputed: yearly,
+    popular: idx === 1 // highlight the middle plan
+  };
+});
+
+// Small “Included in every plan” belt (feel free to tweak labels)
+const globalInclusions = [
+  { icon: 'fa-solid fa-shield-halved', label: 'Security monitoring' },
+  { icon: 'fa-solid fa-database',      label: 'Off-site backups' },
+  { icon: 'fa-solid fa-gauge-high',    label: 'Performance tuning' },
+  { icon: 'fa-solid fa-up-right-from-square', label: 'Staging when needed' },
+  { icon: 'fa-solid fa-headset',       label: 'Friendly support' }
+];
+---
+
+<section id="care-plans" class="py-16 lg:py-24 bg-white dark:bg-neutral-900">
+  <Container>
+    <!-- Header -->
+    <div class="max-w-3xl mx-auto text-center mb-10">
+      <div class="badge-wrapper mb-4">
+        <Badge text="MAINTENANCE PLANS" variant="primary" size="md" />
+      </div>
+      <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-3">
+        Care Plans for External Sites
+      </h2>
+      <p class="text-lg text-neutral-600 dark:text-neutral-300">
+        Professional maintenance for WordPress sites we didn’t build. Keep your site secure, updated, and fast.
+      </p>
+    </div>
+
+    <!-- Billing toggle -->
+    <div class="flex justify-center mb-10">
+      <div class="inline-flex p-1 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800" role="tablist" aria-label="Billing period">
+        <button
+          type="button"
+          data-billing="monthly"
+          aria-pressed="true"
+          class="billing-btn active w-28 px-3 py-1.5 rounded-lg text-sm font-medium text-neutral-900 dark:text-white bg-white dark:bg-neutral-900 shadow border border-neutral-200 dark:border-neutral-700 focus:outline-none"
+        >
+          Monthly
+        </button>
+        <button
+          type="button"
+          data-billing="yearly"
+          aria-pressed="false"
+          class="billing-btn w-28 px-3 py-1.5 rounded-lg text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white focus:outline-none"
+        >
+          Yearly{YEARLY_DISCOUNT > 0 ? ` (save ${Math.round(YEARLY_DISCOUNT * 100)}%)` : ''}
+        </button>
+      </div>
+    </div>
+
+    <!-- Plans grid -->
+    <div id="care-root" class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto" data-billing="monthly">
+      {plans.map((plan) => (
+        <div
+          class={`relative bg-white dark:bg-neutral-800 rounded-xl shadow-lg overflow-hidden
+            ${plan.popular
+              ? `border-2 ${theme.border} ring-2 ${theme.ring} ${theme.shadow}`
+              : 'border border-neutral-200 dark:border-neutral-700'}
+          `}
+        >
+          {plan.popular && (
+            <div class={`absolute top-0 right-0 text-white text-xs font-semibold px-3 py-1 rounded-bl-lg ${theme.bg}`}>
+              RECOMMENDED
+            </div>
+          )}
+
+          <div class="p-6">
+            <h3 class="text-2xl font-bold text-neutral-900 dark:text-white mb-1">{plan.name}</h3>
+            <p class="text-neutral-600 dark:text-neutral-400 mb-4 text-sm">{plan.suitable}</p>
+
+            <!-- Price block -->
+            <div class="mb-1 flex items-baseline gap-2">
+              <span class="price-monthly text-4xl font-bold text-neutral-900 dark:text-white">€{plan.monthlyPrice.toLocaleString()}</span>
+              <span class="price-yearly hidden text-4xl font-bold text-neutral-900 dark:text-white">€{plan.yearlyComputed.toLocaleString()}</span>
+
+              <span class="label-monthly text-neutral-600 dark:text-neutral-400">/month</span>
+              <span class="label-yearly hidden text-neutral-600 dark:text-neutral-400">/year</span>
+            </div>
+
+            <!-- Onboarding pill -->
+            <div class="mb-6">
+              <span class={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${theme.bg} text-white`}>
+                <i class="fa-solid fa-hammer"></i>
+                €{plan.onboardingFee.toLocaleString()} onboarding fee
+              </span>
+            </div>
+
+            <!-- CTA -->
+            {plan.popular ? (
+              <Button
+                data-care={plan.slug}
+                size="md"
+                variant="custom"
+                class={`care-cta w-full mb-6 font-semibold ${theme.solidBtn} ${theme.focusRing} ${theme.shadow}`}
+                href={`/contact?care=${plan.slug}`}
+              >
+                Get Started
+              </Button>
+            ) : (
+              <Button
+                data-care={plan.slug}
+                size="md"
+                variant="custom"
+                class={`care-cta w-full mb-6 font-medium ${theme.mutedBtn} ${theme.focusRing}`}
+                href={`/contact?care=${plan.slug}`}
+              >
+                Get Started
+              </Button>
+            )}
+
+            <!-- Features -->
+            <div class="space-y-3">
+              <p class="text-sm font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide">What you get</p>
+              {plan.features.map((feature) => (
+                <div class="flex items-start">
+                  <span class={`${theme.check} mr-2 mt-0.5 flex-shrink-0`}>
+                    <i class="fa-solid fa-check text-sm"></i>
+                  </span>
+                  <span class="text-sm text-neutral-600 dark:text-neutral-300">{feature}</span>
+                </div>
+              ))}
+
+              <div class="pt-3 flex items-center text-sm text-neutral-600 dark:text-neutral-300">
+                <i class="fa-solid fa-clock mr-2 ${theme.check}"></i>
+                <span><span class="font-semibold">{plan.responseTime}</span> response</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Included in every plan -->
+    <div class="mt-12 bg-neutral-50 dark:bg-neutral-800/50 rounded-xl p-6">
+      <p class="text-center text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-4">INCLUDED IN EVERY PLAN</p>
+      <div class="flex flex-wrap justify-center gap-6">
+        {globalInclusions.map((item) => (
+          <div class="flex items-center text-sm text-neutral-600 dark:text-neutral-300">
+            <i class={`${item.icon} mr-2 ${theme.check}`}></i>
+            {item.label}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {showStripeTable && stripeTableId && (
+      <div class="mt-12 max-w-3xl mx-auto">
+        <!-- Optional Stripe embed (only if you actually use Stripe here) -->
+        <script is:inline async src="https://js.stripe.com/v3/pricing-table.js"></script>
+        <stripe-pricing-table
+          pricing-table-id={stripeTableId}
+          publishable-key=""
+        >
+        </stripe-pricing-table>
+      </div>
+    )}
+  </Container>
+
+  <!-- Inline script to handle billing toggle + CTA routing with billing param -->
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const root = document.getElementById('care-root');
+      const buttons = Array.from(document.querySelectorAll('.billing-btn'));
+      const ctas = Array.from(document.querySelectorAll('.care-cta'));
+
+      function setBilling(mode) {
+        if (!root) return;
+        root.setAttribute('data-billing', mode);
+
+        // Toggle price/labels visibility
+        document.querySelectorAll('.price-monthly').forEach(el => el.classList.toggle('hidden', mode === 'yearly'));
+        document.querySelectorAll('.price-yearly').forEach(el => el.classList.toggle('hidden', mode === 'monthly'));
+        document.querySelectorAll('.label-monthly').forEach(el => el.classList.toggle('hidden', mode === 'yearly'));
+        document.querySelectorAll('.label-yearly').forEach(el => el.classList.toggle('hidden', mode === 'monthly'));
+
+        // Toggle active styles on the toggle buttons
+        buttons.forEach(btn => {
+          const isActive = btn.getAttribute('data-billing') === mode;
+          btn.setAttribute('aria-pressed', String(isActive));
+          if (isActive) {
+            btn.classList.add('active','bg-white','dark:bg-neutral-900','shadow','border','border-neutral-200','dark:border-neutral-700','text-neutral-900','dark:text-white');
+            btn.classList.remove('text-neutral-600','dark:text-neutral-300');
+          } else {
+            btn.classList.remove('active','bg-white','dark:bg-neutral-900','shadow','border','border-neutral-200','dark:border-neutral-700','text-neutral-900','dark:text-white');
+            btn.classList.add('text-neutral-600','dark:text-neutral-300');
+          }
+        });
+      }
+
+      // Attach click to set billing
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const mode = btn.getAttribute('data-billing') || 'monthly';
+          setBilling(mode);
+        });
+      });
+
+      // Ensure CTAs include current billing param
+      ctas.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const billing = root?.getAttribute('data-billing') || 'monthly';
+          const care = btn.getAttribute('data-care');
+          if (!care) return;
+          e.preventDefault();
+          const url = new URL(btn.getAttribute('href') || '/', window.location.origin);
+          url.searchParams.set('billing', billing);
+          window.location.href = url.toString();
+        });
+      });
+
+      // Default to monthly
+      setBilling('monthly');
+    });
+  </script>
+</section>

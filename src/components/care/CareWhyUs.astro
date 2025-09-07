@@ -1,0 +1,47 @@
+---
+import Container from '../common/Container.astro';
+import Button from '../common/Button.astro';
+import Badge from '../ui/Badge.astro';
+import MiniTestimonials from '../common/MiniTestimonials.astro';
+---
+
+<section class="py-16 lg:py-24 bg-neutral-50 dark:bg-neutral-800/50">
+  <Container>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+      <div>
+        <Badge text="WHY GREENBERRY" variant="primary" size="md" />
+        <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mt-4 mb-6">
+          Expert Care from Irish WordPress Specialists
+        </h2>
+
+        <div class="space-y-4">
+          {[
+            { h: 'Irish-Based Support', p: 'Local team that understands Irish business needs and regulations' },
+            { h: 'Proactive Maintenance', p: 'We catch and fix issues before they become problems' },
+            { h: 'Transparent Reporting', p: 'Regular health reports and clear communication on all work done' },
+            { h: 'No Lock-In Contracts', p: 'Month-to-month billing with the flexibility to change or cancel anytime' },
+          ].map((item) => (
+            <div class="flex items-start">
+              <span class="text-greenberry-500 mr-3 mt-1">
+                <i class="fa-solid fa-check-circle"></i>
+              </span>
+              <div>
+                <h3 class="font-semibold text-neutral-900 dark:text-white mb-1">{item.h}</h3>
+                <p class="text-neutral-600 dark:text-neutral-300">{item.p}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="mt-8">
+          <Button href="/contact" variant="primary" size="lg">
+            Get Your Site Audit
+          </Button>
+        </div>
+      </div>
+
+      <!-- Right column: mini testimonial slider -->
+      <MiniTestimonials testimonialId={2} title="What Our Care Clients Say" characterLimit={220}/>
+    </div>
+  </Container>
+</section>

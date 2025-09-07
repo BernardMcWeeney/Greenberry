@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Keep imports light: sections own their dependencies
+import CareHero from '../components/care/CareHero.astro';
+import CareFeatures from '../components/care/CareFeatures.astro';
+import CarePlansTable from '../components/care/CarePlansTable.astro';
+import CareWhyUs from '../components/care/CareWhyUs.astro';
+import CareCTA from '../components/care/CareCTA.astro';
+
+const metaTitle = "Website Maintenance & Care Plans (Ireland) | Greenberry";
+const metaDescription = "Professional WordPress maintenance for sites we didn't build. Security, updates, and performance from €69/mo. Care Basic, Plus, and Pro plans available.";
+---
+
+<Layout title={metaTitle} description={metaDescription}>
+  <CareHero />
+  <CareFeatures />
+  <CarePlansTable />
+  <CareWhyUs />
+  <CareCTA />
+</Layout>

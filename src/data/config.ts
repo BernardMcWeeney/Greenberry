@@ -32,41 +32,74 @@ export const COMPANY: CompanyInfo = {
 // Social media links
 export const SOCIAL_LINKS = {
   facebook: 'https://facebook.com/greenberryie',
-  twitter: 'https://twitter.com/greenberry',
+  x: 'https://x.com/greenberry',
   instagram: 'https://instagram.com/greenberryie',
   linkedin: 'https://linkedin.com/company/greenberryie',
 };
 
-// Navigation item interface
+// Updated navigation item interface to support nested items
 export interface NavItem {
   name: string;
-  href: string;
+  href?: string; // Optional for parent items with children
+  children?: NavItem[]; // Nested navigation items
+  icon?: string; // Optional icon class
+  description?: string; // Optional description for mega menus
 }
 
-// Navigation structure
+// Navigation structure with nested items
 export const NAVIGATION = {
   main: [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
-    { name: 'Services', href: '/services' },
-    { name: 'Solutions', href: '/solutions' },
+    {
+      name: 'Suites',
+      children: [
+        { 
+          name: 'Parish Websites', 
+          href: '/suites/parish-websites',
+          description: 'Parish websites with donations & livestreams'
+        },
+        { 
+          name: 'Club Websites', 
+          href: '/suites/club-websites',
+          description: 'Club websites with fixtures & memberships'
+        },
+        { 
+          name: 'School Websites', 
+          href: '/suites/school-websites',
+          description: 'School websites with calendars & policies'
+        },
+        { 
+          name: 'Business Websites', 
+          href: '/suites/business-websites',
+          description: 'Business websites that drive growth'
+        }
+      ]
+    },
+    { name: 'Plans', href: '/plans' },
     { name: 'Portfolio', href: '/portfolio' },
-    { name: 'Contact', href: '/contact' },
+    { name: 'Care', href: '/care' },
+    { name: 'Contact', href: '/contact' }
   ] as NavItem[],
+
   footer: {
     company: [
       { name: 'About', href: '/about' },
-      { name: 'Services', href: '/services' },
+      { name: 'Plans', href: '/plans' },
       { name: 'Portfolio', href: '/portfolio' },
       { name: 'Contact', href: '/contact' },
     ] as NavItem[],
+
     services: [
-      { name: 'Website Solutions', href: '/services/websites' },
-      { name: 'Upgrades & Maintenance', href: '/services/maintenance' },
-      { name: 'SEO Packages', href: '/services/seo' },
-      { name: 'Email Solutions', href: '/services/email' },
+      { name: 'Parish Websites', href: '/parish-websites' },
+      { name: 'Club Websites', href: '/club-websites' },
+      { name: 'School Websites', href: '/school-websites' },
+      { name: 'Business Websites', href: '/business-websites' },
+      { name: 'Care & Support', href: '/care' },
     ] as NavItem[],
+
     resources: [
+      { name: 'Blog', href: '/blog' },
       { name: 'Help Center', href: '/help' },
       { name: 'Terms of Service', href: '/terms' },
       { name: 'Privacy Policy', href: '/privacy' },
@@ -74,7 +107,7 @@ export const NAVIGATION = {
   }
 };
 
-// Add a solutions section for future use if needed
+// Legacy solutions nav - kept for backwards compatibility
 export const SOLUTIONS_NAV = [
   { name: 'Website-as-a-Service', href: '/solutions/waas' },
   { name: 'Security Solution', href: '/solutions/security' },

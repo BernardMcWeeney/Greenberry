@@ -1,223 +1,458 @@
-// Suites.ts
-export interface Suite {
+// src/data/suites.ts
+
+export interface Testimonial {
   id: string;
-  type: "suite";
+  quote: string;
+  author: string;
+  position: string;
+  company: string;
+  avatar?: string;
+  website?: string;
+  verified?: boolean;
+}
+
+export interface PricingPlan {
+  name: 'Launch' | 'Grow' | 'Pro';
+  monthlyPrice: number;
+  yearlyPrice: number;
+  responseTime: string;
+  features: string[];
+  additionalFeatures?: string[];
+}
+
+// New: FeatureHighlight used by suite.featureHighlights
+export interface FeatureHighlight {
   title: string;
   description: string;
-  icon: string;
-  color: string;
-  borderColor: string;
-  textColor: string;
-  includedSolutions: string[];
-  sectorExtras: string[];
-  features: string[];
-  link: string;
-  ctaText: string;
-  targetSector: string;
-  testimonial?: {
-    quote: string;
-    author: string;
-    position: string;
-    company: string;
-  };
-  faqs?: Array<{ question: string; answer: string }>;
+  icon: string;       // Font Awesome class (e.g., 'fa-solid fa-plug')
+  pills?: string[];   // optional short chips
+  link?: string;      // optional "Learn more" link
 }
+
+// Optional extras for case studies
+export interface ShowcaseMetric {
+  label: string;
+  value: string; // e.g. '+42%', '×3'
+}
+
+export interface CaseStudy {
+  id: string;
+  title: string;
+  url: string;
+  image?: string;
+  excerpt?: string;
+  tags?: string[];
+  metrics?: ShowcaseMetric[];
+  testimonialId?: string;
+}
+
+export type SuiteColor = 'greenberry' | 'blue' | 'purple' | 'amber';
+
+export interface Suite {
+  id: string;
+  name: string;
+  title: string;
+  link: string;
+  targetSector: string;
+  description: string;
+  heroHeading: string;
+  heroSubheading: string;
+  icon: string;
+  color: SuiteColor;
+  setupFee: number;
+  monthlyPlans: {
+    launch: number;
+    grow: number;
+    pro: number;
+  };
+  outcomes: string[];
+  // Suite-specific (concise bullets you may show elsewhere)
+  coreFeatures: string[];        // (max ~4 suggested)
+  specialisedFeatures: string[]; // (max ~5 suggested)
+  // The section this request targets:
+  featureHighlights: FeatureHighlight[];
+  testimonials: number; // IDs of testimonials
+  caseStudies?: CaseStudy[]; // IDs + metadata of case studies
+  metaTitle: string;
+  metaDescription: string;
+  primaryKeyword: string;
+}
+
+export const pricingPlans: PricingPlan[] = [
+  {
+    name: 'Launch',
+    monthlyPrice: 30,
+    yearlyPrice: 360,
+    responseTime: 'Same day',
+    features: [
+      'Managed hosting (NVMe) with SSL',
+      'Server-level caching: Varnish + Redis',
+      'Daily server backups',
+      'Daily website backups (off-site)',
+      '5-day recovery/retention window',
+      'Baseline security hardening & checks',
+      'Core performance optimisation',
+      'Basic on-page SEO + GA4 setup',
+      'Uptime monitoring',
+      'Bi-monthly update window (every 2 months)'
+    ],
+    additionalFeatures: ['Core CMS/plugin maintenance']
+  },
+  {
+    name: 'Grow',
+    monthlyPrice: 40,
+    yearlyPrice: 480,
+    responseTime: 'Same day',
+    features: [
+      'Everything in Launch, plus:',
+      'Upgraded/faster servers',
+      'Image optimisation pipeline',
+      'Monthly maintenance & health checks',
+      'Proactive performance tuning',
+      'Search Console & GA4 sanity checks',
+      'Structured data / schema basics',
+      'Speed optimisation with monthly report',
+      '7-day recovery/retention window'
+    ],
+    additionalFeatures: ['Light observability (key alerts)']
+  },
+  {
+    name: 'Pro',
+    monthlyPrice: 50,
+    yearlyPrice: 600,
+    responseTime: 'Same day (priority queue)',
+    features: [
+      'Everything in Grow, plus:',
+      'Weekly maintenance & security checks',
+      'Advanced cache tuning (Varnish & Redis)',
+      'Global CDN delivery',
+      'DDoS protection & WAF (Cloudflare)',
+      'Staging environment & safe updates',
+      'Malware scanning & remediation',
+      '14-day recovery/retention window'
+    ],
+    additionalFeatures: ['Advanced logging & alerting', 'Incident response playbook']
+  }
+];
 
 export const suites: Suite[] = [
   {
-    id: "school-suite",
-    type: "suite",
-    title: "School Suite",
-    description: "Complete digital solution tailored for educational institutions with child-safe integrations and staff portals.",
-    icon: "fa-solid fa-school",
-    color: "blue",
-    borderColor: "border-t-blue-500",
-    textColor: "text-blue-500",
-    includedSolutions: ["website-solution", "security-solution", "support-solution"],
-    sectorExtras: [
-      "Child-safe media consent system",
-      "Staff portal with secure login",
-      "Absent note submission forms",
-      "Teacher CPD session"
+    id: 'parish-websites',
+    name: 'Parish Websites',
+    title: 'Greenberry for Parishes',
+    link: 'suites/parish-websites',
+    targetSector: 'Parishes',
+    description:
+      'Complete digital presence for parishes with Mass times, donations, and livestreams managed for you.',
+    heroHeading: 'Parish websites by Greenberry',
+    heroSubheading: 'More donations, faster updates, easier newsletters.',
+    icon: 'fa-solid fa-church',
+    color: 'purple',
+    setupFee: 1500,
+    monthlyPlans: { launch: 30, grow: 40, pro: 50 },
+    outcomes: [
+      'Increase online donations by 40%',
+      'Update Mass times in seconds',
+      'Grow newsletter subscribers',
+      'Streamline sacrament bookings'
     ],
-    features: [
-      "School-specific website design",
-      "GDPR-compliant student data handling",
-      "Enhanced security measures for child protection",
-      "Staff training and IT support",
-      "Newsletter and announcement system",
-      "Calendar integration for school events",
-      "Media gallery with parental consent management"
+    coreFeatures: [
+      'Daily Mass Readings, Feast & Saint of the Day widgets',
+      'Mobile-friendly design for parishioners of all ages',
+      'Livestream integration',
+      'Online donation integrations'
     ],
-    link: "/suites/school-suite",
-    ctaText: "Get School Suite",
-    targetSector: "Education",
-    testimonial: {
-      quote: "Greenberry understood our school's unique needs and delivered a secure, user-friendly website that our staff and parents love. Their ongoing support has been invaluable.",
-      author: "Mary O'Sullivan",
-      position: "Principal",
-      company: "St. Patrick's National School"
-    },
-    faqs: [
+    specialisedFeatures: [
+      'Livestream player',
+      'Easy site editing',
+      'Simple parish newsletter upload (PDF → web)',
+      'Mass Times module'
+    ],
+    featureHighlights: [
       {
-        question: "How do you handle student data protection?",
-        answer: "We implement GDPR-compliant systems with strict access controls, data minimization practices, and proper consent management for student information."
+        title: 'Integrations',
+        description: 'Embed livestreams and connect secure donations in minutes.',
+        icon: 'fa-solid fa-plug',
+        pills: ['Livestream', 'Stripe/PayPal', 'Easy embeds']
       },
       {
-        question: "Can parents submit forms through the website?",
-        answer: "Yes, we create secure forms for absent notes, permission slips, and other communications that integrate with your administrative systems."
+        title: 'Easy Editing',
+        description: 'Post notices, Mass times, newsletters — no tech skills needed.',
+        icon: 'fa-regular fa-pen-to-square',
+        pills: ['Inline edit', 'Blocks', 'Image helper']
       },
       {
-        question: "Do you provide training for our teachers?",
-        answer: "Absolutely! We offer dedicated CPD sessions to ensure your staff can confidently manage content and utilize all digital tools effectively."
+        title: 'Automatic Daily Content',
+        description: 'Saint of the Day, Feast Days, daily readings — auto-updated.',
+        icon: 'fa-solid fa-calendar-day',
+        pills: ['Readings', 'Feast days', 'Saint of the day']
+      },
+      {
+        title: 'Accessibility & Mobile',
+        description: 'WCAG-minded, large text options, fast on older phones.',
+        icon: 'fa-solid fa-universal-access',
+        pills: ['WCAG-minded', 'Mobile-first', 'Fast load']
       }
-    ]
+    ],
+    caseStudies: [
+      {
+        id: 'parish-demo-1',
+        title: 'St. Brigid’s Parish (Demo)',
+        url: '#',
+        image: '/images/showcase/parish-1.jpg',
+        excerpt:
+          'Mass times, online donations, and weekly newsletter uploads maintained by parish staff.',
+        tags: ['Donations', 'Mass times', 'Livestream'],
+        metrics: [{ label: 'Online donations', value: '+38%' }]
+      }
+    ],
+    testimonials: 4,
+    metaTitle: 'Church & Parish Websites in Ireland | Churchify by Greenberry',
+    metaDescription:
+      'Parish websites with Mass times, donations, and livestreams. Design, hosting, security, and updates from €30/mo + setup.',
+    primaryKeyword: 'parish website ireland'
   },
   {
-    id: "parish-suite",
-    type: "suite",
-    title: "Parish Suite",
-    description: "Digital presence and support customized for religious communities with livestream capabilities and donation systems.",
-    icon: "fa-solid fa-place-of-worship",
-    color: "purple",
-    borderColor: "border-t-purple-500",
-    textColor: "text-purple-500",
-    includedSolutions: ["website-solution", "support-solution", "security-solution"],
-    sectorExtras: [
-      "Livestream service embed",
-      "Online donations system",
-      "Rota manager for volunteers",
-      "Volunteer email accounts"
+    id: 'club-websites',
+    name: 'Club Websites',
+    title: 'Greenberry for Clubs',
+    link: 'suites/club-websites',
+    targetSector: 'Sports Clubs',
+    description:
+      'Dynamic club websites with fixtures, results, and membership management built in.',
+    heroHeading: 'Club websites by Greenberry',
+    heroSubheading: 'Boost membership, automate updates, engage supporters.',
+    icon: 'fa-solid fa-trophy',
+    color: 'blue',
+    setupFee: 1200,
+    monthlyPlans: { launch: 30, grow: 40, pro: 50 },
+    outcomes: [
+      'Increase membership renewals by 30%',
+      'Automate fixture updates',
+      'Boost sponsor visibility',
+      'Streamline team communications'
     ],
-    features: [
-      "Faith-focused website design",
-      "Service times and special events calendar",
-      "Secure donation processing",
-      "Parish newsletter distribution",
-      "Community announcement system",
-      "Volunteer coordination tools",
-      "Sermon/homily archive"
+    coreFeatures: [
+      'Fixtures & results with auto-updates',
+      'Team & player profiles',
+      'Membership & registrations',
+      'Sponsor placements & rotators'
     ],
-    link: "/suites/parish-suite",
-    ctaText: "Get Parish Suite",
-    targetSector: "Religious Organizations",
-    testimonial: {
-      quote: "The Parish Suite has transformed how we connect with our community. The livestream feature has been especially valuable for our homebound parishioners.",
-      author: "Fr. Michael Byrne",
-      position: "Parish Priest",
-      company: "St. Mary's Parish"
-    },
-    faqs: [
+    specialisedFeatures: [
+      'Live score ticker',
+      'Training schedules & pitch booking',
+      'Online shop & payments',
+      'Media galleries (photo/video)',
+      'Coach/manager update portal'
+    ],
+    featureHighlights: [
       {
-        question: "How does the livestreaming feature work?",
-        answer: "We integrate with services like YouTube or Facebook Live, or can set up dedicated streaming hardware for higher quality broadcasts of services."
+        title: 'Fixtures & Results',
+        description:
+          'Pull in fixtures/results automatically and keep league tables current.',
+        icon: 'fa-solid fa-table-list',
+        pills: ['Auto-updates', 'Tables', 'Results']
       },
       {
-        question: "Is the donation system secure and compliant?",
-        answer: "Yes, we implement PCI-compliant payment processing through trusted providers like Stripe, with options for one-time or recurring donations."
+        title: 'Membership & Payments',
+        description:
+          'Take registrations and renewals online with secure checkout.',
+        icon: 'fa-solid fa-id-card',
+        pills: ['Stripe', 'SEPA', 'Discount codes']
       },
       {
-        question: "Can we manage different ministry sections on the website?",
-        answer: "Absolutely! We structure the site with dedicated sections for each ministry, all manageable by assigned volunteers or staff."
+        title: 'Sponsor Showcases',
+        description:
+          'Rotating sponsor spots and pages to deliver value to partners.',
+        icon: 'fa-solid fa-handshake',
+        pills: ['Rotators', 'Logos', 'UTM tracking']
+      },
+      {
+        title: 'Media Hub',
+        description:
+          'Gallery pages for match photos and highlight videos.',
+        icon: 'fa-solid fa-camera',
+        pills: ['Albums', 'Video embeds', 'Social share']
       }
-    ]
+    ],
+    caseStudies: [
+      {
+        id: 'club-demo-1',
+        title: 'Riverside GAA (Demo)',
+        url: '#',
+        image: '/images/showcase/club-1.jpg',
+        excerpt:
+          'Membership renewals moved online; sponsors featured across fixtures and results.',
+        tags: ['Membership', 'Sponsors', 'Fixtures'],
+        metrics: [{ label: 'Renewals YoY', value: '+31%' }]
+      }
+    ],
+    testimonials: 2,
+    metaTitle: 'GAA & Club Websites in Ireland | Clubify by Greenberry',
+    metaDescription:
+      'Club websites with fixtures, results, and memberships. Professional design and management from €30/mo + setup.',
+    primaryKeyword: 'gaa club website ireland'
   },
   {
-    id: "club-suite",
-    type: "suite",
-    title: "Club Suite",
-    description: "Digital toolkit for sports and community clubs with membership management, fixtures integration, and sponsor showcases.",
-    icon: "fa-solid fa-trophy",
-    color: "green",
-    borderColor: "border-t-green-500",
-    textColor: "text-green-500",
-    includedSolutions: ["website-solution", "support-solution", "security-solution"],
-    sectorExtras: [
-      "Fixtures and results feed",
-      "Membership payments system",
-      "Sponsor carousel display",
-      "Pitch/facility Wi-Fi management"
+    id: 'school-websites',
+    name: 'School Websites',
+    title: 'Greenberry for Schools',
+    link: 'suites/school-websites',
+    targetSector: 'Schools',
+    description:
+      'School websites that inform parents and showcase your educational excellence.',
+    heroHeading: 'School websites by Greenberry',
+    heroSubheading: 'Better communication, easier admissions, happier parents.',
+    icon: 'fa-solid fa-graduation-cap',
+    color: 'amber',
+    setupFee: 1000,
+    monthlyPlans: { launch: 30, grow: 40, pro: 50 },
+    outcomes: [
+      'Reduce admin calls by 50%',
+      'Streamline admissions process',
+      'Improve parent engagement',
+      'Showcase school achievements'
     ],
-    features: [
-      "Team/club branding and colors",
-      "Member registration system",
-      "Match reports and photo galleries",
-      "Committee and coach profiles",
-      "Training schedule calendar",
-      "Club merchandise online store",
-      "Social media integration"
+    coreFeatures: [
+      'School calendar & events hub',
+      'Admissions information & key dates',
+      'Policies & documents library',
+      'News, notices & newsletter updates'
     ],
-    link: "/suites/club-suite",
-    ctaText: "Get Club Suite",
-    targetSector: "Sports & Community Clubs",
-    testimonial: {
-      quote: "The Club Suite has revolutionized how we manage our GAA club. From fixtures to membership fees, everything is now streamlined and professional.",
-      author: "Seamus O'Neill",
-      position: "Club Secretary",
-      company: "Drogheda Celtic GAA"
-    },
-    faqs: [
+    specialisedFeatures: [
+      'Parent notices board',
+      'Absence & permission e-forms',
+      'Multi-campus support',
+      'Staff directory & subject pages',
+      'Google/Microsoft calendar integration'
+    ],
+    featureHighlights: [
       {
-        question: "Can we display live match scores?",
-        answer: "Yes, we can integrate with sports data providers or set up simple score updating systems for your match officials to use."
+        title: 'Admissions & Key Dates',
+        description:
+          'Clear enrolment pages with timelines, forms, and reminders.',
+        icon: 'fa-solid fa-clipboard-check',
+        pills: ['Enrolment', 'Key dates', 'Email reminders']
       },
       {
-        question: "How do you handle membership renewals?",
-        answer: "We implement automated renewal reminders, online payment processing, and member dashboards to track status and benefits."
+        title: 'Calendar & Events',
+        description:
+          'Single source of truth for term dates, PTA events, and exams.',
+        icon: 'fa-solid fa-calendar-days',
+        pills: ['Term dates', 'Sync', 'Multi-campus']
       },
       {
-        question: "Can sponsors get analytics on their exposure?",
-        answer: "Absolutely! We provide detailed reports on sponsor banner impressions, click-throughs, and engagement to demonstrate value."
+        title: 'Policies Library',
+        description:
+          'Searchable policy/document hub with version history.',
+        icon: 'fa-solid fa-file-shield',
+        pills: ['PDF viewer', 'Tags', 'Versioning']
+      },
+      {
+        title: 'News & Notices',
+        description:
+          'Publish updates from desktop or phone in seconds.',
+        icon: 'fa-solid fa-bullhorn',
+        pills: ['Quick post', 'Images', 'Staff roles']
       }
-    ]
+    ],
+    caseStudies: [
+      {
+        id: 'school-demo-1',
+        title: 'Oakfield Secondary (Demo)',
+        url: '#',
+        image: '/images/showcase/school-1.jpg',
+        excerpt:
+          'Admissions simplified; parents use the site as the first port of call.',
+        tags: ['Admissions', 'Parents', 'Calendar'],
+        metrics: [{ label: 'Admin calls', value: '−47%' }]
+      }
+    ],
+    testimonials: 9,
+    metaTitle: 'School Websites in Ireland | Teachify by Greenberry',
+    metaDescription:
+      'School websites with calendars, policies, and admissions. Professional design and updates from €30/mo + setup.',
+    primaryKeyword: 'school website ireland'
   },
   {
-    id: "sme-suite",
-    type: "suite",
-    title: "SME Suite",
-    description: "Practical digital foundation for small businesses with simplified quoting tools and local SEO optimization.",
-    icon: "fa-solid fa-briefcase",
-    color: "amber",
-    borderColor: "border-t-amber-500",
-    textColor: "text-amber-500",
-    includedSolutions: ["website-solution", "support-solution"],
-    sectorExtras: [
-      "Simple quoting form system",
-      "Google Business integration",
-      "On-site device setup",
-      "Basic SEO package"
+    id: 'business-websites',
+    name: 'Business Websites',
+    title: 'Greenberry for Business',
+    link: 'suites/business-websites',
+    targetSector: 'Business',
+    description:
+      'Professional business websites that convert visitors into customers.',
+    heroHeading: 'Business websites by Greenberry',
+    heroSubheading: 'More leads, better conversions, professional presence.',
+    icon: 'fa-solid fa-briefcase',
+    color: 'greenberry',
+    setupFee: 2000,
+    monthlyPlans: { launch: 79, grow: 130, pro: 230 },
+    outcomes: [
+      'Increase lead generation by 60%',
+      'Improve conversion rates',
+      'Enhance brand credibility',
+      'Automate customer inquiries'
     ],
-    features: [
-      "Professional business website",
-      "Local SEO optimization",
-      "Contact and enquiry management",
-      "Product/service showcase",
-      "Business email configuration",
-      "Microsoft 365 or Google Workspace setup",
-      "Basic IT support"
+    coreFeatures: [
+      'Lead-gen landing pages & forms',
+      'Bookings/appointments integration',
+      'Service & product pages with CTAs',
+      'Testimonials & case study modules'
     ],
-    link: "/suites/sme-suite",
-    ctaText: "Get SME Suite",
-    targetSector: "Small & Medium Businesses",
-    testimonial: {
-      quote: "As a small business owner, I needed a simple digital solution without the complexity. The SME Suite delivered exactly what I needed at a price I could afford.",
-      author: "John Murphy",
-      position: "Owner",
-      company: "Murphy's Hardware"
-    },
-    faqs: [
+    specialisedFeatures: [
+      'CRM integration (HubSpot/Zoho/365)',
+      'Quote/estimate workflow forms',
+      'E-commerce ready (Stripe/PayPal)',
+      'Multi-location schema & maps',
+      'Blog & resource hub for SEO'
+    ],
+    featureHighlights: [
       {
-        question: "Is this package suitable for a new business?",
-        answer: "Perfect for startups! We'll help establish your digital presence and provide the tools to grow, with an upgrade path as your business expands."
+        title: 'Lead Funnels',
+        description:
+          'High-converting landing pages with A/B-testable sections.',
+        icon: 'fa-solid fa-filter',
+        pills: ['Forms', 'A/B test', 'Thank-you flows']
       },
       {
-        question: "Can you help with setting up Google Business Profile?",
-        answer: "Yes, we handle the full setup including verification, photos, services listing, and optimization for local search visibility."
+        title: 'Bookings & Calendars',
+        description:
+          'Let customers book calls or services without email ping-pong.',
+        icon: 'fa-solid fa-calendar-check',
+        pills: ['Calendly', 'MS Bookings', 'Reminders']
       },
       {
-        question: "What's included in the on-site device setup?",
-        answer: "We'll configure your computers, network, printers, and business software to ensure everything works seamlessly together."
+        title: 'Local SEO',
+        description:
+          'Schema, Google Business Profile, and review widgets built-in.',
+        icon: 'fa-solid fa-location-dot',
+        pills: ['Schema', 'GBP', 'Reviews']
+      },
+      {
+        title: 'CRM & Automation',
+        description:
+          'Pipe leads into your CRM and trigger follow-ups automatically.',
+        icon: 'fa-solid fa-diagram-project',
+        pills: ['HubSpot', 'Zoho', 'Power Automate']
       }
-    ]
+    ],
+    caseStudies: [
+      {
+        id: 'biz-demo-1',
+        title: 'Boyne Valley Tours (Demo)',
+        url: '#',
+        image: '/images/showcase/business-1.jpg',
+        excerpt:
+          'Bookings integrated with calendar; leads sync to CRM with auto-emails.',
+        tags: ['Leads', 'Bookings', 'CRM'],
+        metrics: [{ label: 'Lead volume', value: '+54%' }]
+      }
+    ],
+    testimonials: 3,
+    metaTitle: 'Business Websites for Irish SMEs | Greenberry',
+    metaDescription:
+      'Professional business websites with lead generation and bookings. Design, hosting, and growth from €79/mo + setup.',
+    primaryKeyword: 'business website ireland'
   }
-]
+];

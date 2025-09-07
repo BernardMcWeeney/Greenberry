@@ -29,7 +29,7 @@
   --color-greenberry-950: #052e16;
 
   /* Gray scale (hex to keep things consistent with your “integrate” file) */
-  --color-gray-50:  #f9fafb;
+  --color-gray-50:  #fafafa;
   --color-gray-100: #f3f4f6;
   --color-gray-200: #e5e7eb;
   --color-gray-300: #d1d5db;
@@ -42,7 +42,7 @@
   --color-gray-950: #030712;
 
   /* Neutral aliases (compat with any existing *-neutral-* usage) */
-  --color-neutral-50:  var(--color-gray-50);
+  --color-neutral-50: var(--color-gray-50);
   --color-neutral-100: var(--color-gray-100);
   --color-neutral-200: var(--color-gray-200);
   --color-neutral-300: var(--color-gray-300);
