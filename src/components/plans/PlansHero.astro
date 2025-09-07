@@ -7,10 +7,15 @@ import Badge from '../ui/Badge.astro';
 
 <!-- Hero -->
 <section class="py-20 lg:py-28 bg-neutral-50 dark:bg-neutral-800/50 relative overflow-hidden">
-    <div class="absolute inset-0">
-        <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-greenberry-500/20 rounded-full filter blur-3xl opacity-70 -translate-y-1/2 translate-x-1/3"></div>
-        <div class="absolute bottom-0 left-0 w-1/3 h-1/3 bg-greenberry-500/20 rounded-full filter blur-3xl opacity-60 translate-y-1/2 -translate-x-1/3"></div>
-    </div>
+  <!-- Decorative glow (perf-friendly: no filters, single element) -->
+  <div aria-hidden="true"
+      class="absolute inset-0 -z-10 pointer-events-none
+              [contain:layout_paint_style]
+              [background:
+                radial-gradient(40vmin_40vmin_at_85%_0%, rgba(22,163,73,0.35), transparent 70%),
+                radial-gradient(48vmin_48vmin_at_0%_100%, rgba(22,163,73,0.25), transparent 70%)
+              ]">
+  </div>
 
   <Container>
     <div class="max-w-4xl mx-auto text-center relative z-10">

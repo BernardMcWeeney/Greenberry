@@ -5,11 +5,10 @@ import Button from '../components/common/Button.astro';
 import Badge from '../components/ui/Badge.astro';
 import PageHeader from '../components/common/PageHeader.astro';
 import { COMPANY, SOCIAL_LINKS } from '../data/config';
-import { SEO } from "astro-seo"; 
 
 const socialLinks = [
   { icon: "fa-brands fa-facebook", path: SOCIAL_LINKS.facebook, color: "hover:bg-blue-500", name: "Facebook" },
-  { icon: "fa-brands fa-twitter", path: SOCIAL_LINKS.twitter, color: "hover:bg-blue-400", name: "X" },
+  { icon: "fa-brands fa-x-twitter", path: SOCIAL_LINKS.x, color: "hover:bg-blue-400", name: "X" },
   { icon: "fa-brands fa-linkedin", path: SOCIAL_LINKS.linkedin, color: "hover:bg-blue-700", name: "LinkedIn" },
   { icon: "fa-brands fa-instagram", path: SOCIAL_LINKS.instagram, color: "hover:bg-pink-600", name: "Instagram" },
 ];

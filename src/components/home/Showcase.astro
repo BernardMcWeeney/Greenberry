@@ -87,7 +87,6 @@ const getNuancedColorClasses = (baseColor: Suite['color'] | undefined) => {
       {suites.map((suite) => {
         const { badgeBg, badgeText, iconBg, iconText } = getNuancedColorClasses(suite.color);
         const href = (suite as any).link || `/suites/${suite.id}`;
-        const featureList: string[] = (suite as any).features ?? suite.coreFeatures ?? [];
         return (
           <a
             href={href}

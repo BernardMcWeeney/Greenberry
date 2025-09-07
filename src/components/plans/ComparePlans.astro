@@ -33,12 +33,31 @@ const genericSuite: Suite = {
   outcomes: [],
   coreFeatures: [],
   specialisedFeatures: [],
-  testimonials: [],
+  featureHighlights: [
+    {
+      title: 'Infrastructure',
+      description: 'NVMe hosting, SSL, CDN, WAF.',
+      icon: 'fa-solid fa-server',
+      pills: ['NVMe', 'SSL', 'CDN']
+    },
+    {
+      title: 'Security & Backups',
+      description: 'Daily backups, WAF, DDoS.',
+      icon: 'fa-solid fa-shield-halved',
+      pills: ['Backups', 'WAF', 'DDoS']
+    },
+    {
+      title: 'Performance & SEO',
+      description: 'Core Web Vitals, caching, on-page basics.',
+      icon: 'fa-solid fa-gauge-high',
+      pills: ['CWV', 'Caching', 'SEO']
+    }
+  ],
+  testimonials: 0,
   caseStudies: [],
   metaTitle: 'Website Packages & Pricing (Ireland) | Launch · Grow · Pro',
   metaDescription: 'Design, hosting, security, SEO, and updates in one subscription. From €30/mo + setup. Clear scope, clear SLAs, no surprises.',
   primaryKeyword: 'website packages ireland',
-  stripeTableId: undefined
 };
 ---
 

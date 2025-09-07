@@ -37,8 +37,8 @@ const paragraphs = description ? description.split('\n\n') : [];
       </h2>
       
       <div class="prose prose-lg dark:prose-invert max-w-none">
-        {paragraphs.map((paragraph, i) => (
-          <p key={i} class="text-gray-700 dark:text-gray-300 mb-4 text-base md:text-lg">{paragraph}</p>
+        {paragraphs.map((paragraph) => (
+          <p class="text-gray-700 dark:text-gray-300 mb-4 text-base md:text-lg">{paragraph}</p>
         ))}
       </div>
       

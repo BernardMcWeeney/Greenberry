@@ -6,7 +6,6 @@ import { pricingPlans } from '../../data/suites';
 
 interface Props {
   suite: Suite;
-  showStripeTable?: boolean;
   showSetupCallout?: boolean;
   showSetupPill?: boolean;
   yearlyDiscountPct?: number;
@@ -14,7 +13,6 @@ interface Props {
 
 const {
   suite,
-  showStripeTable = true,
   showSetupCallout = true,
   showSetupPill = true,
   yearlyDiscountPct = 0

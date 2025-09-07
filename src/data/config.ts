@@ -35,7 +35,8 @@ export const SOCIAL_LINKS = {
   x: 'https://x.com/greenberry',
   instagram: 'https://instagram.com/greenberryie',
   linkedin: 'https://linkedin.com/company/greenberryie',
-};
+  twitter: 'https://twitter.com/greenberry'
+} as const;
 
 // Updated navigation item interface to support nested items
 export interface NavItem {

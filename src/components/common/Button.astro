@@ -1,58 +1,94 @@
 ---
 export interface Props {
-  href?: string;
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'glass';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'glass' | 'custom';
   size?: 'xs' | 'sm' | 'md' | 'lg';
   block?: boolean;
   class?: string;
-  [x: string]: any;
+  href?: string;
+  target?: '_self' | '_blank' | '_parent' | '_top';
+  rel?: string;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
+  ariaLabel?: string;
+  id?: string;
+  name?: string; // <- fixed (no stray "?")
 }
 
 const {
-  href,
   variant = 'primary',
   size = 'md',
   block = false,
   class: className = '',
-  ...rest
-} = Astro.props;
+  href,
+  target,
+  rel,
+  type = 'button',
+  disabled = false,
+  ariaLabel,
+  ...attrs
+} = Astro.props as Props; // id/name/data-* forwarded via {...attrs}
 
-const variants = {
-  primary: 'bg-greenberry-600 hover:bg-greenberry-700 text-white border-transparent shadow-xs hover:shadow',
-  secondary: 'bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 shadow-xs hover:shadow-sm dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-100 dark:border-gray-700',
-  outline: 'bg-transparent hover:bg-greenberry-50 text-greenberry-600 border-2 border-greenberry-600 hover:border-greenberry-700 dark:text-greenberry-400 dark:border-greenberry-500 dark:hover:bg-gray-800',
+const variants: Record<NonNullable<Props['variant']>, string> = {
+  primary: 'bg-greenberry-600 hover:bg-greenberry-700 text-white border-transparent shadow-sm hover:shadow',
+  secondary:
+    'bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 shadow-sm hover:shadow-sm dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-100 dark:border-gray-700',
+  outline:
+    'bg-transparent hover:bg-greenberry-50 text-greenberry-600 border-2 border-greenberry-600 hover:border-greenberry-700 dark:text-greenberry-400 dark:border-greenberry-500 dark:hover:bg-gray-800',
   ghost: 'bg-transparent hover:bg-gray-100 text-gray-700 border-transparent dark:text-gray-300 dark:hover:bg-gray-800',
-  glass: 'backdrop-blur-md bg-white/20 dark:bg-gray-800/20 text-gray-800 dark:text-white border border-white/20 dark:border-gray-700/20 hover:bg-white/30 dark:hover:bg-gray-800/30 shadow-xs hover:shadow',
-  custom: '' // <-- no preset colors
+  glass:
+    'backdrop-blur-md bg-white/20 dark:bg-gray-800/20 text-gray-800 dark:text-white border border-white/20 dark:border-gray-700/20 hover:bg-white/30 dark:hover:bg-gray-800/30 shadow-sm hover:shadow',
+  custom: '' // caller supplies full styling via `class`
 };
 
-const sizes = {
+const sizes: Record<NonNullable<Props['size']>, string> = {
   xs: 'px-2.5 py-1 text-xs',
   sm: 'px-3 py-1.5 text-sm',
   md: 'px-4 py-2.5 text-sm',
   lg: 'px-6 py-3 text-base',
 };
 
-const baseClasses = [
-  'rounded-md font-medium inline-flex items-center justify-center transition-all duration-300 focus:outline-hidden relative overflow-hidden group',
+const base =
+  'rounded-md font-medium inline-flex items-center justify-center transition-all duration-300 ' +
+  'focus:outline-none focus-visible:ring-2 focus-visible:ring-greenberry-500/40 ' +
+  'relative overflow-hidden group select-none';
+
+const classes = [
+  base,
   sizes[size],
   block ? 'w-full' : '',
-  variants[variant],   // keep before user class
-  className,           // user classes last
+  variants[variant], // preset styles
+  className          // user overrides last
 ];
+
+const computedRel = target === '_blank'
+  ? (rel ? `${rel} noopener noreferrer` : 'noopener noreferrer')
+  : rel;
 ---
 
 {href ? (
-  <a href={href} class:list={baseClasses} {...rest}>
+  <a
+    href={href}
+    target={target}
+    rel={computedRel}
+    aria-label={ariaLabel}
+    class:list={classes}
+    {...attrs}
+  >
     {variant === 'primary' && (
-      <span class="absolute inset-0 w-full h-full bg-white/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
+      <span class="pointer-events-none absolute inset-0 w-full h-full bg-white/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
     )}
     <slot />
   </a>
 ) : (
-  <button class:list={baseClasses} {...rest}>
+  <button
+    type={type}
+    disabled={disabled}
+    aria-label={ariaLabel}
+    class:list={classes}
+    {...attrs}
+  >
     {variant === 'primary' && (
-      <span class="absolute inset-0 w-full h-full bg-white/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
+      <span class="pointer-events-none absolute inset-0 w-full h-full bg-white/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
     )}
     <slot />
   </button>

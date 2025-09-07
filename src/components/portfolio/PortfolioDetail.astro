@@ -8,15 +8,13 @@ export interface Props {
   project: PortfolioProject;
 }
 
-const { project } = Astro.props;
+const { project } = Astro.props as Props;
 
-// Define step cards for the project process
 const projectSteps = [
   {
     title: "The Challenge",
     description: project.challenge,
     icon: "fa-solid fa-triangle-exclamation",
-    color: "red",
     borderColor: "border-t-red-500",
     textColor: "text-red-500"
   },
@@ -24,7 +22,6 @@ const projectSteps = [
     title: "Our Solution",
     description: project.solution,
     icon: "fa-solid fa-lightbulb",
-    color: "blue",
     borderColor: "border-t-blue-500",
     textColor: "text-blue-500"
   },
@@ -32,22 +29,24 @@ const projectSteps = [
     title: "The Results",
     description: project.results,
     icon: "fa-solid fa-chart-line",
-    color: "green",
     borderColor: "border-t-green-500",
     textColor: "text-green-500"
   }
 ];
 
-// Format technologies used into tags
 const technologies = project.technologies || [];
 ---
 
 <div>
   <!-- Hero Section with Project Showcase -->
-  <section class="py-16 bg-green-50 dark:bg-gray-800 section-bg-decoration relative overflow-hidden">
-    <div class="absolute inset-0">
-      <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-greenberry-500/10 rounded-full filter blur-3xl opacity-70 -translate-y-1/2 translate-x-1/3"></div>
-      <div class="absolute bottom-0 left-0 w-1/3 h-1/3 bg-greenberry-500/10 rounded-full filter blur-3xl opacity-60 translate-y-1/2 -translate-x-1/3"></div>
+  <section class="py-16 bg-neutral-50 dark:bg-gray-800 relative overflow-hidden">
+    <!-- Perf-friendly decorative glow -->
+    <div aria-hidden="true"
+         class="absolute inset-0 -z-10 pointer-events-none
+                [background:
+                  radial-gradient(40vmin_40vmin_at_85%_0%, rgba(22,163,73,0.35), transparent 70%),
+                  radial-gradient(48vmin_48vmin_at_0%_100%, rgba(22,163,73,0.25), transparent 70%)
+                ]">
     </div>
     
     <Container>
@@ -96,7 +95,7 @@ const technologies = project.technologies || [];
             
             <a 
               href="/portfolio" 
-              class="px-6 py-3 rounded-lg font-medium border border-greenberry-500/40 bg-white dark:bg-gray-800/30 backdrop-blur-xs text-greenberry-700 dark:text-greenberry-300 hover:bg-white/50 dark:hover:bg-gray-800/50 transition-colors shadow-xs hover:shadow-sm flex items-center justify-center"
+              class="px-6 py-3 rounded-lg font-medium border border-greenberry-500/40 bg-white dark:bg-gray-800/30 backdrop-blur-xs text-greenberry-700 dark:text-greenberry-300 hover:bg-white/50 dark:hover:bg-gray-800/50 transition-colors shadow-sm hover:shadow flex items-center justify-center"
             >
               <span class="mr-2"><i class="fa-solid fa-arrow-left"></i></span>
               All Projects
@@ -129,13 +128,17 @@ const technologies = project.technologies || [];
                 alt={`${project.title} - Preview`} 
                 class="w-full h-full object-cover transform group-hover:scale-105 transition-transform"
                 loading="eager"
+                decoding="async"
+                fetchpriority="high"
               />
             </div>
           </div>
           
-          <!-- Decorative elements -->
-          <div class="absolute -bottom-8 -right-8 w-24 h-24 bg-greenberry-500/20 rounded-full filter blur-xl opacity-70 z-0"></div>
-          <div class="absolute -top-8 -left-8 w-24 h-24 bg-greenberry-400/20 rounded-full filter blur-xl opacity-60 z-0"></div>
+          <!-- Decorative accents (no blur filters) -->
+          <div aria-hidden="true" class="absolute -bottom-10 -right-10 w-40 h-40 rounded-full opacity-40"
+               style="background: radial-gradient(closest-side, rgba(22,163,73,0.25), transparent 70%);"></div>
+          <div aria-hidden="true" class="absolute -top-10 -left-10 w-40 h-40 rounded-full opacity-30"
+               style="background: radial-gradient(closest-side, rgba(22,163,73,0.2), transparent 70%);"></div>
         </div>
       </div>
     </Container>
@@ -170,6 +173,7 @@ const technologies = project.technologies || [];
                 alt={`${project.title} - Gallery image ${index + 1}`} 
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
+                decoding="async"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                 <span class="text-white text-sm font-medium">View detail</span>
@@ -182,10 +186,13 @@ const technologies = project.technologies || [];
   )}
   
   <!-- Project Details Section -->
-  <section class="py-16 bg-cool-gray-50 dark:bg-gray-800/50 relative overflow-hidden">
-    <div class="absolute inset-0">
-      <div class="absolute top-1/2 left-1/4 w-64 h-64 bg-greenberry-500/10 rounded-full filter blur-3xl opacity-70"></div>
-      <div class="absolute bottom-0 right-1/4 w-64 h-64 bg-greenberry-600/10 rounded-full filter blur-3xl opacity-60"></div>
+  <section class="py-16 bg-neutral-50 dark:bg-gray-800/50 relative overflow-hidden">
+    <div aria-hidden="true"
+         class="absolute inset-0 -z-10 pointer-events-none
+                [background:
+                  radial-gradient(36vmin_36vmin_at_25%_55%, rgba(22,163,73,0.22), transparent 70%),
+                  radial-gradient(40vmin_40vmin_at_75%_100%, rgba(22,163,73,0.18), transparent 70%)
+                ]">
     </div>
     
     <Container>
@@ -198,8 +205,8 @@ const technologies = project.technologies || [];
         <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Project Overview</h2>
         
         <div class="prose prose-lg dark:prose-invert max-w-none">
-          {project.longDescription && project.longDescription.split('\n\n').map((paragraph, i) => (
-            <p key={i} class="text-gray-700 dark:text-gray-300 mb-4">{paragraph}</p>
+          {project.longDescription && project.longDescription.split('\n\n').map((paragraph) => (
+            <p class="text-gray-700 dark:text-gray-300 mb-4">{paragraph}</p>
           ))}
         </div>
         
@@ -291,36 +298,3 @@ const technologies = project.technologies || [];
     </Container>
   </section>
 </div>
-
-<style>
-  .section-bg-decoration {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .section-bg-decoration::before {
-    content: "";
-    position: absolute;
-    right: -5%;
-    top: -5%;
-    width: 20%;
-    height: 20%;
-    background-color: rgba(72, 187, 120, 0.1);
-    border-radius: 50%;
-    filter: blur(60px);
-    z-index: 0;
-  }
-  
-  .section-bg-decoration::after {
-    content: "";
-    position: absolute;
-    left: -5%;
-    bottom: -5%;
-    width: 20%;
-    height: 20%;
-    background-color: rgba(72, 187, 120, 0.1);
-    border-radius: 50%;
-    filter: blur(60px);
-    z-index: 0;
-  }
-</style>

@@ -106,17 +106,19 @@ const blocks = [
       </div>
     </Container>
   </section>
+  <Container>
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white">Compare What You Get</h2>
+      <p class="text-neutral-600 dark:text-neutral-300 mt-2">
+        Infrastructure, hosting, security, SEO, performance and support — consistent across suites.
+      </p>
+    </div>
 
-  <div class="max-w-4xl mx-auto text-center">
-    <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white">Compare What You Get</h2>
-    <p class="text-neutral-600 dark:text-neutral-300 mt-2">
-      Infrastructure, hosting, security, SEO, performance and support — consistent across suites.
-    </p>
-  </div>
-
-  <PlansComparison suite={suite} />
+    <PlansComparison suite={suite} />
+  </Container>
 
   <!-- Showcase pulls the testimonial internally using the suite’s id(s) -->
+
   <SuiteShowcase suite={suite} />
 
   <section class={`${colors.button} text-white py-16 lg:py-24`}>

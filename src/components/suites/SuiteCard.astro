@@ -8,7 +8,6 @@ export interface Props extends Suite {
 }
 
 const {
-  id,
   title,
   description,
   icon,
@@ -16,7 +15,7 @@ const {
   link = '#',
   targetSector,
   ctaText = 'Learn More'
-} = Astro.props;
+} = Astro.props as Props;
 
 // Color tokens (avoid dynamic Tailwind strings)
 const colorClasses = {
@@ -58,6 +57,13 @@ const colorClasses = {
   },
 } as const;
 
+const colorToBadge: Record<Suite['color'], 'green' | 'blue' | 'purple' | 'yellow'> = {
+  greenberry: 'green',
+  blue: 'blue',
+  purple: 'purple',
+  amber: 'yellow',
+};
+
 const c = colorClasses[color] ?? colorClasses.greenberry;
 ---
 
@@ -85,7 +91,14 @@ const c = colorClasses[color] ?? colorClasses.greenberry;
         </div>
         <div>
           <h3 class={`text-xl font-bold ${c.text} group-hover:underline`}>{title}</h3>
-          {targetSector && <Badge text={targetSector} variant={color} size="sm" class="mt-1 opacity-90" />}
+          {targetSector && (
+            <Badge
+              text={targetSector}
+              variant={colorToBadge[color]}
+              size="sm"
+              class="mt-1 opacity-90"
+            />
+          )}
         </div>
       </div>
 

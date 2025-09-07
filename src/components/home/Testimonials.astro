@@ -3,10 +3,6 @@ import Container from '../common/Container.astro';
 import Badge from '../ui/Badge.astro';
 import testimonials from '../../data/testimonial.ts';
 
-// Calculate average review rating if needed (keeping this from the original component)
-const googleRating = 4.9;
-const totalReviews = 87;
-
 // Define the character limit
 const CHARACTER_LIMIT = 250;
 ---
@@ -52,7 +48,7 @@ const CHARACTER_LIMIT = 250;
               <div class="rounded-2xl p-6 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 shadow-sm h-full flex flex-col">
                 {/* Rating Stars */}
                 <div class="flex text-accent-orange-400 mb-4">
-                  {Array.from({ length: 5 }).map((_, i) => (
+                  {Array.from({ length: 5 }).map(() => (
                     <span class="mr-0.5">
                       <i class="fa-solid fa-star" aria-hidden="true"></i>
                     </span>
@@ -81,7 +77,6 @@ const CHARACTER_LIMIT = 250;
                         class="w-full h-full object-cover"
                         loading="lazy"
                         decoding="async"
-                        onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'w-full h-full flex items-center justify-center bg-greenberry-100 dark:bg-greenberry-900 text-greenberry-600 dark:text-greenberry-400\'><i class=\'fa-solid fa-user\' aria-hidden=\'true\'></i></div>';"
                       />
                     ) : (
                       <div class="w-full h-full flex items-center justify-center bg-greenberry-100 dark:bg-greenberry-900 text-greenberry-600 dark:text-greenberry-400">
