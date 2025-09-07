@@ -92,16 +92,13 @@ export const NAVIGATION = {
     ] as NavItem[],
 
     services: [
-      { name: 'Parish Websites', href: '/parish-websites' },
-      { name: 'Club Websites', href: '/club-websites' },
-      { name: 'School Websites', href: '/school-websites' },
-      { name: 'Business Websites', href: '/business-websites' },
-      { name: 'Care & Support', href: '/care' },
+      { name: 'Parish Websites', href: '/suites/parish-websites' },
+      { name: 'Club Websites', href: '/suites/club-websites' },
+      { name: 'School Websites', href: '/suites/school-websites' },
+      { name: 'Business Websites', href: '/suites/business-websites' },
     ] as NavItem[],
 
     resources: [
-      { name: 'Blog', href: '/blog' },
-      { name: 'Help Center', href: '/help' },
       { name: 'Terms of Service', href: '/terms' },
       { name: 'Privacy Policy', href: '/privacy' },
     ] as NavItem[],
