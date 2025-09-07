@@ -1,0 +1,53 @@
+---
+interface Props {
+  src: string;            // "/hero.png" or full URL
+  alt: string;
+  widths?: number[];      // responsive breakpoints
+  sizes?: string;         // e.g. "(min-width:1024px) 50vw, 100vw"
+  quality?: number;       // 50–85 is typical
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  fetchpriority?: 'high' | 'low' | 'auto';
+  fit?: 'cover' | 'contain' | 'scale-down' | 'fill';
+  gravity?: 'auto' | 'center' | 'top' | 'bottom' | 'left' | 'right' | 'faces';
+}
+
+const {
+  src,
+  alt,
+  widths = [320, 480, 640, 768, 960, 1200, 1600],
+  sizes = '100vw',
+  quality = 80,
+  class: klass = '',
+  loading = 'lazy',
+  fetchpriority = 'auto',
+  fit = 'cover',
+  gravity = 'auto',
+} = Astro.props;
+
+const isDev = import.meta.env.DEV;
+const isRemote = src.startsWith('http://') || src.startsWith('https://');
+const path = isRemote ? src : (src.startsWith('/') ? src : `/${src}`);
+
+const opts = (w: number) =>
+  `width=${w},quality=${quality},format=auto,fit=${fit},gravity=${gravity}`;
+
+const buildProdUrl = (w: number) =>
+  isRemote
+    ? `/cdn-cgi/image/${opts(w)}/${path}`
+    : `/cdn-cgi/image/${opts(w)}${path}`;
+
+const srcDefault = isDev ? path : buildProdUrl(widths[0]);
+const srcset = isDev ? undefined : widths.map((w) => `${buildProdUrl(w)} ${w}w`).join(', ');
+---
+
+<img
+  src={srcDefault}
+  srcset={srcset}
+  sizes={!isDev ? sizes : undefined}
+  alt={alt}
+  class={klass}
+  loading={loading}
+  decoding="async"
+  fetchpriority={fetchpriority}
+/>
