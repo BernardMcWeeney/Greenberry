@@ -17,11 +17,11 @@ const socialLinks = [
 <Layout title="Contact Us | Greenberry">
   <!-- Page Header using the reusable component -->
   <PageHeader
-    title="Let's Start a Conversation"
+    title="Let's Start Your Project"
     description="Ready to discuss your project? We're here to help you create a website that works for your business."
     backgroundVariant="decorated"
     badgeText="GET IN TOUCH"
-    highlightedText="Conversation"
+    highlightedText="Project"
     paddingY="md"
   />
 
@@ -57,19 +57,18 @@ const socialLinks = [
           </div>
           
           <form id="contact-form" class="space-y-6 relative z-10">
-            
-              <div>
-                <label for="full-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  id="full-name"
-                  name="full-name"
-                  class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-3-2 focus:ring-3-[#17A34A] focus:border-[#17A34A] transition-all"
-                  required
-                />
-              </div>
+            <div>
+              <label for="full-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Full Name
+              </label>
+              <input
+                type="text"
+                id="full-name"
+                name="full-name"
+                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-3-2 focus:ring-3-[#17A34A] focus:border-[#17A34A] transition-all"
+                required
+              />
+            </div>
             
             <div>
               <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -111,12 +110,29 @@ const socialLinks = [
                 class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-3-2 focus:ring-3-[#17A34A] focus:border-[#17A34A] transition-all"
               >
                 <option value="">Select a service</option>
-                <option value="website">Website Design</option>
-                <option value="ecommerce">E-Commerce</option>
-                <option value="maintenance">Website Maintenance</option>
-                <option value="seo">SEO Services</option>
-                <option value="email">Email Solutions</option>
-                <option value="other">Other</option>
+
+                <!-- Core offerings -->
+                <optgroup label="Greenberry Products">
+                  <option value="care">Website Care Plans</option>
+                  <option value="plans">Website Plans</option>
+                  <option value="custom">Custom Quote</option>
+                </optgroup>
+
+                <!-- Suites -->
+                <optgroup label="Suites">
+                  <option value="parish-websites">Parish Website Suite</option>
+                  <option value="club-websites">Club Website Suite</option>
+                  <option value="school-websites">School Website Suite</option>
+                  <option value="business-websites">Business Website Suite</option>
+                </optgroup>
+
+                <!-- Other services -->
+                <optgroup label="Other Services">
+                  <option value="seo">SEO Services</option>
+                  <option value="email">Email Solutions</option>
+                  <option value="email">Security Solutions</option>
+                  <option value="other">Other</option>
+                </optgroup>
               </select>
             </div>
             
@@ -241,6 +257,45 @@ const socialLinks = [
 
 <script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
+    // --- Preselect logic for the Service selector ---
+    const selectEl = document.getElementById('service');
+
+    // Map URL paths to option values
+    const serviceMapFromPath = [
+      { test: p => p.startsWith('/care'), value: 'care' },
+      { test: p => p.startsWith('/plans'), value: 'plans' },
+      { test: p => p.includes('/suites/parish-websites'), value: 'parish' },
+      { test: p => p.includes('/suites/club-websites'), value: 'club' },
+      { test: p => p.includes('/suites/school-websites'), value: 'school' },
+      { test: p => p.includes('/suites/business-websites'), value: 'business' },
+    ];
+
+    function setServiceValue(val) {
+      if (!selectEl) return;
+      const hasOption = Array.from(selectEl.options).some(o => o.value === val);
+      if (hasOption) selectEl.value = val;
+    }
+
+    try {
+      const url = new URL(window.location.href);
+      // Support both ?service= and ?suite= just in case
+      let svc = url.searchParams.get('service') || url.searchParams.get('suite');
+
+      if (!svc && document.referrer) {
+        const ref = new URL(document.referrer);
+        if (ref.hostname === window.location.hostname) {
+          const path = ref.pathname.toLowerCase();
+          const hit = serviceMapFromPath.find(m => m.test(path));
+          if (hit) svc = hit.value;
+        }
+      }
+
+      if (svc) setServiceValue(svc);
+    } catch (e) {
+      console.warn('Preselect error:', e);
+    }
+
+    // --- Existing form submit logic ---
     const contactForm = document.getElementById('contact-form');
     const submitButton = document.getElementById('submit-button');
     const successMessage = document.getElementById('form-status-success');

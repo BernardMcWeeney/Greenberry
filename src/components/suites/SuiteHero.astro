@@ -114,20 +114,20 @@ if (idx !== -1) {
               href="#plans"
               size="lg"
               variant="custom"
-              class={`${colors.button} ${colors.ring} text-white font-semibold shadow-lg`}
+              class={`${colors.button} text-white font-semibold shadow-lg`}
             >
               See Plans <span class="ml-2">→</span>
             </Button>
             <!-- Outline secondary -->
-            <button
-              type="button"
-              data-cal-link="greenberry/15min"
-              data-cal-namespace="15min"
-              data-cal-config='{"layout":"column_view"}'
-              class={`px-6 py-3 rounded-lg font-medium border-2 border-current ${colors.accent} bg-white dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-all duration-300`}
+            <Button
+              href={`/contact?service=${encodeURIComponent(suite.id ?? '')}`}
+              size="lg"
+              variant="custom"
+              class={`px-6 py-3 rounded-lg font-medium border-2 ${colors.accent} border-current bg-white dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-all duration-300`}
             >
-              Book a 15-minute call
-            </button>
+              Start Your Project
+              <span class="ml-2"><i class="fa-solid fa-rocket"></i></span>
+            </Button>
           </div>
 
       </div>

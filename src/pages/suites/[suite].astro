@@ -7,6 +7,7 @@ import SuiteShowcase from '../../components/suites/SuiteShowcase.astro';
 import PlansComparison from '../../components/suites/PlansComparison.astro';
 import Container from '../../components/common/Container.astro';
 import { suites } from '../../data/suites';
+import Button from '../../components/common/Button.astro';
 
 // Generate static paths for all suites
 export function getStaticPaths() {
@@ -131,16 +132,15 @@ const blocks = [
           Launch with {suite.name}. Go live in 21 days or get 10% off.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="#plans" class="inline-flex items-center justify-center px-8 py-3 rounded-lg font-semibold bg-white text-neutral-900">
-            View Plans & Pricing
-          </a>
-          <button
-            type="button"
-            data-cal-link="greenberry/15min"
-            class="px-8 py-3 rounded-lg font-semibold border-2 border-white text-white"
-          >
-            Book a Free Consultation
-          </button>
+          <Button 
+          href={`/contact?service=${encodeURIComponent(suite.id ?? '')}`}
+          variant="secondary" 
+          size="lg"
+          class="font-semibold"
+        >
+          Start Your Project
+          <span class="ml-2"><i class="fa-solid fa-rocket"></i></span>
+        </Button>
         </div>
       </div>
     </Container>
