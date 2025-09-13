@@ -8,83 +8,80 @@ const featureCards = [
     description: "We build websites that load in milliseconds, not seconds. Speed is critical for user experience and search engine rankings.",
     icon: "fa-solid fa-bolt",
     color: "yellow",
-    textColor: "text-accent-orange-500"  // Changed from yellow to orange from your palette
+    textColor: "text-accent-orange-500"
   },
   {
     title: "Mobile-First Design",
     description: "Every website we build is fully responsive and optimized for all devices, from smartphones to desktop computers.",
     icon: "fa-solid fa-mobile-screen",
     color: "blue",
-    textColor: "text-accent-blue-500"  // Updated to accent-blue
+    textColor: "text-accent-blue-500"
   },
   {
     title: "SEO Optimization",
     description: "We implement the latest SEO best practices to ensure your website ranks well and attracts more organic traffic.",
     icon: "fa-solid fa-magnifying-glass-chart",
     color: "green",
-    textColor: "text-greenberry-500"  // Updated to greenberry
+    textColor: "text-greenberry-500"
   },
   {
     title: "Secure & Reliable",
     description: "We implement robust security measures to protect your website and your customers' data from threats.",
     icon: "fa-solid fa-shield-halved",
     color: "red",
-    textColor: "text-accent-red-500"  // Updated to accent-red
+    textColor: "text-accent-red-500"
   }
 ];
 ---
 
-<section class="section-padding bg-white dark:bg-gray-900 relative">
+<section class="section-padding bg-white dark:bg-gray-900 relative cv-auto">
   <Container>
     <div class="max-w-3xl mx-auto text-center mb-16">
       <div class="badge-wrapper">
         <Badge text="WHY CHOOSE GREENBERRY" variant="primary" size="md" />
       </div>
-      <h2 class="heading-primary">
-        Features That Make Us Different
-      </h2>
+      <h2 class="heading-primary">Features That Make Us Different</h2>
       <p class="section-description">
         We combine cutting-edge technology with beautiful design to create websites that perform.
       </p>
     </div>
-    
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-        {featureCards.map((card) => (
-          <div
-            class="group card p-8 rounded-2xl
-                  bg-white dark:bg-neutral-800
-                  border border-neutral-200 dark:border-neutral-700
-                  shadow-sm
-                  transition-all duration-200
-                  hover:-translate-y-0.5 hover:shadow-lg
-                  hover:border-neutral-300 dark:hover:border-neutral-600"
-          >
-            <div class="flex gap-6">
-              <div class={`${card.textColor} text-4xl shrink-0 mt-1`}>
-                <div class="w-14 h-14 rounded-2xl bg-white dark:bg-gray-700 flex items-center justify-center shadow-xs group-hover:shadow-md group-hover:scale-110 transition-all duration-300">
-                  <i class={card.icon}></i>
-                </div>
-              </div>
-              <div>
-                <h3 class="text-xl font-bold text-neutral-900 dark:text-white mb-3 group-hover:text-greenberry-600 dark:group-hover:text-greenberry-400 transition-colors">
-                  {card.title}
-                </h3>
-                <p class="text-neutral-600 dark:text-gray-300">
-                  {card.description}
-                </p>
+      {featureCards.map((card) => (
+        <div
+          class="group card p-8 rounded-2xl
+                 bg-white dark:bg-neutral-800
+                 border border-neutral-200 dark:border-neutral-700
+                 shadow-sm
+                 transition-all duration-200
+                 hover:-translate-y-0.5 md:hover:shadow-lg
+                 hover:border-neutral-300 dark:hover:border-neutral-600"
+        >
+          <div class="flex gap-6">
+            <div class={`${card.textColor} text-4xl shrink-0 mt-1`}>
+              <div class="w-14 h-14 rounded-2xl bg-white dark:bg-gray-700 flex items-center justify-center shadow-xs md:group-hover:shadow-md md:group-hover:scale-110 transition-all duration-300">
+                <i class={card.icon}></i>
               </div>
             </div>
+            <div>
+              <h3 class="text-xl font-bold text-neutral-900 dark:text-white mb-3 group-hover:text-greenberry-600 dark:group-hover:text-greenberry-400 transition-colors">
+                {card.title}
+              </h3>
+              <p class="text-neutral-600 dark:text-gray-300">
+                {card.description}
+              </p>
+            </div>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
+    </div>
 
-    
-    <!-- Feature highlight box with greenberry green background -->
-    <div class="mt-16 bg-greenberry-600 dark:bg-greenberry-600/80 rounded-2xl p-10 border border-greenberry-600/20 dark:border-greenberry-600/30 relative overflow-hidden group hover:shadow-lg hover:shadow-greenberry-600/20 transition-all duration-300">
-      <!-- Background decorative elements -->
-      <div class="absolute -top-20 -right-20 w-40 h-40 bg-white/10 rounded-full filter blur-3xl opacity-70 group-hover:opacity-90 transition-opacity duration-700"></div>
-      <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-white/10 rounded-full filter blur-3xl opacity-60 group-hover:opacity-80 transition-opacity duration-700"></div>
-      
+    <!-- Feature highlight box with greenberry background -->
+    <div class="mt-16 bg-greenberry-600 dark:bg-greenberry-600/80 rounded-2xl p-10 border border-greenberry-600/20 dark:border-greenberry-600/30 relative overflow-hidden group md:hover:shadow-lg md:hover:shadow-greenberry-600/20 transition-all duration-300">
+      <!-- Background decorative elements (hidden on mobile via .decor-blur) -->
+      <div class="absolute -top-20 -right-20 w-40 h-40 bg-white/10 rounded-full filter blur-3xl opacity-70 group-hover:opacity-90 transition-opacity duration-700 decor-blur"></div>
+      <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-white/10 rounded-full filter blur-3xl opacity-60 group-hover:opacity-80 transition-opacity duration-700 decor-blur"></div>
+
       <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
         <div>
           <div class="badge-wrapper mb-3">
@@ -111,14 +108,24 @@ const featureCards = [
             ))}
           </ul>
         </div>
+
         <div class="relative h-full flex items-center justify-center">
-          <div class="w-full max-w-xs h-auto relative">
-            <!-- Decorative elements -->
+          <div class="w-full max-w-xs h-auto relative pointer-events-none">
+            <!-- Decorative ping dots (lightweight; disabled on reduced motion) -->
             <div class="absolute -top-5 -left-5 w-10 h-10 bg-white rounded-full opacity-20 animate-ping-slow"></div>
             <div class="absolute top-1/2 -right-5 w-8 h-8 bg-white rounded-full opacity-20 animate-ping-slow animation-delay-700"></div>
             <div class="absolute -bottom-5 left-1/3 w-12 h-12 bg-white rounded-full opacity-20 animate-ping-slow animation-delay-1500"></div>
-            
-            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" alt="Managed services illustration" class="w-full h-auto rounded-2xl shadow-lg group-hover:shadow-xl transition-shadow duration-300 border-2 border-white/20" />
+
+            <img
+              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80"
+              alt="Managed services illustration"
+              width="800"
+              height="533"
+              decoding="async"
+              loading="lazy"
+              sizes="(max-width: 768px) 90vw, 400px"
+              class="w-full h-auto rounded-2xl shadow-lg md:group-hover:shadow-xl transition-shadow duration-300 border-2 border-white/20"
+            />
           </div>
         </div>
       </div>

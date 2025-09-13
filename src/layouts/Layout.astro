@@ -21,7 +21,7 @@ const {
 ---
 
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -88,8 +88,9 @@ const {
 
     <style is:global>
       /* Fix horizontal scrolling issues */
-      html { overflow-x: hidden; width: 100%; }
-      body { overflow-x: hidden; width: 100%; position: relative; overflow-y: auto; }
+      html, body { overflow-x: hidden; width: 100%; }
+      body { min-height: 100dvh; } /* no overflow-y, no forced positioning */
+
 
       img, video, svg, iframe, embed, object { max-width: 100%; height: auto; }
 
