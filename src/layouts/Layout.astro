@@ -24,17 +24,18 @@ const {
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
-    <!-- Cloudflare Turnstile -->
-    <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <!-- Warm up connections only; no heavy scripts in <head> -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://app.cal.com" crossorigin>
+    <link rel="preconnect" href="https://challenges.cloudflare.com" crossorigin>
 
     <!-- Non-blocking Font Awesome (if you keep FA) -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link
       rel="preload"
       as="style"
@@ -46,7 +47,7 @@ const {
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin>
     </noscript>
 
-    <!-- Simple SEO Component -->
+    <!-- SEO -->
     <SEO title={title} description={description} image={image} />
   </head>
   <body class={`bg-white dark:bg-gray-900 min-h-screen flex flex-col ${bodyClass}`}>
@@ -55,50 +56,92 @@ const {
     <main class="flex-grow pt-[73px]">
       <slot />
     </main>
+
+    <!-- Cal floating button (now lazy-loaded on interaction) -->
     <CalPopup />
 
     <Footer />
 
-    <script>
-      // Enhanced dark mode handling with proper event listeners
-      function initializeDarkMode() {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-          if (!savedTheme) localStorage.setItem('theme', 'light');
-        }
-      }
-      initializeDarkMode();
-      window.addEventListener('storage', (e) => {
-        if (e.key === 'theme') initializeDarkMode();
-      });
+    <script is:inline>
+      // Theme handling
+      (function () {
+        const apply = () => {
+          const saved = localStorage.getItem('theme');
+          if (saved === 'dark') document.documentElement.classList.add('dark');
+          else {
+            document.documentElement.classList.remove('dark');
+            if (!saved) localStorage.setItem('theme', 'light');
+          }
+        };
+        apply();
+        window.addEventListener('storage', (e) => { if (e.key === 'theme') apply(); });
+      })();
 
-      // Smooth scroll for hash links
-      document.querySelectorAll('a[href^="#"]').forEach((link) => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const id = link.getAttribute('href');
-          if (!id) return;
-          document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
+      // Smooth scroll for hash links only (no global smooth behavior)
+      (function () {
+        const links = document.querySelectorAll('a[href^="#"]');
+        links.forEach((link) => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const id = link.getAttribute('href');
+            if (!id) return;
+            document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
+          });
         });
-      });
+      })();
+
+      // Lazy-load Cloudflare Turnstile only if needed
+      (function () {
+        const selector = '[data-turnstile]';
+        const load = () => {
+          if (window.__turnstileLoaded) return;
+          window.__turnstileLoaded = true;
+          const s = document.createElement('script');
+          s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+          s.async = true;
+          s.defer = true;
+          document.head.appendChild(s);
+        };
+
+        if (document.querySelector(selector)) {
+          if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 2000 });
+          else setTimeout(load, 1500);
+
+          const io = new IntersectionObserver((entries) => {
+            if (entries.some(e => e.isIntersecting)) {
+              load();
+              io.disconnect();
+            }
+          }, { rootMargin: '400px' });
+          document.querySelectorAll(selector).forEach(el => io.observe(el));
+
+          document.addEventListener('focusin', (e) => {
+            if (e.target && e.target.closest(selector)) load();
+          }, { passive: true });
+        }
+      })();
     </script>
 
     <style is:global>
-      /* Fix horizontal scrolling issues */
+      /* Keep default scrolling path fast */
       html, body { overflow-x: hidden; width: 100%; }
-      body { min-height: 100dvh; } /* no overflow-y, no forced positioning */
+      body { min-height: 100dvh; }
 
+      img, video, svg, iframe, embed, object { max-width: 100%; height: auto; display: block; }
 
-      img, video, svg, iframe, embed, object { max-width: 100%; height: auto; }
+      /* If any header uses backdrop blur, disable on small screens to avoid GPU cost */
+      @media (max-width: 768px) {
+        header { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+      }
 
-      /* Smooth transition for theme changes */
+      /* Composite the floating button to its own layer for smoother scroll */
+      .cal-floating-button-container { transform: translateZ(0); will-change: transform; }
+
+      /* Smooth transition for theme changes (opt-in by adding .dark-mode-transition to <html> before toggling) */
       html.dark-mode-transition,
       html.dark-mode-transition *,
-      html.dark-mode-transition *:before,
-      html.dark-mode-transition *:after {
+      html.dark-mode-transition *::before,
+      html.dark-mode-transition *::after {
         transition: background-color 300ms ease, border-color 300ms ease, color 300ms ease !important;
         transition-delay: 0 !important;
       }
