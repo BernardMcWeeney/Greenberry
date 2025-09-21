@@ -1,8 +1,19 @@
 ---
-import { SEO } from "astro-seo";
+/**
+ * src/components/common/Seo.astro
+ * Sitewide SEO + JSON-LD with special handling for /suites/<id>.
+ *
+ * - Organization/LocalBusiness schema with real NAP (set in /src/data/config).
+ * - BreadcrumbList on inner pages.
+ * - For /suites/<id>: Service schema with Offers (Setup/Launch/Grow/Pro) + optional FAQPage.
+ * - Uses astro-seo for Open Graph/Twitter and meta tags.
+ */
+
+import { SEO as AstroSEO } from "astro-seo";
 import { SITE, COMPANY, SOCIAL_LINKS } from "../../data/config";
 import { services, getServiceById } from "../../data/services";
 import { solutions, getSolutionById } from "../../data/solutions";
+import { suites } from "../../data/suites";
 import type { PortfolioProject } from "../../data/portfolioProjects";
 import { portfolioProjects } from "../../data/portfolioProjects";
 
@@ -13,7 +24,6 @@ export interface Props {
   type?: string;
 }
 
-// Get defaults from your existing config
 const {
   title = SITE.title,
   description = SITE.description,
@@ -21,88 +31,98 @@ const {
   type = "website"
 } = Astro.props;
 
-// Get current URL
+// Canonical
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 
-// Simple schema detection based on URL
+// Path analysis
 const path = Astro.url.pathname.replace(/^\/|\/$/g, '') || 'index';
 const pathSegments = path.split('/');
 
-// Analyze current path to determine content type
+// Page type defaults
 let schemaType = "WebPage";
-let currentService = null;
-let currentSolution = null;
+let currentService: any = null;
+let currentSolution: any = null;
+let currentSuite: any = null;
 let currentProject: PortfolioProject | null = null;
 
-// Detect page type based on URL
+// Simple detectors
 if (path === 'index') schemaType = "WebSite";
 if (path === 'about') schemaType = "AboutPage";
 if (path === 'contact') schemaType = "ContactPage";
 
-// Check if we're on a service page
 if (pathSegments[0] === 'services') {
   schemaType = "Service";
-  if (pathSegments[1]) {
-    currentService = getServiceById(pathSegments[1]);
-  }
+  if (pathSegments[1]) currentService = getServiceById?.(pathSegments[1]) ?? null;
 }
 
-// Check if we're on a solution page
 if (pathSegments[0] === 'solutions') {
   schemaType = "Service";
-  if (pathSegments[1]) {
-    currentSolution = getSolutionById(pathSegments[1]);
-  }
+  if (pathSegments[1]) currentSolution = getSolutionById?.(pathSegments[1]) ?? null;
 }
 
-// Check if we're on a portfolio page
+// Suites detection (this powers Service + Offers schema for suite pages)
+if (pathSegments[0] === 'suites' && pathSegments[1]) {
+  currentSuite = suites.find((s: any) => s.id === pathSegments[1]) ?? null;
+  if (currentSuite) schemaType = "Service";
+}
+
 if (pathSegments[0] === 'portfolio') {
   if (pathSegments[1]) {
-    const foundProject = portfolioProjects.find(p => p.id === pathSegments[1]) || null;
-    currentProject = foundProject;
+    currentProject = portfolioProjects.find(p => p.id === pathSegments[1]) || null;
     schemaType = "ItemPage";
   } else {
     schemaType = "CollectionPage";
   }
 }
 
-// Type for Schema.org objects - use Record<string, any> to allow for flexibility with different schema types
+// Schema type
 type SchemaObject = Record<string, any>;
 
-// Base Organization schema - will be used on multiple pages
+// Organization / Local
 const organizationSchema: SchemaObject = {
   "@context": "https://schema.org",
-  "@type": "ProfessionalService",
+  "@type": ["Organization","ProfessionalService","LocalBusiness"],
   "@id": `${SITE.url}#organization`,
   "name": COMPANY.name,
   "url": SITE.url,
   "logo": {
     "@type": "ImageObject",
-    "url": new URL(SITE.ogImage, SITE.url).toString(),
+    "url": SITE.ogImage,
     "width": 1200,
     "height": 630
   },
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": COMPANY.address?.split(',')[0]?.trim() || "",
-    "addressLocality": "Drogheda", // Update with your actual city
-    "addressRegion": "Leinster", // Update with your actual region
-    "postalCode": "A92 ABC1", // Update with your actual postal code
-    "addressCountry": "IE"
-  },
+  "image": SITE.ogImage,
+  "description": COMPANY.description || SITE.description,
   "telephone": COMPANY.phone || "",
   "email": COMPANY.email || "",
-  "description": COMPANY.description || SITE.description,
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": COMPANY.addressStreet,
+    "addressLocality": COMPANY.addressLocality,
+    "addressRegion": COMPANY.addressRegion,
+    "postalCode": COMPANY.postalCode,
+    "addressCountry": "IE"
+  },
+  "areaServed": { "@type": "Country", "name": "Ireland" },
+  "contactPoint": COMPANY.phone ? [{
+    "@type":"ContactPoint",
+    "contactType":"customer support",
+    "telephone": COMPANY.phone,
+    "email": COMPANY.email || "",
+    "areaServed":"IE",
+    "availableLanguage":["en-IE","en"]
+  }] : undefined,
   "sameAs": [
     SOCIAL_LINKS.twitter,
     SOCIAL_LINKS.facebook,
     SOCIAL_LINKS.instagram,
     SOCIAL_LINKS.linkedin
   ].filter(Boolean),
-  "priceRange": "€€" // Update with your price range
+  "priceRange": COMPANY.priceRange ?? "€€"
 };
 
-// Basic webpage schema to be extended
+
+// Base WebPage
 const baseSchema: SchemaObject = {
   "@context": "https://schema.org",
   "@type": schemaType,
@@ -116,45 +136,73 @@ const baseSchema: SchemaObject = {
     "url": SITE.url,
     "name": SITE.title,
     "description": SITE.description,
-    "publisher": {
-      "@id": `${SITE.url}#organization`
-    }
+    "publisher": { "@id": `${SITE.url}#organization` }
   }
 };
 
-// Initialize schema data array
 let schemaData: SchemaObject[] = [organizationSchema, baseSchema];
 
-// Customize schema based on page type
+// Homepage
 if (path === 'index') {
-  // Homepage Schema
   const websiteSchema: SchemaObject = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": `${SITE.url}#website`,
     "url": SITE.url,
     "name": SITE.title,
-    "description": SITE.description,
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": {
-        "@type": "EntryPoint",
-        "urlTemplate": `${SITE.url}/search?q={search_term_string}`
-      },
-      "query-input": "required name=search_term_string"
-    }
+    "description": SITE.description
   };
-  
   schemaData = [organizationSchema, websiteSchema];
-} 
-else if (path === 'services') {
-  // Services List Page Schema
+}
+
+// Breadcrumbs (inner pages only)
+if (path !== 'index') {
+  // Build readable names (replace slugs, map suites/services to titles where possible)
+  const readable = (seg: string, idx: number) => {
+    if (idx === 0 && seg === 'suites') return 'Suites';
+    if (idx === 0 && seg === 'services') return 'Services';
+    if (idx === 0 && seg === 'solutions') return 'Solutions';
+    if (idx === 0 && seg === 'portfolio') return 'Portfolio';
+    // Suite/service/solution item names
+    if (pathSegments[0] === 'suites' && currentSuite && idx === 1) return currentSuite.name;
+    if (pathSegments[0] === 'services' && currentService && idx === 1) return currentService.title;
+    if (pathSegments[0] === 'solutions' && currentSolution && idx === 1) return currentSolution.title;
+    // Fallback: prettify segment
+    return seg.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
+  };
+
+  const breadcrumbItems = [
+    { "@type":"ListItem", "position": 1, "name": "Home", "item": SITE.url }
+  ];
+
+  let pos = 2;
+  for (let i = 0; i < pathSegments.length; i++) {
+    const seg = pathSegments[i];
+    if (!seg) continue;
+    const crumbUrl = new URL('/' + pathSegments.slice(0, i + 1).join('/'), SITE.url).toString();
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      "position": pos++,
+      "name": readable(seg, i),
+      "item": crumbUrl
+    });
+  }
+
+  schemaData.push({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": breadcrumbItems
+  });
+}
+
+// Services list
+if (path === 'services') {
   const servicesPageSchema: SchemaObject = {
     ...baseSchema,
     "@type": "CollectionPage",
     "mainEntity": {
       "@type": "ItemList",
-      "itemListElement": services.map((service, index) => ({
+      "itemListElement": services.map((service: any, index: number) => ({
         "@type": "ListItem",
         "position": index + 1,
         "item": {
@@ -162,64 +210,35 @@ else if (path === 'services') {
           "name": service.title,
           "description": service.description,
           "url": `${SITE.url}/services/${service.id}`,
-          "provider": {
-            "@id": `${SITE.url}#organization`
-          }
+          "provider": { "@id": `${SITE.url}#organization` }
         }
       }))
     }
   };
-  
-  schemaData = [organizationSchema, servicesPageSchema];
-} 
-else if (pathSegments[0] === 'services' && currentService) {
-  // Individual Service Page Schema
-  const servicePageSchema: SchemaObject = {
+  schemaData.push(servicesPageSchema);
+}
+
+// Individual service page
+if (pathSegments[0] === 'services' && currentService) {
+  schemaData.push({
     ...baseSchema,
     "@type": "Service",
     "name": currentService.title,
     "description": currentService.description,
     "serviceType": currentService.title,
-    "provider": {
-      "@id": `${SITE.url}#organization`
-    },
-    "areaServed": {
-      "@type": "Place",
-      "name": "Ireland",
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": "IE"
-      }
-    },
-    "offers": {
-      "@type": "Offer",
-      "priceCurrency": "EUR",
-      "availability": "https://schema.org/InStock",
-      "seller": {
-        "@id": `${SITE.url}#organization`
-      }
-    },
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": `${currentService.title} Features`,
-      "itemListElement": currentService.features.map((feature, index) => ({
-        "@type": "OfferCatalog",
-        "name": feature,
-        "position": index + 1
-      }))
-    }
-  };
-  
-  schemaData = [organizationSchema, servicePageSchema];
+    "provider": { "@id": `${SITE.url}#organization` },
+    "areaServed": { "@type": "Country", "name": "Ireland" }
+  });
 }
-else if (path === 'solutions') {
-  // Solutions List Page Schema
+
+// Solutions list
+if (path === 'solutions') {
   const solutionsPageSchema: SchemaObject = {
     ...baseSchema,
     "@type": "CollectionPage",
     "mainEntity": {
-      "@type": "ItemList",
-      "itemListElement": solutions.map((solution, index) => ({
+      "@type":"ItemList",
+      "itemListElement": solutions.map((solution: any, index: number) => ({
         "@type": "ListItem",
         "position": index + 1,
         "item": {
@@ -227,89 +246,57 @@ else if (path === 'solutions') {
           "name": solution.title,
           "description": solution.description,
           "url": `${SITE.url}/solutions/${solution.id}`,
-          "provider": {
-            "@id": `${SITE.url}#organization`
-          }
+          "provider": { "@id": `${SITE.url}#organization` }
         }
       }))
     }
   };
-  
-  schemaData = [organizationSchema, solutionsPageSchema];
+  schemaData.push(solutionsPageSchema);
 }
-else if (pathSegments[0] === 'solutions' && currentSolution) {
-  // Individual Solution Page Schema
-  const solutionPageSchema: SchemaObject = {
+
+// Individual solution page
+if (pathSegments[0] === 'solutions' && currentSolution) {
+  schemaData.push({
     ...baseSchema,
     "@type": "Service",
     "name": currentSolution.title,
     "description": currentSolution.description,
     "serviceType": currentSolution.title,
-    "provider": {
-      "@id": `${SITE.url}#organization`
-    },
-    "areaServed": {
-      "@type": "Place",
-      "name": "Ireland",
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": "IE"
-      }
-    },
-    "offers": {
-      "@type": "Offer",
-      "priceCurrency": "EUR",
-      "availability": "https://schema.org/InStock",
-      "seller": {
-        "@id": `${SITE.url}#organization`
-      }
-    },
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": `${currentSolution.title} Features`,
-      "itemListElement": currentSolution.features.map((feature, index) => ({
-        "@type": "OfferCatalog",
-        "name": feature,
-        "position": index + 1
-      }))
-    }
-  };
-  
-  schemaData = [organizationSchema, solutionPageSchema];
+    "provider": { "@id": `${SITE.url}#organization` },
+    "areaServed": { "@type": "Country", "name": "Ireland" }
+  });
 }
-else if (path === 'portfolio') {
-  // Portfolio List Page Schema
+
+// Portfolio list
+if (path === 'portfolio') {
   const portfolioPageSchema: SchemaObject = {
     ...baseSchema,
     "@type": "CollectionPage",
     "mainEntity": {
       "@type": "ItemList",
-      "itemListElement": portfolioProjects.map((project, index) => ({
-        "@type": "ListItem",
+      "itemListElement": portfolioProjects.map((project: any, index: number) => ({
+        "@type":"ListItem",
         "position": index + 1,
         "item": {
-          "@type": "CreativeWork",
+          "@type":"CreativeWork",
           "name": project.title,
           "description": project.description,
           "url": `${SITE.url}/portfolio/${project.id}`,
-          "image": project.image.startsWith('http') ? project.image : `${SITE.url}${project.image}`,
+          "image": project.image?.startsWith('http') ? project.image : `${SITE.url}${project.image}`,
           "datePublished": project.completionDate,
-          "creator": {
-            "@id": `${SITE.url}#organization`
-          }
+          "creator": { "@id": `${SITE.url}#organization` }
         }
       }))
     }
   };
-  
-  schemaData = [organizationSchema, portfolioPageSchema];
-} 
-else if (pathSegments[0] === 'portfolio' && currentProject) {
-  // Individual Portfolio Item Page Schema
-  const projectImageUrl = currentProject.image.startsWith('http') ? 
-                         currentProject.image : 
-                         `${SITE.url}${currentProject.image}`;
-  
+  schemaData.push(portfolioPageSchema);
+}
+
+// Individual portfolio item
+if (pathSegments[0] === 'portfolio' && currentProject) {
+  const projectImageUrl =
+    currentProject.image?.startsWith('http') ? currentProject.image : `${SITE.url}${currentProject.image}`;
+
   const projectSchema: SchemaObject = {
     ...baseSchema,
     "@type": "CreativeWork",
@@ -317,70 +304,119 @@ else if (pathSegments[0] === 'portfolio' && currentProject) {
     "description": currentProject.description,
     "datePublished": currentProject.completionDate,
     "image": projectImageUrl,
-    "creator": {
-      "@id": `${SITE.url}#organization`
-    }
+    "creator": { "@id": `${SITE.url}#organization` }
   };
-  
-  // Add testimonial if available
+
   if (currentProject.testimonial) {
     projectSchema.review = {
       "@type": "Review",
       "reviewBody": currentProject.testimonial.quote,
-      "author": {
-        "@type": "Person",
-        "name": currentProject.testimonial.author
-      }
+      "author": { "@type": "Person", "name": currentProject.testimonial.author }
     };
   }
-  
-  // Add website info if available
+
   if (currentProject.website) {
     projectSchema.mainEntity = {
       "@type": "WebSite",
       "name": currentProject.title,
-      "url": currentProject.website.startsWith('http') ? 
-            currentProject.website : 
-            `https://${currentProject.website}`,
+      "url": currentProject.website.startsWith('http')
+        ? currentProject.website
+        : `https://${currentProject.website}`,
       "description": currentProject.longDescription || currentProject.description
     };
   }
-  
-  schemaData = [organizationSchema, projectSchema];
-} 
-else if (path === 'about') {
-  // About Page Schema
-  const aboutPageSchema: SchemaObject = {
-    ...baseSchema,
-    "@type": "AboutPage",
-    "mainEntity": {
-      "@id": `${SITE.url}#organization`
-    }
-  };
-  
-  schemaData = [organizationSchema, aboutPageSchema];
-} 
-else if (path === 'contact') {
-  // Contact Page Schema
-  const contactPageSchema: SchemaObject = {
-    ...baseSchema,
-    "@type": "ContactPage",
-    "mainEntity": {
-      "@id": `${SITE.url}#organization`
-    }
-  };
-  
-  schemaData = [organizationSchema, contactPageSchema];
+
+  schemaData.push(projectSchema);
 }
 
-// Clean up schema data (remove null, undefined or empty values)
+// About / Contact
+if (path === 'about') {
+  schemaData.push({
+    ...baseSchema,
+    "@type": "AboutPage",
+    "mainEntity": { "@id": `${SITE.url}#organization` }
+  });
+}
+if (path === 'contact') {
+  schemaData.push({
+    ...baseSchema,
+    "@type": "ContactPage",
+    "mainEntity": { "@id": `${SITE.url}#organization` }
+  });
+}
+
+// SUITES: Individual suite page -> Service + Offers + FAQ
+if (pathSegments[0] === 'suites' && currentSuite) {
+  // Expecting pricing fields: setup, launch, grow, pro (numbers or strings)
+  const pricing = currentSuite.pricing ?? {};
+  const priceNum = (v: any) => {
+    if (typeof v === 'number') return v;
+    if (typeof v === 'string') return Number(v.replace(/[^\d.]/g, '')) || undefined;
+    return undefined;
+  };
+
+  const offers = [
+    { name: "Setup fee", price: priceNum(pricing.setup), periodicity: "ONE_TIME" },
+    { name: "Launch",    price: priceNum(pricing.launch), periodicity: "P1M" },
+    { name: "Grow",      price: priceNum(pricing.grow),   periodicity: "P1M" },
+    { name: "Pro",       price: priceNum(pricing.pro),    periodicity: "P1M" },
+  ].filter(o => o.price !== undefined);
+
+  const serviceSchema: SchemaObject = {
+    "@context":"https://schema.org",
+    "@type":"Service",
+    "name": `${currentSuite.name} – Fully Managed ${currentSuite.targetSector} Websites`,
+    "description": currentSuite.metaDescription || `Fully managed ${currentSuite.targetSector} websites in Ireland with transparent pricing.`,
+    "serviceType": currentSuite.name,
+    "provider": { "@id": `${SITE.url}#organization` },
+    "areaServed": { "@type":"Country","name":"Ireland" },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": `${currentSuite.name} Plans`,
+      "itemListElement": offers.map((o, idx) => ({
+        "@type":"Offer",
+        "name": o.name,
+        "priceCurrency":"EUR",
+        "price": o.price,
+        "sku": `${currentSuite.id}-${o.name.toLowerCase().replace(/\s+/g,'-')}`,
+        "eligibleRegion":"IE",
+        "priceSpecification": {
+          "@type":"PriceSpecification",
+          "priceCurrency":"EUR",
+          "price": o.price,
+          ...(o.periodicity !== "ONE_TIME"
+            ? { "billingDuration": o.periodicity, "unitText": "MON" }
+            : { "validFor":"P0D" })
+        },
+        "seller": { "@id": `${SITE.url}#organization` },
+        "position": idx + 1
+      }))
+    }
+  };
+  schemaData.push(serviceSchema);
+
+  // FAQPage (use suite.faqs if provided)
+  const faqs = (currentSuite.faqs && Array.isArray(currentSuite.faqs) ? currentSuite.faqs : [
+    { q: "How fast can we launch?", a: "Most sites go live in 21 days with our Launch plan." },
+    { q: "Is hosting included?", a: "Yes. Hosting, backups, security, and updates are included in all plans." },
+    { q: "Can you migrate our existing site?", a: "Yes. We migrate content, set redirects, and preserve SEO." }
+  ]);
+
+  schemaData.push({
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity": faqs.map((f: any) => ({
+      "@type":"Question",
+      "name": f.q,
+      "acceptedAnswer": { "@type":"Answer", "text": f.a }
+    }))
+  });
+}
+
+// Clean null/empty fields
 const cleanSchema = (obj: any): any => {
   if (!obj) return null;
-  
-  if (Array.isArray(obj)) {
-    return obj.map(cleanSchema).filter(Boolean);
-  }
-  
+  if (Array.isArray(obj)) return obj.map(cleanSchema).filter(Boolean);
   if (obj && typeof obj === 'object') {
     return Object.fromEntries(
       Object.entries(obj)
@@ -388,16 +424,14 @@ const cleanSchema = (obj: any): any => {
         .map(([k, v]) => [k, cleanSchema(v)])
     );
   }
-  
   return obj;
 };
 
-// Convert schema to JSON
 const schemaJson = JSON.stringify(cleanSchema(schemaData));
 ---
 
-<!-- SEO Meta Tags via astro-seo -->
-<SEO
+<!-- Meta/OG/Twitter via astro-seo -->
+<AstroSEO
   title={title}
   description={description}
   canonical={canonical}
@@ -426,10 +460,9 @@ const schemaJson = JSON.stringify(cleanSchema(schemaData));
     meta: [
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "format-detection", content: "telephone=no" },
-      // Add any additional meta tags you might need below
     ],
   }}
 />
 
-<!-- Schema.org structured data -->
+<!-- Single JSON-LD block containing Organization + page-level schemas (Breadcrumbs, Service, FAQ, etc.) -->
 <script is:inline type="application/ld+json" set:html={schemaJson} />

@@ -56,7 +56,7 @@ const colorClasses = {
 };
 const colors = colorClasses[suite.color] ?? colorClasses.greenberry;
 
-// Universal blocks
+// Universal feature blocks (keep concise; these are also echoed in schema FAQ/answers)
 const blocks = [
   { title: 'Hosting & Infrastructure', icon: 'fa-solid fa-server', items: ['LiteSpeed Enterprise servers','NVMe SSD storage','Cloudflare CDN & WAF','99.9% uptime guarantee'] },
   { title: 'Security', icon: 'fa-solid fa-shield-halved', items: ['SSL certificates included','Managed firewall & brute-force protection','Malware scanning & patching','DDoS protection'] },
@@ -65,9 +65,24 @@ const blocks = [
   { title: 'Support & Updates', icon: 'fa-solid fa-headset', items: ['Irish-based support','Regular content updates','Software maintenance','Priority escalation path'] },
   { title: 'Performance', icon: 'fa-solid fa-gauge-high', items: ['Core Web Vitals optimisation','Image optimisation','Lazy loading','Redis caching'] },
 ];
+
+// Visible FAQ (keep content aligned with what’s in schema for rich results)
+const faqs: { q: string; a: string }[] = suite.faqs ?? [
+  { q: 'How fast can we launch?', a: 'Most sites go live in 21 days with our Launch plan.' },
+  { q: 'Is hosting included?', a: 'Yes. Hosting, backups, security, and updates are included in all plans.' },
+  { q: 'Can you migrate our existing site?', a: 'Yes. We migrate content, set redirects, and preserve SEO.' },
+  { q: 'Do you manage updates?', a: 'Yes. We handle software updates, security patches, and performance tuning.' }
+];
+
+// Best-effort OG image (falls back if not present)
+const ogImage = suite.ogImage ?? suite.image ?? `/og/suites/${suite.id}.png`;
+
+// Title/description for page-level meta (used by Seo.astro)
+const pageTitle = suite.metaTitle ?? `${suite.name} – Fully Managed ${suite.targetSector} Websites | Greenberry`;
+const pageDescription = suite.metaDescription ?? `Fully managed ${suite.targetSector} websites in Ireland. Transparent pricing: setup fee and simple monthly plans. Launch in 21 days. Hosting, security, backups and support included.`;
 ---
 
-<Layout title={suite.metaTitle} description={suite.metaDescription}>
+<Layout title={pageTitle} description={pageDescription} image={ogImage}>
   <SuiteHero suite={suite} />
   <SuiteHighlights suite={suite} />
 
@@ -107,6 +122,7 @@ const blocks = [
       </div>
     </Container>
   </section>
+
   <Container>
     <div class="max-w-4xl mx-auto text-center">
       <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white">Compare What You Get</h2>
@@ -118,9 +134,30 @@ const blocks = [
     <PlansComparison suite={suite} />
   </Container>
 
-  <!-- Showcase pulls the testimonial internally using the suite’s id(s) -->
-
   <SuiteShowcase suite={suite} />
+
+  <!-- Visible FAQ content (helps eligibility for FAQ rich results) -->
+  <section class="py-16 lg:py-24 bg-neutral-50 dark:bg-neutral-900/50">
+    <Container>
+      <div class="max-w-3xl mx-auto text-center mb-10">
+        <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white">Frequently Asked Questions</h2>
+        <p class="text-neutral-600 dark:text-neutral-300 mt-2">
+          Straight answers to common questions about {suite.name}.
+        </p>
+      </div>
+      <div class="max-w-3xl mx-auto divide-y divide-neutral-200 dark:divide-neutral-700">
+        {faqs.map((f) => (
+          <details class="group py-5">
+            <summary class="cursor-pointer list-none flex items-start justify-between">
+              <h3 class="text-lg font-semibold text-neutral-900 dark:text-white">{f.q}</h3>
+              <span class="ml-4 text-neutral-500 group-open:rotate-180 transition"><i class="fa-solid fa-chevron-down"></i></span>
+            </summary>
+            <p class="mt-3 text-neutral-700 dark:text-neutral-300">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </Container>
+  </section>
 
   <section class={`${colors.button} text-white py-16 lg:py-24`}>
     <Container>
@@ -133,16 +170,16 @@ const blocks = [
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <Button 
-          href={`/contact?service=${encodeURIComponent(suite.id ?? '')}`}
-          variant="secondary" 
-          size="lg"
-          class="font-semibold"
-        >
-          Start Your Project
-          <span class="ml-2"><i class="fa-solid fa-rocket"></i></span>
-        </Button>
+            href={`/contact?service=${encodeURIComponent(suite.id ?? '')}`}
+            variant="secondary" 
+            size="lg"
+            class="font-semibold"
+          >
+            Start Your Project
+            <span class="ml-2"><i class="fa-solid fa-rocket"></i></span>
+          </Button>
         </div>
       </div>
     </Container>
   </section>
-</Layout
+</Layout>

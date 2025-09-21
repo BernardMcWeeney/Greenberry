@@ -1,42 +1,78 @@
-// Site configuration
+// src/data/config.ts
 
-export const SITE = {
+export type SiteConfig = {
+  name: string;
+  title: string;
+  description: string;
+  url: string;
+  ogImage: string;
+  themeColor?: string;
+  language?: string;
+  country?: string;
+};
+
+export interface CompanyInfo {
+  name: string;
+  addressStreet?: string;
+  addressLocality?: string;
+  addressRegion?: string;
+  postalCode?: string;
+  address?: string;
+  email: string;
+  phone: string;
+  foundedYear: number;
+  description?: string;
+  legalName?: string;
+  taxId?: string;
+  priceRange?: string;
+}
+
+export type SocialLinks = {
+  facebook?: string;
+  instagram?: string;
+  linkedin?: string;
+  twitter?: string;
+  x?: string;
+  youtube?: string;
+  github?: string;
+  tiktok?: string;
+};
+
+export const SITE: SiteConfig = {
   name: 'Greenberry',
   title: 'Greenberry - Hassle-Free Websites & IT Solutions in Ireland',
   description: 'Greenberry provides hassle-free website solutions, fully managed IT services, SEO packages, and email solutions for Irish businesses.',
   url: 'https://greenberry.ie',
   ogImage: 'https://greenberry.ie/social.png',
-  themeColor: '#38a169', // Green color
+  themeColor: '#38a169',
+  language: 'en-IE',
+  country: 'IE',
 };
 
-// Company information
-export interface CompanyInfo {
-  name: string;
-  address: string;
-  email: string;
-  phone: string;
-  foundedYear: number;
-  description?: string; // Make description optional to avoid type errors
-}
-
-// Adding description property to match what's used in SEO component
 export const COMPANY: CompanyInfo = {
   name: 'Greenberry',
+  addressStreet: 'Duleek',
+  addressLocality: 'Drogheda',
+  addressRegion: 'Co. Meath',
+  postalCode: 'A92 V0F3',
   address: 'Meath, Ireland',
   email: 'office@greenberry.ie',
-  phone: '',
+  phone: '+353 83 019 9860',
   foundedYear: 2018,
-  description: 'Greenberry is a leading provider of hassle-free website solutions, fully managed IT services, SEO packages, and email solutions for Irish businesses.' // Added description
+  description: 'Greenberry is a leading provider of hassle-free website solutions, fully managed IT services, SEO packages, and email solutions for Irish businesses.',
+  legalName: 'Greenberry',
+  taxId: '',
+  priceRange: '€€',
 };
 
-// Social media links
-export const SOCIAL_LINKS = {
+export const SOCIAL_LINKS: SocialLinks = {
   facebook: 'https://facebook.com/greenberryie',
-  x: 'https://x.com/greenberry',
   instagram: 'https://instagram.com/greenberryie',
-  linkedin: 'https://linkedin.com/company/greenberryie',
-  twitter: 'https://twitter.com/greenberry'
-} as const;
+  linkedin: 'https://www.linkedin.com/company/greenberryie',
+  twitter: 'https://x.com/greenberry',
+  x: 'https://x.com/greenberry',
+};
+
 
 // Updated navigation item interface to support nested items
 export interface NavItem {

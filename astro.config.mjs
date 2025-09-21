@@ -2,22 +2,19 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 
-// https://astro.build/config
 export default defineConfig({
+  site: 'https://greenberry.ie',
+  trailingSlash: 'never',
   integrations: [
     sitemap({
       changefreq: 'weekly',
       lastmod: new Date(),
-    })
+      // If you later add SSR anywhere, keep sitemaps for static routes only
+    }),
   ],
-  vite: {
-    plugins: [
-      tailwindcss(),
-    ],
-  },
+  vite: { plugins: [tailwindcss()] },
   build: {
-    inlineStylesheets: 'auto', // inlines small page CSS into HTML to avoid blocking
+    inlineStylesheets: 'auto',
     cssMinify: 'lightningcss'
-  },
-  site: 'https://greenberry.ie',
+  }
 });
