@@ -11,7 +11,7 @@ export interface Props {
   bodyClass?: string;
 }
 
-const { 
+const {
   title,
   description,
   image,
@@ -32,7 +32,7 @@ const {
     <!-- Cloudflare Turnstile -->
     <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
-    <!-- Non-blocking Font Awesome (if you keep FA) -->
+    <!-- Non-blocking Font Awesome -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link
       rel="preload"
@@ -45,20 +45,19 @@ const {
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin>
     </noscript>
 
-    <!-- Simple SEO Component -->
     <SEO title={title} description={description} image={image} />
   </head>
-  <body class={`bg-white dark:bg-gray-900 min-h-screen flex flex-col ${bodyClass}`}>
+  <body class={bodyClass}>
     <Header />
-
-    <main class="flex-grow pt-[73px]">
+    
+    <main class="pt-[73px]">
       <slot />
     </main>
-
+    
     <Footer />
 
     <script>
-      // Enhanced dark mode handling with proper event listeners
+      // Dark mode handling
       function initializeDarkMode() {
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'dark') {
@@ -74,25 +73,36 @@ const {
       });
 
       // Smooth scroll for hash links
-      document.querySelectorAll('a[href^="#"]').forEach((link) => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const id = link.getAttribute('href');
-          if (!id) return;
-          document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
-        });
+      document.addEventListener('click', (e) => {
+        const link = e.target.closest('a[href^="#"]');
+        if (!link) return;
+        e.preventDefault();
+        const id = link.getAttribute('href');
+        if (!id) return;
+        document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
       });
     </script>
 
     <style is:global>
-      /* Fix horizontal scrolling issues */
-      html, body { overflow-x: hidden; width: 100%; }
-      body { min-height: 100dvh; } /* no overflow-y, no forced positioning */
+      /* Prevent scroll jitter */
+      html {
+        overflow-x: hidden;
+        scroll-behavior: auto; /* Override smooth scroll from CSS */
+      }
+      
+      body {
+        overflow-x: hidden;
+        min-height: 100dvh;
+        background-color: var(--color-white);
+        color: var(--color-gray-700);
+      }
+      
+      body.dark {
+        background-color: var(--color-gray-900);
+        color: var(--color-gray-300);
+      }
 
-
-      img, video, svg, iframe, embed, object { max-width: 100%; height: auto; }
-
-      /* Smooth transition for theme changes */
+      /* Smooth theme transitions */
       html.dark-mode-transition,
       html.dark-mode-transition *,
       html.dark-mode-transition *:before,
