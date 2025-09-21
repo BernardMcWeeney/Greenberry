@@ -151,7 +151,7 @@ export const suites: Suite[] = [
     setupFee: 1500,
     monthlyPlans: { launch: 30, grow: 40, pro: 50 },
     outcomes: [
-      'Increase online donations by 40%',
+      'Increase online donations by 100%',
       'Update Mass times in seconds',
       'Grow newsletter subscribers',
       'Streamline sacrament bookings'
@@ -173,7 +173,7 @@ export const suites: Suite[] = [
         title: 'Integrations',
         description: 'Embed livestreams and connect secure donations in minutes.',
         icon: 'fa-solid fa-plug',
-        pills: ['Livestream', 'Stripe/PayPal', 'Easy embeds']
+        pills: ['Livestream', 'Stripe', 'Easy embeds']
       },
       {
         title: 'Easy Editing',
@@ -197,13 +197,13 @@ export const suites: Suite[] = [
     caseStudies: [
       {
         id: 'parish-demo-1',
-        title: 'St. Brigid’s Parish (Demo)',
-        url: '#',
-        image: '/images/showcase/parish-1.jpg',
+        title: 'Duleek Bellewstown Parish',
+        url: 'https://duleekbellewstownparish.com/',
+        image: '/projects/duleek-parish/duleek-parish-1.png',
         excerpt:
           'Mass times, online donations, and weekly newsletter uploads maintained by parish staff.',
         tags: ['Donations', 'Mass times', 'Livestream'],
-        metrics: [{ label: 'Online donations', value: '+38%' }]
+        metrics: [{ label: 'Online donations', value: '+100%' },{ label: 'Increased Viewers', value: '+2000' }]
       }
     ],
     testimonials: 4,
@@ -227,43 +227,42 @@ export const suites: Suite[] = [
     setupFee: 1200,
     monthlyPlans: { launch: 30, grow: 40, pro: 50 },
     outcomes: [
-      'Increase membership renewals by 30%',
-      'Automate fixture updates',
+      'Reduce support and message queries',
+      'Highlight fixtures and results clearly',
       'Boost sponsor visibility',
-      'Streamline team communications'
+      'Keep community engaged with news and updates'
     ],
     coreFeatures: [
-      'Fixtures & results with auto-updates',
-      'Team & player profiles',
-      'Membership & registrations',
-      'Sponsor placements & rotators'
+      'Fixtures & results (manual updates)',
+      'Club news & posts',
+      'Sponsor placements & rotators',
+      'Media galleries (photo/video)'
     ],
     specialisedFeatures: [
-      'Live score ticker',
-      'Training schedules & pitch booking',
-      'Online shop & payments',
-      'Media galleries (photo/video)',
+      'Training schedules',
+      'Pitch booking',
+      'Stripe/online shop integrations',
       'Coach/manager update portal'
     ],
     featureHighlights: [
       {
         title: 'Fixtures & Results',
         description:
-          'Pull in fixtures/results automatically and keep league tables current.',
+          'Display fixtures and results clearly, with league tables and match highlights updated by the club.',
         icon: 'fa-solid fa-table-list',
-        pills: ['Auto-updates', 'Tables', 'Results']
+        pills: ['Manual updates', 'Tables', 'Results']
       },
       {
-        title: 'Membership & Payments',
+        title: 'Club News & Updates',
         description:
-          'Take registrations and renewals online with secure checkout.',
-        icon: 'fa-solid fa-id-card',
-        pills: ['Stripe', 'SEPA', 'Discount codes']
+          'Reduce support queries by keeping the community informed with the latest posts, notices, and announcements online.',
+        icon: 'fa-solid fa-bullhorn',
+        pills: ['Posts', 'Notices', 'Community']
       },
       {
         title: 'Sponsor Showcases',
         description:
-          'Rotating sponsor spots and pages to deliver value to partners.',
+          'Rotating sponsor spots and dedicated pages to deliver value to partners.',
         icon: 'fa-solid fa-handshake',
         pills: ['Rotators', 'Logos', 'UTM tracking']
       },
@@ -278,19 +277,19 @@ export const suites: Suite[] = [
     caseStudies: [
       {
         id: 'club-demo-1',
-        title: 'Riverside GAA (Demo)',
-        url: '#',
+        title: 'ISSC Vancouver GAA',
+        url: 'https://isscvancouver.com/',
         image: '/images/showcase/club-1.jpg',
         excerpt:
-          'Membership renewals moved online; sponsors featured across fixtures and results.',
-        tags: ['Membership', 'Sponsors', 'Fixtures'],
-        metrics: [{ label: 'Renewals YoY', value: '+31%' }]
+          'Reduced member queries by publishing fixtures, results, and news online while giving sponsors prominent placement.',
+        tags: ['Fixtures', 'News', 'Sponsors'],
+        metrics: [{ label: 'Support Queries', value: '-40%' }]
       }
     ],
     testimonials: 2,
     metaTitle: 'GAA & Club Websites in Ireland | Clubify by Greenberry',
     metaDescription:
-      'Club websites with fixtures, results, and memberships. Professional design and management from €30/mo + setup.',
+      'Club websites with fixtures, results, news, and sponsor showcases. Professional design and management from €30/mo + setup.',
     primaryKeyword: 'gaa club website ireland'
   },
   {
@@ -359,13 +358,13 @@ export const suites: Suite[] = [
     caseStudies: [
       {
         id: 'school-demo-1',
-        title: 'Oakfield Secondary (Demo)',
-        url: '#',
+        title: 'Mount Hanover NS',
+        url: 'https://mounthanoverns.ie/',
         image: '/images/showcase/school-1.jpg',
         excerpt:
           'Admissions simplified; parents use the site as the first port of call.',
         tags: ['Admissions', 'Parents', 'Calendar'],
-        metrics: [{ label: 'Admin calls', value: '−47%' }]
+        metrics: [{ label: 'Admin calls', value: '−50%' }]
       }
     ],
     testimonials: 9,
@@ -389,15 +388,15 @@ export const suites: Suite[] = [
     setupFee: 2000,
     monthlyPlans: { launch: 79, grow: 130, pro: 230 },
     outcomes: [
-      'Increase lead generation by 60%',
-      'Improve conversion rates',
-      'Enhance brand credibility',
-      'Automate customer inquiries'
+      'Increase website visibility and traffic',
+      'Reduce admin overhead through online bookings',
+      'Enhance customer experience with clear information',
+      'Ensure 100% uptime and reliability'
     ],
     coreFeatures: [
-      'Lead-gen landing pages & forms',
-      'Bookings/appointments integration',
-      'Service & product pages with CTAs',
+      'SEO-optimised service & info pages',
+      'Bookings & appointments integration',
+      'Email/contact forms',
       'Testimonials & case study modules'
     ],
     specialisedFeatures: [
@@ -405,54 +404,58 @@ export const suites: Suite[] = [
       'Quote/estimate workflow forms',
       'E-commerce ready (Stripe/PayPal)',
       'Multi-location schema & maps',
-      'Blog & resource hub for SEO'
+      'Resource hub or blog for SEO'
     ],
     featureHighlights: [
       {
-        title: 'Lead Funnels',
-        description:
-          'High-converting landing pages with A/B-testable sections.',
-        icon: 'fa-solid fa-filter',
-        pills: ['Forms', 'A/B test', 'Thank-you flows']
-      },
-      {
         title: 'Bookings & Calendars',
         description:
-          'Let customers book calls or services without email ping-pong.',
+          'Let customers book tee times, services, or appointments directly online.',
         icon: 'fa-solid fa-calendar-check',
         pills: ['Calendly', 'MS Bookings', 'Reminders']
       },
       {
-        title: 'Local SEO',
+        title: 'SEO & Visibility',
         description:
-          'Schema, Google Business Profile, and review widgets built-in.',
+          'Boost search rankings with schema, Google Business integration, and optimised content.',
         icon: 'fa-solid fa-location-dot',
         pills: ['Schema', 'GBP', 'Reviews']
       },
       {
-        title: 'CRM & Automation',
+        title: 'Email & Contact Forms',
         description:
-          'Pipe leads into your CRM and trigger follow-ups automatically.',
-        icon: 'fa-solid fa-diagram-project',
-        pills: ['HubSpot', 'Zoho', 'Power Automate']
+          'Integrated forms that route enquiries directly to your inbox or CRM.',
+        icon: 'fa-solid fa-envelope',
+        pills: ['Forms', 'Notifications', 'Automation']
+      },
+      {
+        title: 'Uptime & Reliability',
+        description:
+          'Enterprise-grade hosting with 100% uptime and fast page loads.',
+        icon: 'fa-solid fa-server',
+        pills: ['Monitoring', 'Backups', 'SSL']
       }
     ],
     caseStudies: [
       {
         id: 'biz-demo-1',
-        title: 'Boyne Valley Tours (Demo)',
-        url: '#',
+        title: 'Bellewstown Golf Course',
+        url: 'https://bellewstowngolfclub.ie/',
         image: '/images/showcase/business-1.jpg',
         excerpt:
-          'Bookings integrated with calendar; leads sync to CRM with auto-emails.',
-        tags: ['Leads', 'Bookings', 'CRM'],
-        metrics: [{ label: 'Lead volume', value: '+54%' }]
+          'Online booking integrated with calendars, reducing admin workload. Site traffic increased significantly with 100% uptime and a seamless visitor experience.',
+        tags: ['Bookings', 'SEO', 'Uptime'],
+        metrics: [
+          { label: 'Admin overhead', value: '-40%' },
+          { label: 'Website visitors', value: '+65%' },
+          { label: 'Uptime', value: '100%' }
+        ]
       }
     ],
     testimonials: 3,
-    metaTitle: 'Business Websites for Irish SMEs | Greenberry',
+    metaTitle: 'Business & Club Websites in Ireland | Greenberry',
     metaDescription:
-      'Professional business websites with lead generation and bookings. Design, hosting, and growth from €79/mo + setup.',
+      'Professional websites with booking systems, SEO, and guaranteed uptime. Managed design and hosting for clubs and businesses in Ireland.',
     primaryKeyword: 'business website ireland'
   }
 ];

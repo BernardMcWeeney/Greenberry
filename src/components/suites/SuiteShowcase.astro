@@ -115,9 +115,11 @@ const chosenTestimonialId =
 
             {csQuote && (
               <blockquote class={`mt-6 pl-4 border-l-2 ${c.accent} text-neutral-700 dark:text-neutral-200 italic`}>
-                “{csQuote}”
+                "{csQuote}"
               </blockquote>
             )}
+
+
           </>
         ) : (
           <>
@@ -190,6 +192,20 @@ const chosenTestimonialId =
                   {t.company && <div class="text-xs text-greenberry-600 dark:text-greenberry-500 font-medium">{t.company}</div>}
                 </div>
               </div>
+
+              {cs?.url && (
+                <div class="mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+                  <a
+                    href={cs.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class={`inline-flex items-center px-4 py-2 rounded-lg font-medium transition-colors w-full justify-center ${c.badge} hover:opacity-80`}
+                  >
+                    <i class="fa-solid fa-external-link-alt mr-2"></i>
+                    View Live Website
+                  </a>
+                </div>
+              )}
             </div>
           );
         })()

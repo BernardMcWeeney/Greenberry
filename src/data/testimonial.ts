@@ -22,12 +22,12 @@ const testimonials: Testimonial[] = [
   },
   {
     id: 2,
-    quote: "Working with Bernard from Greenberry was a fantastic experience. He built a fast, user-friendly, and fully customized website for Vancouver GAA, providing excellent support throughout. His attention to detail and expertise made the process seamless, and club members have been thrilled with the result. We highly recommend Greenberry for top-quality web development!",
-    author: "Vancouver GAA",
+    quote: "Working with Bernard from Greenberry was a fantastic experience. He built a fast, user-friendly, and fully customized website for ISSC Vancouver GAA, providing excellent support throughout. His attention to detail and expertise made the process seamless, and club members have been thrilled with the result. We highly recommend Greenberry for top-quality web development!",
+    author: "ISSC Vancouver GAA",
     position: "Public Relation Officer",
-    company: "Vancouver GAA",
-    website: "vancouvergaa.com",
-    avatar: "/testimonal/vancouvergaa.png", // Added avatar path
+    company: "ISSC Vancouver GAA",
+    website: "isscvancouver.com",
+    avatar: "/testimonal/isscvancouvergaa.png", // Added avatar path
     verified: true
   },
   {
