@@ -1,0 +1,28 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://greenberry.ie/api/contact",
+      "service-doc": [
+        { "href": "https://greenberry.ie/contact", "type": "text/html", "title": "Contact page" }
+      ],
+      "describedby": [
+        { "href": "https://greenberry.ie/.well-known/agent-skills/index.json", "type": "application/json" }
+      ],
+      "type": [
+        { "href": "https://schema.org/ContactAction" }
+      ]
+    },
+    {
+      "anchor": "https://greenberry.ie/api/subscribe",
+      "service-doc": [
+        { "href": "https://greenberry.ie/", "type": "text/html", "title": "Newsletter subscription" }
+      ],
+      "describedby": [
+        { "href": "https://greenberry.ie/.well-known/agent-skills/index.json", "type": "application/json" }
+      ],
+      "type": [
+        { "href": "https://schema.org/SubscribeAction" }
+      ]
+    }
+  ]
+}

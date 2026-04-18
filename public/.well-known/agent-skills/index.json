@@ -1,0 +1,73 @@
+{
+  "$schema": "https://agentskills.io/schemas/v0.2/index.json",
+  "version": "0.2.0",
+  "publisher": {
+    "name": "Greenberry",
+    "url": "https://greenberry.ie",
+    "contact": "office@greenberry.ie"
+  },
+  "skills": [
+    {
+      "name": "get-company-info",
+      "type": "data",
+      "description": "Returns Greenberry contact details, address, hours, and service areas.",
+      "url": "https://greenberry.ie/about",
+      "contentType": "text/html"
+    },
+    {
+      "name": "list-services",
+      "type": "data",
+      "description": "Lists website, IT support, SEO, and email services offered by Greenberry.",
+      "url": "https://greenberry.ie/plans",
+      "contentType": "text/html"
+    },
+    {
+      "name": "list-suites",
+      "type": "data",
+      "description": "Lists Greenberry website suites: Parish, Club, School, and Business sites.",
+      "url": "https://greenberry.ie/#suites",
+      "contentType": "text/html"
+    },
+    {
+      "name": "view-portfolio",
+      "type": "data",
+      "description": "Browse past Greenberry projects and case studies.",
+      "url": "https://greenberry.ie/portfolio",
+      "contentType": "text/html"
+    },
+    {
+      "name": "submit-contact-request",
+      "type": "action",
+      "description": "Submit a contact request to Greenberry. Requires a Cloudflare Turnstile token; human-only by design.",
+      "url": "https://greenberry.ie/api/contact",
+      "method": "POST",
+      "inputSchema": {
+        "type": "object",
+        "required": ["full-name", "email", "message", "cf-turnstile-response"],
+        "properties": {
+          "full-name": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "phone": { "type": "string" },
+          "service": { "type": "string" },
+          "message": { "type": "string" },
+          "cf-turnstile-response": { "type": "string", "description": "Cloudflare Turnstile token" }
+        }
+      }
+    },
+    {
+      "name": "subscribe-newsletter",
+      "type": "action",
+      "description": "Subscribe an email address to the Greenberry newsletter. Requires a Cloudflare Turnstile token.",
+      "url": "https://greenberry.ie/api/subscribe",
+      "method": "POST",
+      "inputSchema": {
+        "type": "object",
+        "required": ["email", "cf-turnstile-response"],
+        "properties": {
+          "email": { "type": "string", "format": "email" },
+          "cf-turnstile-response": { "type": "string", "description": "Cloudflare Turnstile token" }
+        }
+      }
+    }
+  ]
+}

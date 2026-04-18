@@ -57,6 +57,91 @@ const {
     <Footer />
 
     <script>
+      // WebMCP: expose site tools to AI agents running in the browser.
+      // https://webmachinelearning.github.io/webmcp/
+      if (typeof navigator !== 'undefined' && 'modelContext' in navigator) {
+        const origin = location.origin;
+        navigator.modelContext.provideContext({
+          tools: [
+            {
+              name: 'get_company_info',
+              description: 'Get Greenberry contact details, address, and hours.',
+              inputSchema: { type: 'object', properties: {} },
+              async execute() {
+                return {
+                  name: 'Greenberry',
+                  email: 'office@greenberry.ie',
+                  phone: '+353 83 019 9860',
+                  address: 'Duleek, Drogheda, Co. Meath, A92 V0F3, Ireland',
+                  website: origin,
+                  foundedYear: 2018,
+                };
+              },
+            },
+            {
+              name: 'list_suites',
+              description: 'List Greenberry website suites (parish, club, school, business).',
+              inputSchema: { type: 'object', properties: {} },
+              async execute() {
+                return [
+                  { slug: 'parish-websites', url: origin + '/suites/parish-websites' },
+                  { slug: 'club-websites', url: origin + '/suites/club-websites' },
+                  { slug: 'school-websites', url: origin + '/suites/school-websites' },
+                  { slug: 'business-websites', url: origin + '/suites/business-websites' },
+                ];
+              },
+            },
+            {
+              name: 'navigate_to_page',
+              description: 'Navigate the current tab to a Greenberry page (home, about, plans, portfolio, care, contact, or a suite slug).',
+              inputSchema: {
+                type: 'object',
+                required: ['page'],
+                properties: {
+                  page: {
+                    type: 'string',
+                    enum: ['home', 'about', 'plans', 'portfolio', 'care', 'contact', 'parish-websites', 'club-websites', 'school-websites', 'business-websites'],
+                  },
+                },
+              },
+              async execute({ page }) {
+                const map = {
+                  home: '/',
+                  about: '/about',
+                  plans: '/plans',
+                  portfolio: '/portfolio',
+                  care: '/care',
+                  contact: '/contact',
+                  'parish-websites': '/suites/parish-websites',
+                  'club-websites': '/suites/club-websites',
+                  'school-websites': '/suites/school-websites',
+                  'business-websites': '/suites/business-websites',
+                };
+                const path = map[page];
+                if (!path) throw new Error('Unknown page: ' + page);
+                location.assign(path);
+                return { navigatedTo: path };
+              },
+            },
+            {
+              name: 'open_contact_form',
+              description: 'Open the Greenberry contact form, optionally pre-filling the service of interest.',
+              inputSchema: {
+                type: 'object',
+                properties: {
+                  service: { type: 'string', description: 'Service the user is interested in (e.g. "Website Design", "IT Support").' },
+                },
+              },
+              async execute({ service } = {}) {
+                const qs = service ? '?service=' + encodeURIComponent(service) : '';
+                location.assign('/contact' + qs);
+                return { opened: '/contact' + qs };
+              },
+            },
+          ],
+        });
+      }
+
       // Dark mode handling
       function initializeDarkMode() {
         const savedTheme = localStorage.getItem('theme');
