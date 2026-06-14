@@ -23,7 +23,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const turnstileVerification = await verifyTurnstileToken(
       String(turnstileToken),
       ip,
-      env.TURNSTILE_SECRET_KEY,
+      String(env.TURNSTILE_SECRET_KEY || '').trim(),
     );
 
     if (!turnstileVerification.success) {

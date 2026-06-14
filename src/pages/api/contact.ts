@@ -1,103 +1,126 @@
 import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
-import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, clientAddress }) => {
+export const POST: APIRoute = async ({ request }) => {
   try {
     const formData = await request.formData();
 
-    const name = formData.get('full-name');
-    const email = formData.get('email');
-    const phone = formData.get('phone') || 'Not provided';
-    const service = formData.get('service') || 'Not specified';
-    const message = formData.get('message');
+    const name = (formData.get('full-name') || '').toString().trim();
+    const email = (formData.get('email') || '').toString().trim();
+    const phone = (formData.get('phone') || '').toString().trim() || 'Not provided';
+    const service = (formData.get('service') || '').toString().trim() || 'Not specified';
+    const message = (formData.get('message') || '').toString().trim();
     const turnstileToken = formData.get('cf-turnstile-response');
 
     if (!name || !email || !message) {
-      return json({ success: false, message: 'Missing required fields' }, 400);
+      return jsonResponse({ success: false, message: 'Please fill in your name, email, and message.' }, 400);
     }
 
     if (!turnstileToken) {
-      return json({ success: false, message: 'CAPTCHA verification failed' }, 400);
+      return jsonResponse({ success: false, message: 'Please complete the security check.' }, 400);
     }
 
-    const ip =
-      request.headers.get('CF-Connecting-IP') || clientAddress || undefined;
     const turnstileVerification = await verifyTurnstileToken(
       String(turnstileToken),
-      ip,
-      env.TURNSTILE_SECRET_KEY,
+      request.headers.get('CF-Connecting-IP'),
+      cleanSecret(env.TURNSTILE_SECRET_KEY),
     );
 
     if (!turnstileVerification.success) {
-      return json({ success: false, message: 'CAPTCHA verification failed' }, 400);
+      return jsonResponse({ success: false, message: 'Security check failed. Please refresh and try again.' }, 400);
     }
 
-    const sesClient = new SESClient({
-      region: env.AWS_REGION,
-      credentials: {
-        accessKeyId: env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+    // Trim secrets defensively — a stray newline/space (common when setting
+    // Cloudflare secrets) otherwise breaks the AWS SigV4 signature.
+    const region = cleanSecret(env.AWS_REGION);
+    const accessKeyId = cleanSecret(env.AWS_ACCESS_KEY_ID);
+    const secretAccessKey = cleanSecret(env.AWS_SECRET_ACCESS_KEY);
+    const fromAddress = cleanSecret(env.FROM_EMAIL_ADDRESS);
+    const toAddress = cleanSecret(env.TO_EMAIL_ADDRESS);
+
+    if (!region || !accessKeyId || !secretAccessKey || !fromAddress || !toAddress) {
+      console.error('Missing env vars:', {
+        AWS_REGION: !!region,
+        AWS_ACCESS_KEY_ID: !!accessKeyId,
+        AWS_SECRET_ACCESS_KEY: !!secretAccessKey,
+        FROM_EMAIL_ADDRESS: !!fromAddress,
+        TO_EMAIL_ADDRESS: !!toAddress,
+      });
+      return jsonResponse({ success: false, message: 'Server configuration error. Please email hello@greenberry.ie directly.' }, 500);
+    }
+
+    const textBody = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nService: ${service}\nMessage: ${message}`;
+    const htmlBody = `<h2>New Greenberry Contact Form Submission</h2>
+<p><strong>Name:</strong> ${escapeHtml(name)}</p>
+<p><strong>Email:</strong> ${escapeHtml(email)}</p>
+<p><strong>Phone:</strong> ${escapeHtml(phone)}</p>
+<p><strong>Service:</strong> ${escapeHtml(service)}</p>
+<p><strong>Message:</strong> ${escapeHtml(message)}</p>`;
+
+    const params = new URLSearchParams();
+    params.append('Action', 'SendEmail');
+    params.append('Source', fromAddress);
+    params.append('Destination.ToAddresses.member.1', toAddress);
+    params.append('Message.Subject.Data', `Greenberry Contact: ${service} — ${name}`);
+    params.append('Message.Subject.Charset', 'UTF-8');
+    params.append('Message.Body.Text.Data', textBody);
+    params.append('Message.Body.Text.Charset', 'UTF-8');
+    params.append('Message.Body.Html.Data', htmlBody);
+    params.append('Message.Body.Html.Charset', 'UTF-8');
+    params.append('ReplyToAddresses.member.1', email);
+    params.append('Version', '2010-12-01');
+
+    const endpoint = `https://email.${region}.amazonaws.com/`;
+    const now = new Date();
+    const amzDate = now.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+    const dateStamp = amzDate.slice(0, 8);
+
+    const body = params.toString();
+    const bodyHash = await sha256Hex(body);
+
+    const canonicalHeaders = `content-type:application/x-www-form-urlencoded\nhost:email.${region}.amazonaws.com\nx-amz-date:${amzDate}\n`;
+    const signedHeaders = 'content-type;host;x-amz-date';
+    const canonicalRequest = `POST\n/\n\n${canonicalHeaders}\n${signedHeaders}\n${bodyHash}`;
+
+    const credentialScope = `${dateStamp}/${region}/ses/aws4_request`;
+    const stringToSign = `AWS4-HMAC-SHA256\n${amzDate}\n${credentialScope}\n${await sha256Hex(canonicalRequest)}`;
+
+    const signingKey = await getSignatureKey(secretAccessKey, dateStamp, region, 'ses');
+    const signature = await hmacHex(signingKey, stringToSign);
+
+    const authHeader = `AWS4-HMAC-SHA256 Credential=${accessKeyId}/${credentialScope}, SignedHeaders=${signedHeaders}, Signature=${signature}`;
+
+    const sesResponse = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-Amz-Date': amzDate,
+        Authorization: authHeader,
       },
+      body,
     });
 
-    const command = new SendEmailCommand({
-      Source: env.FROM_EMAIL_ADDRESS,
-      Destination: { ToAddresses: [env.TO_EMAIL_ADDRESS] },
-      Message: {
-        Subject: {
-          Data: `New Contact Form Submission from ${name}`,
-          Charset: 'UTF-8',
-        },
-        Body: {
-          Text: {
-            Data: `
-Name: ${name}
-Email: ${email}
-Phone: ${phone}
-Service: ${service}
-Message: ${message}
-            `,
-            Charset: 'UTF-8',
-          },
-          Html: {
-            Data: `
-<h2>New Contact Form Submission</h2>
-<p><strong>Name:</strong> ${escapeHtml(String(name))}</p>
-<p><strong>Email:</strong> ${escapeHtml(String(email))}</p>
-<p><strong>Phone:</strong> ${escapeHtml(String(phone))}</p>
-<p><strong>Service:</strong> ${escapeHtml(String(service))}</p>
-<p><strong>Message:</strong> ${escapeHtml(String(message))}</p>
-            `,
-            Charset: 'UTF-8',
-          },
-        },
-      },
-    });
+    if (!sesResponse.ok) {
+      const errorText = await sesResponse.text();
+      console.error('SES error:', sesResponse.status, errorText);
+      return jsonResponse({ success: false, message: 'Something went wrong sending your message. Please email hello@greenberry.ie directly.' }, 500);
+    }
 
-    await sesClient.send(command);
-
-    return json({ success: true, message: 'Form submitted successfully' }, 200);
+    return jsonResponse({ success: true, message: 'Thanks. Your message has been sent.' });
   } catch (error) {
-    // Surface the underlying AWS/SES error name + message so it shows up in
-    // `wrangler tail`. The most common causes after rotating credentials are:
-    //   - SignatureDoesNotMatch  -> secret has a trailing newline/space
-    //   - InvalidClientTokenId / UnrecognizedClient -> wrong access key id
-    //   - AccessDenied           -> IAM user lacks ses:SendEmail
-    //   - MessageRejected (Email address not verified) -> SES sandbox / from not verified
-    const name = error instanceof Error ? error.name : 'UnknownError';
-    const message = error instanceof Error ? error.message : String(error);
-    console.error(`Error processing form submission: ${name}: ${message}`, error);
-    return json(
-      { success: false, message: 'An error occurred while processing your request' },
-      500,
-    );
+    const err = error as Error;
+    console.error('Contact form error:', err?.name, err?.message, err?.stack);
+    return jsonResponse({ success: false, message: 'Something went wrong. Please try again or email hello@greenberry.ie.' }, 500);
   }
 };
 
-function json(body: unknown, status: number): Response {
+function cleanSecret(value: unknown): string {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function jsonResponse(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
     headers: { 'Content-Type': 'application/json' },
@@ -115,22 +138,59 @@ function escapeHtml(s: string): string {
 
 async function verifyTurnstileToken(
   token: string,
-  ip: string | undefined,
+  ip: string | null,
   secret: string,
 ): Promise<{ success: boolean }> {
   try {
     const formData = new FormData();
     formData.append('secret', secret);
     formData.append('response', token);
-    if (ip) formData.append('remoteip', ip);
+    if (ip) {
+      formData.append('remoteip', ip);
+    }
 
-    const result = await fetch(
-      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-      { method: 'POST', body: formData },
-    );
+    const result = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body: formData,
+    });
+
     return (await result.json()) as { success: boolean };
   } catch (error) {
     console.error('Turnstile verification error:', error);
     return { success: false };
   }
+}
+
+// AWS Signature V4 helpers using Web Crypto API (Workers-compatible)
+async function sha256Hex(message: string): Promise<string> {
+  const data = new TextEncoder().encode(message);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return arrayBufferToHex(hash);
+}
+
+async function hmac(key: string | ArrayBuffer, message: string): Promise<ArrayBuffer> {
+  const encoder = new TextEncoder();
+  const keyData = typeof key === 'string' ? encoder.encode(key) : key;
+  const cryptoKey = await crypto.subtle.importKey('raw', keyData, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  return crypto.subtle.sign('HMAC', cryptoKey, encoder.encode(message));
+}
+
+async function hmacHex(key: string | ArrayBuffer, message: string): Promise<string> {
+  return arrayBufferToHex(await hmac(key, message));
+}
+
+async function getSignatureKey(
+  secretKey: string,
+  dateStamp: string,
+  region: string,
+  service: string,
+): Promise<ArrayBuffer> {
+  const kDate = await hmac('AWS4' + secretKey, dateStamp);
+  const kRegion = await hmac(kDate, region);
+  const kService = await hmac(kRegion, service);
+  return hmac(kService, 'aws4_request');
+}
+
+function arrayBufferToHex(buffer: ArrayBuffer): string {
+  return [...new Uint8Array(buffer)].map((b) => b.toString(16).padStart(2, '0')).join('');
 }
