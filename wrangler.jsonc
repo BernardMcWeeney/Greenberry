@@ -5,6 +5,11 @@
 	"compatibility_flags": [
 		"nodejs_compat"
 	],
+	// Site is served from the greenberry.ie custom domain, so the
+	// *.workers.dev subdomain and preview URLs stay disabled. Pinned here so
+	// `wrangler deploy` matches the remote dashboard config (no drift prompt).
+	"workers_dev": false,
+	"preview_urls": false,
 	"assets": {
 		"directory": "./dist",
 		"binding": "ASSETS",
@@ -36,6 +41,22 @@
 			"binding": "SESSION",
 			"id": "29e185ae0f854849a76f97a64a40776b",
 			"remote": true
+		}
+	],
+	"routes": [
+		{
+			"pattern": "greenberry.ie",
+			"zone_name": "greenberry.ie",
+			"custom_domain": true,
+			"enabled": true,
+			"previews_enabled": false
+		},
+		{
+			"pattern": "www.greenberry.ie",
+			"zone_name": "greenberry.ie",
+			"custom_domain": true,
+			"enabled": true,
+			"previews_enabled": false
 		}
 	]
 }

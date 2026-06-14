@@ -1,11 +1,10 @@
 import type { APIRoute } from 'astro';
+import { env } from 'cloudflare:workers';
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
-  const env = locals.runtime.env;
-
+export const POST: APIRoute = async ({ request, clientAddress }) => {
   try {
     const formData = await request.formData();
 
@@ -82,7 +81,15 @@ Message: ${message}
 
     return json({ success: true, message: 'Form submitted successfully' }, 200);
   } catch (error) {
-    console.error('Error processing form submission:', error);
+    // Surface the underlying AWS/SES error name + message so it shows up in
+    // `wrangler tail`. The most common causes after rotating credentials are:
+    //   - SignatureDoesNotMatch  -> secret has a trailing newline/space
+    //   - InvalidClientTokenId / UnrecognizedClient -> wrong access key id
+    //   - AccessDenied           -> IAM user lacks ses:SendEmail
+    //   - MessageRejected (Email address not verified) -> SES sandbox / from not verified
+    const name = error instanceof Error ? error.name : 'UnknownError';
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(`Error processing form submission: ${name}: ${message}`, error);
     return json(
       { success: false, message: 'An error occurred while processing your request' },
       500,
